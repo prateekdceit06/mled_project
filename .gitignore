@@ -1,7 +1,10 @@
-**/classes/**
+target/classes/**
 
 .idea/**
 
 /.git/
 
 **/.DS_Store
+
+**.iml
+
