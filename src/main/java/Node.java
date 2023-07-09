@@ -1,22 +1,15 @@
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public abstract class Node implements Runnable {
+public abstract class Node {
 
     private final int layerID;
     private final int nodeID;
     private final String nodeName;
-    private final String IP;
-    private final int port;
-    private Socket clientSocket;
     private List<Packet> receivedData = new ArrayList<>();
     private Queue<Packet> packetQueue = new LinkedList<Packet>();
     private final int MTU;
@@ -27,47 +20,14 @@ public abstract class Node implements Runnable {
 
     private int errorCount = 0;
 
-    public Node(int layerID, int nodeID, int port, int MTU, ErrorDetectionMethod errorDetectionMethod){
+    public Node(int layerID, int nodeID, int port, int MTU, ErrorDetectionMethod errorDetectionMethod) {
         this.layerID = layerID;
         this.nodeID = nodeID;
         this.nodeName = layerID + "-" + nodeID;
-        this.IP = CommonFunctions.getIP();
-        this.port = port;
         this.MTU = MTU;
         this.errorDetectionMethod = errorDetectionMethod;
         this.parentNode = null;
         this.childNode = null;
-        startReceivingPackets();
-    }
-
-    public void startReceivingPackets() {
-        new Thread(this).start();
-    }
-    @Override
-    public void run() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);  // Create a server socket
-            Socket socket = serverSocket.accept();   // Accept an incoming client connection request
-
-//            File file = new File("astroMLData.txt");
-//            FileInputStream fileInputStream = new FileInputStream(file);
-//
-//            OutputStream outputStream = clientSocket.getOutputStream();
-//
-//            byte[] buffer = new byte[1024]; // this is your MTU
-//            int bytesRead;
-//
-//            while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-//                outputStream.write(buffer, 0, bytesRead);
-//            }
-//
-//            fileInputStream.close();
-//            outputStream.close();
-//            clientSocket.close();
-//            serverSocket.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -81,14 +41,6 @@ public abstract class Node implements Runnable {
 
     public String getNodeName() {
         return nodeName;
-    }
-
-    public String getIP() {
-        return IP;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public List<Packet> getReceivedData() {
@@ -139,9 +91,6 @@ public abstract class Node implements Runnable {
     public void setErrorCount(int errorCount) {
         this.errorCount = errorCount;
     }
-    public Socket getClientSocket() {
-        return clientSocket;
-    }
 
 
 
@@ -160,8 +109,6 @@ public abstract class Node implements Runnable {
                 "layerID=" + layerID +
                 ", nodeID=" + nodeID +
                 ", nodeName='" + nodeName + '\'' +
-                ", IP='" + IP + '\'' +
-                ", port=" + port +
                 ", receivedData=" + receivedData +
                 ", packetQueue=" + packetQueue +
                 ", MTU=" + MTU +
@@ -170,17 +117,13 @@ public abstract class Node implements Runnable {
                 '}';
     }
 
-//    public boolean createClientSocket(String IP, int port){
-//        try{
-//            this.clientSocket = new Socket(IP, port);
-//            return true;
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
+    public String getNodeNameForErrorCheck(){
+        int layerIDForNodeCheck = this.getLayerID();
+        int nodeIDForNodeCheck = (int) (this.getNodeID() -
+                Math.pow(2, MledSimulator.getInstance().getLayerNum()) - layerIDForNodeCheck);
+        String nodeName = layerIDForNodeCheck + "-" + nodeIDForNodeCheck;
+        return nodeName;
+    }
 
-
-    public abstract void receiveAndSendPacket();
-
+    public abstract void receivePacket(Packet packet);
 }

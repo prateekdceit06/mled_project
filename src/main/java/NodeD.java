@@ -2,56 +2,32 @@
 // from parent node, verify the error check and sending data to child node.
 
 import java.io.FileWriter;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.net.Socket;
+
 
 public class NodeD extends Node {
     public NodeD(int layerID, int nodeID, int port, int MTU, ErrorDetectionMethod errorDetectionMethod) {
         super(layerID, nodeID, port, MTU, errorDetectionMethod);
     }
 
-    public void receiveAndSendPacket() {
-        Socket parentSocket = this.getParentNode().getClientSocket();
+    public void receivePacket(Packet packet) {
+        // Retrieve the attached hash
 
-        // Check if the socket is connected before trying to receive the packet
-        if (parentSocket != null && !parentSocket.isClosed()) {
-            try {
-                // Create an ObjectInputStream on the parent's socket
-                ObjectInputStream in = new ObjectInputStream(parentSocket.getInputStream());
+        String nodeName = getNodeNameForErrorCheck();
+        String packetHash = packet.getNodeNameValueMap().get(nodeName);
 
-                // Read a Packet object from the ObjectInputStream
-                Packet packet = (Packet) in.readObject();
+        // Verify the hash
+        String packetData = packet.getData();
+        byte[] packetDataBytes = packetData.getBytes();
 
-                // Retrieve the attached hash
-                int layerIDForNodeCheck = this.getLayerID();
-                int nodeIDForNodeCheck = (int) (this.getNodeID() -
-                        Math.pow(2, MledSimulator.getInstance().getLayerNum()) - layerIDForNodeCheck);
-                String nodeName = layerIDForNodeCheck + "-" + nodeIDForNodeCheck;
-                String packetHash = packet.getNodeNameValueMap().get(nodeName);
-
-                // Verify the hash
-                String packetData = packet.getData();
-                byte[] packetDataBytes = packetData.getBytes();
-
-                if (this.getErrorDetectionMethod().verify(packetDataBytes, packetHash)) {
-                    // If the hash matches, add the packet to receivedData
-                    this.getReceivedData().add(packet);
-
-                    // Send the packet to the child node through its socket
-                    Socket childSocket = this.getChildNode().getClientSocket();
-                    ObjectOutputStream out = new ObjectOutputStream(childSocket.getOutputStream());
-                    out.writeObject(packet);
-                    out.flush();
-                } else {
-                    // Log the packet in errorsFound.txt
-                    logErrorPacket(packet);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (this.getErrorDetectionMethod().verify(packetDataBytes, packetHash)) {
+            // If the hash matches, add the packet to receivedData and send it to the child node
+            this.getReceivedData().add(packet);
+            this.getChildNode().receivePacket(packet);
+        } else {
+            // If the hash doesn't match, log the packet in errorsFound.txt
+            logErrorPacket(packet);
+            this.setErrorCount(this.getErrorCount() + 1);
         }
     }
 
@@ -63,4 +39,5 @@ public class NodeD extends Node {
         }
     }
 }
+
 

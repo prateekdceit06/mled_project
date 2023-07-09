@@ -12,16 +12,6 @@ public class CommonFunctions {
     }
 
 
-    public static String getIP() {
-        try {
-            InetAddress ipAddress = InetAddress.getLocalHost();
-            String hostAddress = ipAddress.getHostAddress();
-            return hostAddress;
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public static void printNetwork(List<Layer> layers){
         int layerNum = layers.size();
