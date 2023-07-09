@@ -49,9 +49,12 @@ public class Layer {
     public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod){
         int increment  = (int) Math.pow(2, layerNum - layerID);
         int nodeID = 1;
+        Node node;
+        NodeFactory nodeFactory = new NodeFactory();
         for (int i = 1; i <= nodeNum; i++ ) {
             int portNum = 50000 + Integer.parseInt(layerID+""+i);
-            addNode(new Node(layerID, nodeID, portNum, MTU, errorDetectionMethod));
+            node = nodeFactory.getNewNode(layerID, nodeID, portNum, MTU, errorDetectionMethod);
+            addNode(node);
             nodeIDs.add(nodeID);
             nodeID += increment;
         }

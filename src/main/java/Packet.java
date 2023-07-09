@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Packet {
+public class Packet implements Serializable {
     private String packetID;
     private String data;
     private HashMap<String, String> nodeNameValueMap;
@@ -44,6 +45,10 @@ public class Packet {
 
     public void setNodeNameValueMap(HashMap<String, String> nodeNameValueMap) {
         this.nodeNameValueMap = nodeNameValueMap;
+    }
+
+    public void addToNodeNameValueMap(String nodeName, String value) {
+        this.nodeNameValueMap.put(nodeName, value);
     }
 
     public String getSendTo() {

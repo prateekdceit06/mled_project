@@ -14,6 +14,8 @@ public class MledSimulator {
     private List<Layer> layers = new ArrayList<>();
 
     private int MSS = Integer.MAX_VALUE;
+
+    private int lastNodeID = 0;
     private MledSimulator() {
     }
     public static MledSimulator getInstance() {
@@ -39,8 +41,12 @@ public class MledSimulator {
         return MSS;
     }
 
+    public int getLastNodeID() {
+        return lastNodeID;
+    }
+
     public void initialise() {
-        System.out.println(PrintColor.printInGreen("MLED Simulator starting.."));
+        System.out.println(PrintColor.printInBlue("MLED Simulator starting.."));
         boolean errorFlag = false;
 
         do{
@@ -102,8 +108,8 @@ public class MledSimulator {
                         errorDetectionMethod.configure();
                         layers.add(new Layer(i, MTU, errorDetectionMethodName, errorDetectionMethod));
                         // Number of nodes in each layer is 2^(i-1) + 1
-                        int nodeNum = (int) Math.pow(2, i-1) + 1;
-                        layers.get(i-1).addNodes(layerNum, nodeNum, errorDetectionMethod);
+                        lastNodeID = (int) Math.pow(2, i-1) + 1;
+                        layers.get(i-1).addNodes(layerNum, lastNodeID, errorDetectionMethod);
                         System.out.println(PrintColor.printInGreen("Layer " + i + " created with MTU " + MTU + " and error detection method " + errorDetectionMethodName + '\n'));
                     }
 
@@ -112,11 +118,12 @@ public class MledSimulator {
                 }
             } while (errorFlag);
         }
-        CommonFunctions.printNetwork(layers);
         createRoute();
-        createConnections();
+//        createConnections();
         calculateSmallestMTU();
+        CommonFunctions.printNetwork(layers);
         System.out.println(PrintColor.printInGreen("MLED Simulator started successfully."));
+//        runNetwork();
 
 
     }
@@ -144,71 +151,65 @@ public class MledSimulator {
                         }
                     }
                 }
-                if (node.getNodeID()==1) {
-                    node.createClientSocket(node.getParentNode().getIP(), node.getParentNode().getPort());
-                }
-
-
             }
         }
     }
 
-    public void createConnections(){
-        int lastNodeID = (int) Math.pow(2, layers.size()-1) + 1;
-        for (Layer layer : layers){
-            List<Node> nodes = layer.getNodes();
-            for (int j = 0; j < nodes.size(); j++) {
-                Node node = nodes.get(j);
-
-                //for the first node in every layer, parent will send data to child so the parent will be the server
-                if (node.getNodeID()==1 && node.getParentNode()!=null) {
-                    if (node.createClientSocket(node.getParentNode().getIP(), node.getParentNode().getPort())) {
-                        System.out.println(PrintColor.printInGreen("Connection established between server node " + node.getParentNode().getNodeName() + " and client node " + node.getNodeName()));
-                    } else {
-                        System.out.println(PrintColor.printInRed("Connection failed between server node " + node.getParentNode().getNodeName() + " and client node " + node.getNodeName()));
-                    }
-                }
-
-                //for the last node in every layer, child will send data to parent  so the child will be the server
-                if (node.getNodeID() == lastNodeID && node.getChildNode()!=null) {
-                    if(node.createClientSocket(node.getChildNode().getIP(), node.getChildNode().getPort())){
-                        System.out.println(PrintColor.printInGreen("Connection established between server node " + node.getChildNode().getNodeName() + " and client node " + node.getNodeName()));
-                    } else {
-                        System.out.println(PrintColor.printInRed("Connection failed between server node " + node.getChildNode().getNodeName() + " and client node " + node.getNodeName()));
-                    }
-                }
-
-                //In last layer every node will send data to the next node, so the previous node will be the server
-                if (node.getLayerID() == layerNum && node.getNodeID()!=1){
-                    if(node.createClientSocket(nodes.get(nodes.indexOf(node)-1).getIP(), nodes.get(nodes.indexOf(node)-1).getPort())){
-                        System.out.println(PrintColor.printInGreen("Connection established between server node " + nodes.get(nodes.indexOf(node)-1).getNodeName() + " and client node " + node.getNodeName()));
-                    } else {
-                        System.out.println(PrintColor.printInRed("Connection failed between server node " + nodes.get(nodes.indexOf(node)-1).getNodeName() + " and client node " + node.getNodeName() ));
-                    }
-                    if (node.getNodeID()!=lastNodeID){
-                        Node tempNode = node;
-                        while (tempNode.getParentNode()!=null){
-                            if(tempNode.createClientSocket(tempNode.getParentNode().getIP(), tempNode.getParentNode().getPort())){
-                                System.out.println(PrintColor.printInGreen("Connection established between server node " + tempNode.getParentNode().getNodeName() + " and client node " + tempNode.getNodeName() ));
-                            } else {
-                                System.out.println(PrintColor.printInRed("Connection failed between server node " + tempNode.getParentNode().getNodeName()  + " and client node " + tempNode.getNodeName() ));
-                            }
-
-                            if (tempNode.getParentNode().createClientSocket(tempNode.getIP(), tempNode.getPort())){
-                                System.out.println(PrintColor.printInGreen("Connection established between server node " +  tempNode.getNodeName() + " and client node " +  tempNode.getParentNode().getNodeName()));
-                            } else {
-                                System.out.println(PrintColor.printInRed("Connection failed between server node " + tempNode.getNodeName() + " and client node " +  tempNode.getParentNode().getNodeName()));
-                            }
-                            tempNode = tempNode.getParentNode();
-                        }
-
-                    }
-                }
-
-
-            }
-        }
-    }
+//    public void createConnections(){
+//        for (Layer layer : layers){
+//            List<Node> nodes = layer.getNodes();
+//            for (int j = 0; j < nodes.size(); j++) {
+//                Node node = nodes.get(j);
+//
+//                //for the first node in every layer, parent will send data to child so the parent will be the server
+//                if (node.getNodeID()==1 && node.getParentNode()!=null) {
+//                    if (node.createClientSocket(node.getParentNode().getIP(), node.getParentNode().getPort())) {
+//                        System.out.println(PrintColor.printInGreen("Connection established between server node " + node.getParentNode().getNodeName() + " and client node " + node.getNodeName()));
+//                    } else {
+//                        System.out.println(PrintColor.printInRed("Connection failed between server node " + node.getParentNode().getNodeName() + " and client node " + node.getNodeName()));
+//                    }
+//                }
+//
+//                //for the last node in every layer, child will send data to parent  so the child will be the server
+//                if (node.getNodeID() == lastNodeID && node.getChildNode()!=null) {
+//                    if(node.createClientSocket(node.getChildNode().getIP(), node.getChildNode().getPort())){
+//                        System.out.println(PrintColor.printInGreen("Connection established between server node " + node.getChildNode().getNodeName() + " and client node " + node.getNodeName()));
+//                    } else {
+//                        System.out.println(PrintColor.printInRed("Connection failed between server node " + node.getChildNode().getNodeName() + " and client node " + node.getNodeName()));
+//                    }
+//                }
+//
+//                //In last layer every node will send data to the next node, so the previous node will be the server
+//                if (node.getLayerID() == layerNum && node.getNodeID()!=1){
+//                    if(node.createClientSocket(nodes.get(nodes.indexOf(node)-1).getIP(), nodes.get(nodes.indexOf(node)-1).getPort())){
+//                        System.out.println(PrintColor.printInGreen("Connection established between server node " + nodes.get(nodes.indexOf(node)-1).getNodeName() + " and client node " + node.getNodeName()));
+//                    } else {
+//                        System.out.println(PrintColor.printInRed("Connection failed between server node " + nodes.get(nodes.indexOf(node)-1).getNodeName() + " and client node " + node.getNodeName() ));
+//                    }
+//                    if (node.getNodeID()!=lastNodeID){
+//                        Node tempNode = node;
+//                        while (tempNode.getParentNode()!=null){
+//                            if(tempNode.createClientSocket(tempNode.getParentNode().getIP(), tempNode.getParentNode().getPort())){
+//                                System.out.println(PrintColor.printInGreen("Connection established between server node " + tempNode.getParentNode().getNodeName() + " and client node " + tempNode.getNodeName() ));
+//                            } else {
+//                                System.out.println(PrintColor.printInRed("Connection failed between server node " + tempNode.getParentNode().getNodeName()  + " and client node " + tempNode.getNodeName() ));
+//                            }
+//
+//                            if (tempNode.getParentNode().createClientSocket(tempNode.getIP(), tempNode.getPort())){
+//                                System.out.println(PrintColor.printInGreen("Connection established between server node " +  tempNode.getNodeName() + " and client node " +  tempNode.getParentNode().getNodeName()));
+//                            } else {
+//                                System.out.println(PrintColor.printInRed("Connection failed between server node " + tempNode.getNodeName() + " and client node " +  tempNode.getParentNode().getNodeName()));
+//                            }
+//                            tempNode = tempNode.getParentNode();
+//                        }
+//
+//                    }
+//                }
+//
+//
+//            }
+//        }
+//    }
 
     public void calculateSmallestMTU(){
         for (Layer layer: layers) {
@@ -217,6 +218,8 @@ public class MledSimulator {
             }
         }
     }
+
+
 
 
 

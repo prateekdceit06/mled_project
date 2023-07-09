@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
@@ -8,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class Node implements Runnable {
+public abstract class Node implements Runnable {
 
     private final int layerID;
     private final int nodeID;
@@ -23,6 +24,8 @@ public class Node implements Runnable {
 
     private Node parentNode;
     private Node childNode;
+
+    private int errorCount = 0;
 
     public Node(int layerID, int nodeID, int port, int MTU, ErrorDetectionMethod errorDetectionMethod){
         this.layerID = layerID;
@@ -44,7 +47,8 @@ public class Node implements Runnable {
     public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(port);  // Create a server socket
-            Socket ss = serverSocket.accept();   // Accept an incoming client connection request
+            Socket socket = serverSocket.accept();   // Accept an incoming client connection request
+
 //            File file = new File("astroMLData.txt");
 //            FileInputStream fileInputStream = new FileInputStream(file);
 //
@@ -128,6 +132,13 @@ public class Node implements Runnable {
     }
 
 
+    public int getErrorCount() {
+        return errorCount;
+    }
+
+    public void setErrorCount(int errorCount) {
+        this.errorCount = errorCount;
+    }
     public Socket getClientSocket() {
         return clientSocket;
     }
@@ -159,15 +170,17 @@ public class Node implements Runnable {
                 '}';
     }
 
-    public boolean createClientSocket(String IP, int port){
-        try{
-            this.clientSocket = new Socket(IP, port);
-            return true;
-        } catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public boolean createClientSocket(String IP, int port){
+//        try{
+//            this.clientSocket = new Socket(IP, port);
+//            return true;
+//        } catch (Exception e){
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
+
+    public abstract void receiveAndSendPacket();
 
 }
