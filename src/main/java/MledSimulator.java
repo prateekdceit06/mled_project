@@ -16,6 +16,8 @@ public class MledSimulator {
 
     private int lastNodeID;
 
+    private ErrorModel errorModel;
+
     private MledSimulator() {
     }
 
@@ -47,14 +49,14 @@ public class MledSimulator {
     }
 
     public void initialise() {
-        System.out.println(PrintColor.printInBlue("MLED Simulator starting.."));
+        System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
         boolean errorFlag = false;
         do {
             if (errorFlag) {
-                System.out.println(PrintColor.printInRed("Error: Invalid input. Please try again."));
+                System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
             }
             try {
-                System.out.print(PrintColor.printInRed("Enter the number of error checking layers [1-99]: "));
+                System.out.print(PrintColor.printInGreen("Enter the number of error checking layers [1-99]: "));
                 layerNum = scanner.nextInt();
                 scanner.nextLine();
                 errorFlag = !Validator.isIntValid(layerNum, 1, 99);
@@ -70,19 +72,41 @@ public class MledSimulator {
         for (int i = 1; i <= layerNum; i++) {
             do {
                 if (errorFlag) {
-                    System.out.println(PrintColor.printInRed("Error: Invalid input. Please try again."));
+                    System.out.println(PrintColor.printInPurple("Error: Invalid input. Please try again."));
                 }
                 try {
 
-                    System.out.print(PrintColor.printInRed("Enter the MTU (in Bytes) for layer " + i + " [500-5000]: "));
+                    System.out.print(PrintColor.printInYellow("Enter the MTU (in Bytes) for layer " + i + " [500-5000]: "));
                     int MTU = scanner.nextInt();
                     scanner.nextLine();
                     errorFlag = !Validator.isIntValid(MTU, 500, 5000);
                     if (errorFlag) {
                         continue;
                     }
+                    Menu.errorModelMenu();
+                    System.out.print(PrintColor.printInBlue("Enter the error model for layer " + i + ": "));
+                    int edModel = scanner.nextInt();
+                    scanner.nextLine();
+                    errorFlag = !Validator.isIntValid(edModel, 1, 3);
+                    if (errorFlag) {
+                        continue;
+                    }
+                    switch (edModel) {
+                        case 1:
+                            errorModel = new ErrorModelGilbertElliot();
+                            break;
+                        case 2:
+                            errorModel = new ErrorModelGilbertElliot();
+                            errorModel.configure();
+                            break;
+                        case 3:
+                            exit(1);
+                        default:
+                            System.out.println(PrintColor.printInRed("Invalid input"));
+                            errorFlag = true;
+                    }
                     Menu.errorCheckMethodMenu();
-                    System.out.print(PrintColor.printInRed("Select the error detection method for layer " + i + ": "));
+                    System.out.print(PrintColor.printInCyan("Select the error detection method for layer " + i + ": "));
                     int edm = scanner.nextInt();
                     scanner.nextLine();
                     errorFlag = !Validator.isIntValid(edm, 1, 4);
@@ -106,11 +130,11 @@ public class MledSimulator {
                         }
                         ErrorDetectionMethod errorDetectionMethod = ErrorDetectionMethodFactory.getErrorDetectionMethod(errorDetectionMethodName);
                         errorDetectionMethod.configure();
-                        layers.add(new Layer(i, MTU, errorDetectionMethodName, errorDetectionMethod));
+                        layers.add(new Layer(i, MTU, errorDetectionMethodName, errorDetectionMethod, errorModel));
                         // Number of nodes in each layer is 2^(i-1) + 1
                         int numNodes = (int) Math.pow(2, i - 1) + 1;
-                        layers.get(i - 1).addNodes(layerNum, numNodes, errorDetectionMethod);
-                        System.out.println(PrintColor.printInGreen("Layer " + i + " created with MTU " + MTU + " and error detection method " + errorDetectionMethodName + '\n'));
+                        layers.get(i - 1).addNodes(layerNum, numNodes, errorDetectionMethod, errorModel);
+                        System.out.println(PrintColor.printInGreenBack("Layer " + i + " created with MTU " + MTU + " and error detection method " + errorDetectionMethodName + '\n'));
                     }
 
                 } catch (Exception e) {
@@ -148,7 +172,7 @@ public class MledSimulator {
                 }
             }
         }
-        System.out.println(PrintColor.printInGreen("MLED Simulator started successfully."));
+        System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
     }
 
     public void runNetwork() {

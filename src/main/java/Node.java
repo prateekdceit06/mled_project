@@ -19,7 +19,9 @@ public abstract class Node {
 
     private int errorCount = 0;
 
-    public Node(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod) {
+    private ErrorModel errorModel;
+
+    public Node(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
         this.layerID = layerID;
         this.nodeID = nodeID;
         this.nodeName = layerID + "-" + nodeID;
@@ -27,7 +29,9 @@ public abstract class Node {
         this.errorDetectionMethod = errorDetectionMethod;
         this.parentNode = null;
         this.childNode = null;
+        this.errorModel = errorModel;
     }
+
 
 
     public int getLayerID() {
@@ -84,7 +88,9 @@ public abstract class Node {
         this.errorCount = errorCount;
     }
 
-
+    public ErrorModel getErrorModel() {
+        return errorModel;
+    }
 
     //override toString method to print out node information
     @Override
@@ -105,6 +111,7 @@ public abstract class Node {
                 ", MTU=" + MTU +
                 ", parentNode=" + parentNodeName +
                 ", childNode=" + childNodeName +
+                ", errorModel=" + errorModel +
                 '}';
     }
 

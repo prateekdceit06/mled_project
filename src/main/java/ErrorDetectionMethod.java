@@ -1,5 +1,5 @@
 public interface ErrorDetectionMethod {
-    public void configure();
-    public String calculate(byte[] input);
-    public boolean verify(byte[] input, String valueToCompare);
+    void configure();
+    String calculate(byte[] input);
+    boolean verify(byte[] input, String valueToCompare);
 }

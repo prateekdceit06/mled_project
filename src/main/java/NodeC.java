@@ -2,8 +2,8 @@
 // from parent node, generate an error check and sending it to child node.
 
 public class NodeC extends Node {
-    public NodeC(int layerID, int nodeID,  int MTU, ErrorDetectionMethod errorDetectionMethod) {
-        super(layerID, nodeID,  MTU, errorDetectionMethod);
+    public NodeC(int layerID, int nodeID,  int MTU, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+        super(layerID, nodeID,  MTU, errorDetectionMethod, errorModel);
     }
 
     public void receivePacket(Packet packet, int totalFileSize, String valueToCheckOnWholeFile) {

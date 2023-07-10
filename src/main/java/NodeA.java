@@ -6,15 +6,15 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 
 public class NodeA extends Node {
-    public NodeA(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod) {
-        super(layerID, nodeID, MTU, errorDetectionMethod);
+    public NodeA(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+        super(layerID, nodeID, MTU, errorDetectionMethod, errorModel);
     }
 
     public void readFileAndSendPackets() {
         int packetID = 0;
         try {
             // Read file
-            String data = new String(Files.readAllBytes(Paths.get("astroMLDataLarge.txt")));
+            String data = new String(Files.readAllBytes(Paths.get("astroMLData.txt")));
 
             // Calculate the hash of the entire file content
             byte[] dataBytes = data.getBytes();

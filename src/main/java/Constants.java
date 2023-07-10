@@ -119,4 +119,10 @@ public class Constants {
         }
     }
 
+    public static final double GOOD_TO_BAD = 0.5;
+    public static final double BAD_TO_GOOD = 0.5;
+    public static final double errorProbabilityGood = 0.5;
+    public static final double errorProbabilityBad = 0.5;
+    public static final int SEED = 123456789;
+
 }

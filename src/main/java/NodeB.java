@@ -11,8 +11,8 @@ import java.util.List;
 public class NodeB extends Node {
     private List<Packet> packetBuffer = new ArrayList<>();
 
-    public NodeB(int layerID, int nodeID,  int MTU, ErrorDetectionMethod errorDetectionMethod) {
-        super(layerID, nodeID, MTU, errorDetectionMethod);
+    public NodeB(int layerID, int nodeID,  int MTU, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+        super(layerID, nodeID, MTU, errorDetectionMethod, errorModel);
     }
 
     public void receivePacket(Packet packet, int totalFileSize, String valueToCheckOnWholeFile) {

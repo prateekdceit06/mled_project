@@ -6,8 +6,8 @@ import java.io.PrintWriter;
 
 
 public class NodeD extends Node {
-    public NodeD(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod) {
-        super(layerID, nodeID, MTU, errorDetectionMethod);
+    public NodeD(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+        super(layerID, nodeID, MTU, errorDetectionMethod, errorModel);
     }
 
     public void receivePacket(Packet packet, int totalFileSize, String valueToCheckOnWholeFile) {

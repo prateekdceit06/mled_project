@@ -14,10 +14,10 @@ public class ErrorDetectionMethodChecksum implements ErrorDetectionMethod {
         boolean errorFlag = false;
         do {
             if (errorFlag) {
-                System.out.println(PrintColor.printInRed("Error: Invalid input. Please try again."));
+                System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
             }
             try {
-                System.out.print(PrintColor.printInRed("Enter the checksum length (in bytes) [1-10]: "));
+                System.out.print(PrintColor.printInWhite("Enter the checksum length (in bytes) [1-10]: "));
                 checksumLength = MledSimulator.getInstance().getScanner().nextInt();
                 MledSimulator.getInstance().getScanner().nextLine();
                 errorFlag = !Validator.isIntValid(checksumLength, 1, 10);

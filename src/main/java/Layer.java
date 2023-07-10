@@ -11,11 +11,14 @@ public class Layer {
 
     private List<Integer> nodeIDs = new ArrayList<>();
 
-    public Layer(int layerID, int MTU, String errorDetectionMethodName, ErrorDetectionMethod errorDetectionMethod) {
+    private ErrorModel errorModel;
+
+    public Layer(int layerID, int MTU, String errorDetectionMethodName, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
         this.layerID = layerID;
         this.MTU = MTU;
         this.errorDetectionMethodName = errorDetectionMethodName;
         this.errorDetectionMethod = errorDetectionMethod;
+        this.errorModel = errorModel;
     }
 
     public int getLayerID() {
@@ -46,13 +49,13 @@ public class Layer {
         return nodeIDs;
     }
 
-    public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod){
+    public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel){
         int increment  = (int) Math.pow(2, layerNum - layerID);
         int nodeID = 1;
         Node node;
         NodeFactory nodeFactory = new NodeFactory();
         for (int i = 1; i <= nodeNum; i++ ) {
-            node = nodeFactory.getNewNode(layerID, nodeID,  MTU, errorDetectionMethod);
+            node = nodeFactory.getNewNode(layerID, nodeID,  MTU, errorDetectionMethod, errorModel);
 //            System.out.println(PrintColor.printInPurple("Node Name" + node.getNodeName() + ", Node Class: " +
 //                    node.getClass().getName()));
             addNode(node);
@@ -71,6 +74,7 @@ public class Layer {
                 ", nodes=" + nodes +
                 ", nodeIDs=" + nodeIDs +
                 ", errorDetectionMethod=" + errorDetectionMethod +
+                ", errorModel=" + errorModel +
                 '}';
     }
 

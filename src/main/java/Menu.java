@@ -66,6 +66,19 @@ public class Menu {
         System.out.println(PrintColor.printInCyan(index + ". Exit"));
     }
 
+    public static void errorModelMenu(){
+        System.out.println(PrintColor.printInBlue("Error Model Menu"));
+        System.out.println(PrintColor.printInBlue("1. Default " +
+                "[ Good to Bad-"+ Constants.GOOD_TO_BAD +
+                ", Bad to Good-" + Constants.BAD_TO_GOOD +
+                ", Error Probability Good-" + Constants.errorProbabilityGood +
+                ", Error Probability Bad-" + Constants.errorProbabilityBad +
+                "]: "));
+        System.out.println(PrintColor.printInBlue("2. Custom"));
+        System.out.println(PrintColor.printInBlue("3. Exit"));
+
+    }
+
 
 
 
