@@ -52,8 +52,9 @@ public class Layer {
         Node node;
         NodeFactory nodeFactory = new NodeFactory();
         for (int i = 1; i <= nodeNum; i++ ) {
-            int portNum = 50000 + Integer.parseInt(layerID+""+i);
-            node = nodeFactory.getNewNode(layerID, nodeID, portNum, MTU, errorDetectionMethod);
+            node = nodeFactory.getNewNode(layerID, nodeID,  MTU, errorDetectionMethod);
+//            System.out.println(PrintColor.printInPurple("Node Name" + node.getNodeName() + ", Node Class: " +
+//                    node.getClass().getName()));
             addNode(node);
             nodeIDs.add(nodeID);
             nodeID += increment;

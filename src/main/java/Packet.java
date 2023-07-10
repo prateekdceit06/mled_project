@@ -1,7 +1,9 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class Packet implements Serializable {
+public class Packet {
     private String packetID;
     private String data;
     private HashMap<String, String> nodeNameValueMap;
@@ -10,6 +12,8 @@ public class Packet implements Serializable {
     private int seqnum;
     private int acknum;
     private int size;
+
+    private List<String> path;
 
 
     public Packet(String packetID, String data, String sendTo, String sentFrom,
@@ -21,14 +25,12 @@ public class Packet implements Serializable {
         this.seqnum = seqnum;
         this.acknum = acknum;
         this.size = data.length();
+        this.nodeNameValueMap = new HashMap<>();
+        this.path = new ArrayList<>();
     }
 
     public String getPacketID() {
         return packetID;
-    }
-
-    public void setPacketID(String packetID) {
-        this.packetID = packetID;
     }
 
     public String getData() {
@@ -43,16 +45,16 @@ public class Packet implements Serializable {
         return nodeNameValueMap;
     }
 
-    public void setNodeNameValueMap(HashMap<String, String> nodeNameValueMap) {
-        this.nodeNameValueMap = nodeNameValueMap;
-    }
-
     public void addToNodeNameValueMap(String nodeName, String value) {
         this.nodeNameValueMap.put(nodeName, value);
     }
 
     public String getSendTo() {
         return sendTo;
+    }
+
+    public List<String> getPath() {
+        return path;
     }
 
     public void setSendTo(String sendTo) {
@@ -71,17 +73,11 @@ public class Packet implements Serializable {
         return seqnum;
     }
 
-    public void setSeqnum(int seqnum) {
-        this.seqnum = seqnum;
-    }
 
     public int getAcknum() {
         return acknum;
     }
 
-    public void setAcknum(int acknum) {
-        this.acknum = acknum;
-    }
 
     public int getSize() {
         return size;
@@ -98,6 +94,6 @@ public class Packet implements Serializable {
     public String toString() {
         return "Packet [packetID=" + packetID + ", data=" + data + ",  nodeNameValueMap="
                 + nodeNameValueMap + ", sendTo=" + sendTo + ", sentFrom=" + sentFrom + ", seqnum=" + seqnum
-                + ", acknum=" + acknum + ", size=" + size + "]";
+                + ", acknum=" + acknum + ", size=" + size + ", path=" + path + "]";
     }
 }

@@ -5,8 +5,7 @@ public class Menu {
         System.out.println(PrintColor.printInCyan("1. Checksum"));
         System.out.println(PrintColor.printInCyan("2. CRC"));
         System.out.println(PrintColor.printInCyan("3. Hash"));
-        System.out.println(PrintColor.printInCyan("4. None"));
-        System.out.println(PrintColor.printInCyan("5. Exit"));
+        System.out.println(PrintColor.printInCyan("4. Exit"));
     }
 
     public static void hashAlgorithmMenu() {

@@ -11,7 +11,6 @@ public abstract class Node {
     private final int nodeID;
     private final String nodeName;
     private List<Packet> receivedData = new ArrayList<>();
-    private Queue<Packet> packetQueue = new LinkedList<Packet>();
     private final int MTU;
     private final ErrorDetectionMethod errorDetectionMethod;
 
@@ -20,7 +19,7 @@ public abstract class Node {
 
     private int errorCount = 0;
 
-    public Node(int layerID, int nodeID, int port, int MTU, ErrorDetectionMethod errorDetectionMethod) {
+    public Node(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod) {
         this.layerID = layerID;
         this.nodeID = nodeID;
         this.nodeName = layerID + "-" + nodeID;
@@ -51,13 +50,6 @@ public abstract class Node {
         this.receivedData = receivedData;
     }
 
-    public Queue<Packet> getPacketQueue() {
-        return packetQueue;
-    }
-
-    public void setPacketQueue(Queue<Packet> packetQueue) {
-        this.packetQueue = packetQueue;
-    }
 
     public int getMTU() {
         return MTU;
@@ -110,7 +102,6 @@ public abstract class Node {
                 ", nodeID=" + nodeID +
                 ", nodeName='" + nodeName + '\'' +
                 ", receivedData=" + receivedData +
-                ", packetQueue=" + packetQueue +
                 ", MTU=" + MTU +
                 ", parentNode=" + parentNodeName +
                 ", childNode=" + childNodeName +
@@ -120,10 +111,12 @@ public abstract class Node {
     public String getNodeNameForErrorCheck(){
         int layerIDForNodeCheck = this.getLayerID();
         int nodeIDForNodeCheck = (int) (this.getNodeID() -
-                Math.pow(2, MledSimulator.getInstance().getLayerNum()) - layerIDForNodeCheck);
+                Math.pow(2, MledSimulator.getInstance().getLayerNum()- layerIDForNodeCheck));
         String nodeName = layerIDForNodeCheck + "-" + nodeIDForNodeCheck;
         return nodeName;
     }
 
-    public abstract void receivePacket(Packet packet);
+
+
+    public abstract void receivePacket(Packet packet, int totalFileSize, String valueToCheckonWholeFile);
 }

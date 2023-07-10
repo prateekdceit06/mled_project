@@ -5,6 +5,11 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
     String crcPolynomialHex;
     String getCrcPolynomialBinary;
     String type = "";
+
+    public void setGetCrcPolynomialBinary(String getCrcPolynomialBinary) {
+        this.getCrcPolynomialBinary = getCrcPolynomialBinary;
+    }
+
     public void configure() {
         Menu.crcMenu();
         boolean errorFlag = false;
@@ -80,9 +85,10 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
     }
 
     public boolean verify(byte[] input, String valueToCompare) {
-        valueToCompare = getZeros(getCrcPolynomialBinary.length() - 1);
-        String remainder = calculate(input);
-        if (remainder.equals(valueToCompare)) {
+        String binaryString = byteArrayToString(input) + valueToCompare;
+        String remainder = divide(binaryString, getCrcPolynomialBinary);
+        String zeros = getZeros(getCrcPolynomialBinary.length() - 1);
+        if (remainder.equals(zeros)) {
             return true;
         }
         return false;
@@ -108,13 +114,33 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
     }
 
 //    private static byte[] stringToByteArray(String binaryString) {
-//        String[] byteStrings = binaryString.split(" ");
-//        byte[] byteArray = new byte[byteStrings.length];
-//        for (int i = 0; i < byteStrings.length; i++) {
-//            byteArray[i] = (byte) Integer.parseInt(byteStrings[i], 2);
+//        int byteLength = 8;
+//
+//        // Error checking: input validation
+//        if (!binaryString.matches("[01]+")) {
+//            throw new IllegalArgumentException("Input string is not a valid binary string");
 //        }
+//
+//        // Padding: if binaryString's length is not a multiple of 8
+//        int remainder = binaryString.length() % byteLength;
+//        if (remainder != 0) {
+//            int paddingLength = byteLength - remainder;
+//            for (int i = 0; i < paddingLength; i++) {
+//                binaryString = "0" + binaryString;
+//            }
+//        }
+//
+//        int byteArrayLength = binaryString.length() / byteLength;
+//        byte[] byteArray = new byte[byteArrayLength];
+//
+//        for (int i = 0; i < byteArrayLength; i++) {
+//            String byteString = binaryString.substring(i * byteLength, (i + 1) * byteLength);
+//            byteArray[i] = (byte) Integer.parseInt(byteString, 2);
+//        }
+//
 //        return byteArray;
 //    }
+
 
     private String byteArrayToString(byte[] byteArray) {
         StringBuilder binaryString = new StringBuilder();

@@ -6,26 +6,32 @@ import java.io.PrintWriter;
 
 
 public class NodeE extends Node {
-    public NodeE(int layerID, int nodeID, int port, int MTU, ErrorDetectionMethod errorDetectionMethod) {
-        super(layerID, nodeID, port, MTU, errorDetectionMethod);
+    public NodeE(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod) {
+        super(layerID, nodeID, MTU, errorDetectionMethod);
     }
 
-    public void receivePacket(Packet packet) {
+    public void receivePacket(Packet packet, int totalFileSize, String valueToCheckOnWholeFile) {
+
         // Retrieve the attached hash from parent node
 
         String nodeName = getNodeNameForErrorCheck();
-        String packetHash = packet.getNodeNameValueMap().get(nodeName);
+        String packetValue = packet.getNodeNameValueMap().get(nodeName);
 
         // Verify the hash
         String packetData = packet.getData();
         byte[] packetDataBytes = packetData.getBytes();
 
-        if (this.getErrorDetectionMethod().verify(packetDataBytes, packetHash)) {
+        if (this.getErrorDetectionMethod().verify(packetDataBytes, packetValue)) {
+
             // If the hash matches, add the packet to receivedData, generate new hash and send it to the child node
             this.getReceivedData().add(packet);
-            String newPacketHash = this.getErrorDetectionMethod().calculate(packetDataBytes);
-            packet.addToNodeNameValueMap(this.getNodeName(), newPacketHash);
-            this.getChildNode().receivePacket(packet);
+            Node sendToNode = this.getSendToNode(packet.getSentFrom());
+            packet.setSendTo(sendToNode.getNodeName());
+            packet.setSentFrom(this.getNodeName());
+            String newPacketValue = this.getErrorDetectionMethod().calculate(packetDataBytes);
+            packet.addToNodeNameValueMap(this.getNodeName(), newPacketValue);
+            packet.getPath().add(this.getNodeName());
+            sendToNode.receivePacket(packet, totalFileSize, valueToCheckOnWholeFile);
         } else {
             // If the hash doesn't match, log the packet in errorsFound.txt
             logErrorPacket(packet);
@@ -39,6 +45,18 @@ public class NodeE extends Node {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Node getSendToNode(String packetSentFrom){
+        Node node = null;
+        if (this.getParentNode()!=null && !packetSentFrom.equals(this.getParentNode().getNodeName())){
+            node  = this.getParentNode();
+        } else if (this.getChildNode() != null) {
+            node = this.getChildNode();
+        } else {
+            node = MledSimulator.getInstance().getLayers().get(this.getLayerID()-1).getNodes().get(this.getNodeID());
+        }
+        return node;
     }
 }
 

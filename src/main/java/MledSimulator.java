@@ -14,7 +14,7 @@ public class MledSimulator {
 
     private int MSS = Integer.MAX_VALUE;
 
-    private int lastNodeID = 0;
+    private int lastNodeID;
 
     private MledSimulator() {
     }
@@ -49,7 +49,6 @@ public class MledSimulator {
     public void initialise() {
         System.out.println(PrintColor.printInBlue("MLED Simulator starting.."));
         boolean errorFlag = false;
-
         do {
             if (errorFlag) {
                 System.out.println(PrintColor.printInRed("Error: Invalid input. Please try again."));
@@ -59,6 +58,9 @@ public class MledSimulator {
                 layerNum = scanner.nextInt();
                 scanner.nextLine();
                 errorFlag = !Validator.isIntValid(layerNum, 1, 99);
+                if (!errorFlag) {
+                    lastNodeID = (int) Math.pow(2,  layerNum- 1) + 1;
+                }
             } catch (Exception e) {
                 errorFlag = true;
             }
@@ -83,7 +85,7 @@ public class MledSimulator {
                     System.out.print(PrintColor.printInRed("Select the error detection method for layer " + i + ": "));
                     int edm = scanner.nextInt();
                     scanner.nextLine();
-                    errorFlag = !Validator.isIntValid(edm, 1, 5);
+                    errorFlag = !Validator.isIntValid(edm, 1, 4);
                     if (!errorFlag) {
                         String errorDetectionMethodName = "";
                         switch (edm) {
@@ -97,9 +99,6 @@ public class MledSimulator {
                                 errorDetectionMethodName = Constants.errorDetectionMethodEnum.HASH.toString();
                                 break;
                             case 4:
-                                errorDetectionMethodName = Constants.errorDetectionMethodEnum.NONE.toString();
-                                break;
-                            case 5:
                                 exit(1);
                             default:
                                 System.out.println(PrintColor.printInRed("Invalid input"));
@@ -109,8 +108,8 @@ public class MledSimulator {
                         errorDetectionMethod.configure();
                         layers.add(new Layer(i, MTU, errorDetectionMethodName, errorDetectionMethod));
                         // Number of nodes in each layer is 2^(i-1) + 1
-                        lastNodeID = (int) Math.pow(2, i - 1) + 1;
-                        layers.get(i - 1).addNodes(layerNum, lastNodeID, errorDetectionMethod);
+                        int numNodes = (int) Math.pow(2, i - 1) + 1;
+                        layers.get(i - 1).addNodes(layerNum, numNodes, errorDetectionMethod);
                         System.out.println(PrintColor.printInGreen("Layer " + i + " created with MTU " + MTU + " and error detection method " + errorDetectionMethodName + '\n'));
                     }
 
@@ -120,13 +119,9 @@ public class MledSimulator {
             } while (errorFlag);
         }
         createRoute();
-//        createConnections();
         calculateSmallestMTU();
         CommonFunctions.printNetwork(layers);
-        System.out.println(PrintColor.printInGreen("MLED Simulator started successfully."));
-//        runNetwork();
-
-
+        runNetwork();
     }
 
     public void createRoute() {
@@ -137,23 +132,27 @@ public class MledSimulator {
 
             for (int j = 0; j < nodes.size(); j++) {
                 Node node = nodes.get(j);
-                if (node.getLayerID() == 1) {
-                    continue;
-                }
-                int parentLayerID = node.getLayerID() - 1;
-                List<Integer> nodeIDs = layers.get(parentLayerID - 1).getNodeIDs();
-                int parentNodeID = node.getNodeID();
-                if (nodeIDs.contains(parentNodeID)) {
-                    for (Node parentNode : layers.get(parentLayerID - 1).getNodes()) {
-                        if (parentNode.getNodeID() == parentNodeID) {
-                            node.setParentNode(parentNode);
-                            parentNode.setChildNode(node);
-                            break;
+                if (node.getLayerID() != 1) {
+                    int parentLayerID = node.getLayerID() - 1;
+                    List<Integer> nodeIDs = layers.get(parentLayerID - 1).getNodeIDs();
+                    int parentNodeID = node.getNodeID();
+                    if (nodeIDs.contains(parentNodeID)) {
+                        for (Node parentNode : layers.get(parentLayerID - 1).getNodes()) {
+                            if (parentNode.getNodeID() == parentNodeID) {
+                                node.setParentNode(parentNode);
+                                parentNode.setChildNode(node);
+                                break;
+                            }
                         }
                     }
                 }
             }
         }
+        System.out.println(PrintColor.printInGreen("MLED Simulator started successfully."));
+    }
+
+    public void runNetwork() {
+        ((NodeA) layers.get(0).getNodes().get(0)).readFileAndSendPackets();
     }
 
 

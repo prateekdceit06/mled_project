@@ -6,27 +6,32 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 
 public class NodeA extends Node {
-    public NodeA(int layerID, int nodeID, int port, int MTU, ErrorDetectionMethod errorDetectionMethod) {
-        super(layerID, nodeID, port, MTU, errorDetectionMethod);
+    public NodeA(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod) {
+        super(layerID, nodeID, MTU, errorDetectionMethod);
     }
 
     public void readFileAndSendPackets() {
         int packetID = 0;
         try {
             // Read file
-            String data = new String(Files.readAllBytes(Paths.get("AstroMLData.txt")));
+            String data = new String(Files.readAllBytes(Paths.get("astroMLData.txt")));
 
             // Calculate the hash of the entire file content
             byte[] dataBytes = data.getBytes();
-            String fileHash = this.getErrorDetectionMethod().calculate(dataBytes);
+            int totalFileSize = dataBytes.length;
+            String valueToCheckOnWholeFile = this.getErrorDetectionMethod().calculate(dataBytes);
+            Node sendToNode = getSendToNode();
 
             // Split into packets and send
             LinkedList<String> packets = splitIntoPackets(data, MledSimulator.getInstance().getMSS());
             for (String packetData : packets) {
                 packetID++;
-                Packet packet = new Packet(String.valueOf(packetID), packetData, this.getChildNode().getNodeName(), this.getNodeName(), packetID, 0);
-                packet.addToNodeNameValueMap(this.getNodeName(), fileHash); // Attach the file hash to the packet
-                this.getChildNode().receivePacket(packet);
+                Packet packet = new Packet(String.valueOf(packetID), packetData, sendToNode.getNodeName(), this.getNodeName(), packetID, 0);
+                this.getReceivedData().add(packet);
+                packet.getPath().add(this.getNodeName());
+                String valueToCheck = this.getErrorDetectionMethod().calculate(packetData.getBytes());
+                packet.addToNodeNameValueMap(this.getNodeName(), valueToCheck); // Attach the file hash to the packet
+                sendToNode.receivePacket(packet, totalFileSize, valueToCheckOnWholeFile);
             }
 
         } catch (Exception e) {
@@ -45,7 +50,17 @@ public class NodeA extends Node {
     }
 
     @Override
-    public void receivePacket(Packet packet) {
+    public void receivePacket(Packet packet, int totalFileSize, String valueToCheckonWholeFile) {
         // Do nothing
+    }
+
+    public Node getSendToNode(){
+        Node node = null;
+        if (this.getChildNode() != null) {
+            node = this.getChildNode();
+        } else {
+            node = MledSimulator.getInstance().getLayers().get(this.getLayerID()-1).getNodes().get(this.getNodeID());
+        }
+        return node;
     }
 }

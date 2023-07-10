@@ -1,13 +1,9 @@
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-
 public class Constants {
-    enum errorDetectionMethodEnum {CRC, CHECKSUM, HASH, NONE};
-    enum hashAlgorithmsEnum {MD5, SHA1, SHA256};
+    enum errorDetectionMethodEnum {CRC, CHECKSUM, HASH}
+
+    enum hashAlgorithmsEnum {MD5, SHA1, SHA256}
+
     public enum CRC8Variant {
         CRC_8("CRC-8", "0x07"),
         CRC_8_CDMA2000("CRC-8/CDMA2000", "0x9B"),
@@ -36,6 +32,7 @@ public class Constants {
             return polynomial;
         }
     }
+
     public enum CRC16Variant {
         CRC_16("CRC-16", "0x8005"),
         CRC_16_ARC("CRC-16/ARC", "0x8005"),
@@ -71,6 +68,7 @@ public class Constants {
             return polynomial;
         }
     }
+
     public enum CRC32Variant {
         CRC_32("CRC-32", "0x04C11DB7"),
         CRC_32_BZIP2("CRC-32/BZIP2", "0x04C11DB7"),
@@ -97,6 +95,7 @@ public class Constants {
             return polynomial;
         }
     }
+
     public enum CRC64Variant {
         CRC_64("CRC-64", "0x42F0E1EBA9EA3693"),
         CRC_64_ECMA_182("CRC-64/ECMA-182", "0x42F0E1EBA9EA3693"),
@@ -119,45 +118,5 @@ public class Constants {
             return polynomial;
         }
     }
-
-
-
-    public static final int caveProb = 20;
-    public static final int koulouProb = 20;
-    public static final int bushProb = 20;
-    public static final double heroAttack = 0.05;
-    public static final double monsterAttack = 0.2;
-    public static final double monsterDefence = 0.03;
-    public static final double skillLossSpellEffect = 0.05;
-    public static final double heroDodge = 0.02;
-    public static final double heroDefense = 0.02;
-    public static final double dexterityRatioForSpellDamage = 0.0001;
-    public static final HashMap<String, Integer> initialHealth = new HashMap<String, Integer>(){
-        {
-            put("A", 100);
-            put("B", 100);
-            put("C", 100);
-        }
-    };
-    public static final int initialMana = 100;
-    public static final int experienceGainPerAttack = 1;
-    public static final int goldGainPerMonster = 100;
-    public static final double healthGainPerBattleRound = 0.05;
-    public static final double ManaGainPerBattleRound = 0.05;
-    public static final int expToLevelUp = 10;
-    public static final double levelUpManaGain = 0.1;
-    public static final double levelUpHealthGain = 0.1;
-    public static final double levelUpAllSkillGain = 0.05;
-    public static final double levelUpSpecialSkillGain = 0.05;
-    public static final int maxItemsInMarket = 20;
-    public static final int costPerDurabilityReduction = 2;
-    public static final int durabilityReductionPerAttack = 1;
-    public static final int durabilityRepairWarning = 20;
-
-    public static final int monsterSpawnAfterTurns = 4;
-    public static final double bushDefenceBoost = 0.1;
-    public static final double caveDodgeChanceIncrease = 0.1;
-
-    public static final double koulouStrengthIncrease = 0.1;
 
 }
