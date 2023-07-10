@@ -79,7 +79,7 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
         } while (errorFlag);
     }
     public String calculate(byte[] input) {
-        String binaryString = byteArrayToString(input);
+        String binaryString = byteArrayToString(input) + getZeros(getCrcPolynomialBinary.length() - 1);
         String remainder = divide(binaryString, getCrcPolynomialBinary);
         return remainder;
     }
@@ -113,33 +113,7 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
         return bin.replaceFirst("^0+", "");
     }
 
-//    private static byte[] stringToByteArray(String binaryString) {
-//        int byteLength = 8;
-//
-//        // Error checking: input validation
-//        if (!binaryString.matches("[01]+")) {
-//            throw new IllegalArgumentException("Input string is not a valid binary string");
-//        }
-//
-//        // Padding: if binaryString's length is not a multiple of 8
-//        int remainder = binaryString.length() % byteLength;
-//        if (remainder != 0) {
-//            int paddingLength = byteLength - remainder;
-//            for (int i = 0; i < paddingLength; i++) {
-//                binaryString = "0" + binaryString;
-//            }
-//        }
-//
-//        int byteArrayLength = binaryString.length() / byteLength;
-//        byte[] byteArray = new byte[byteArrayLength];
-//
-//        for (int i = 0; i < byteArrayLength; i++) {
-//            String byteString = binaryString.substring(i * byteLength, (i + 1) * byteLength);
-//            byteArray[i] = (byte) Integer.parseInt(byteString, 2);
-//        }
-//
-//        return byteArray;
-//    }
+
 
 
     private String byteArrayToString(byte[] byteArray) {
