@@ -14,7 +14,7 @@ public class NodeA extends Node {
         int packetID = 0;
         try {
             // Read file
-            String data = new String(Files.readAllBytes(Paths.get("astroMLData.txt")));
+            String data = new String(Files.readAllBytes(Paths.get("astroMLDataLarge.txt")));
 
             // Calculate the hash of the entire file content
             byte[] dataBytes = data.getBytes();

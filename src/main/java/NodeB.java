@@ -71,7 +71,7 @@ public class NodeB extends Node {
 
     private void writeToFile(String data) {
         try (PrintWriter out = new PrintWriter(new FileWriter("output.txt", true))) {
-            out.println(data);
+            out.print(data);
         } catch (Exception e) {
             e.printStackTrace();
         }
