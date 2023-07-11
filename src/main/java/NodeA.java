@@ -6,12 +6,13 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 
 public class NodeA extends Node {
-    public NodeA(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
-        super(layerID, nodeID, MTU, errorDetectionMethod, errorModel);
+    public NodeA(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+        super(layerID, nodeID, fragmentationParameter, errorDetectionMethod, errorModel);
     }
 
     public void readFileAndSendPackets() {
-        int packetID = 0;
+        int seqNum = 0;
+        int MTU = MledSimulator.getInstance().getFirstLayerMTU();
         try {
             // Read file
             String data = new String(Files.readAllBytes(Paths.get("astroMLData.txt")));
@@ -21,13 +22,11 @@ public class NodeA extends Node {
             int totalFileSize = dataBytes.length;
             String valueToCheckOnWholeFile = this.getErrorDetectionMethod().calculate(dataBytes);
             Node sendToNode = getSendToNode();
-
             // Split into packets and send
-            LinkedList<String> packets = splitIntoPackets(data, MledSimulator.getInstance().getMSS());
+            LinkedList<String> packets = splitFile(data, MTU);
             for (String packetData : packets) {
-                packetID++;
-                Packet packet = new Packet(String.valueOf(packetID), packetData, sendToNode.getNodeName(), this.getNodeName(), packetID, 0);
-                this.getReceivedData().add(packet);
+                seqNum++;
+                Packet packet = new Packet(this.getNodeName(), packetData, sendToNode.getNodeName(), this.getNodeName(), seqNum, 0);
                 packet.getPath().add(this.getNodeName());
                 String valueToCheck = this.getErrorDetectionMethod().calculate(packetData.getBytes());
                 packet.addToNodeNameValueMap(this.getNodeName(), valueToCheck); // Attach the file hash to the packet
@@ -39,15 +38,7 @@ public class NodeA extends Node {
         }
     }
 
-    private LinkedList<String> splitIntoPackets(String data, int packetSize) {
-        LinkedList<String> packets = new LinkedList<>();
-        int index = 0;
-        while (index < data.length()) {
-            packets.add(data.substring(index, Math.min(index + packetSize,data.length())));
-            index += packetSize;
-        }
-        return packets;
-    }
+
 
     @Override
     public void receivePacket(Packet packet, int totalFileSize, String valueToCheckonWholeFile) {
@@ -62,5 +53,15 @@ public class NodeA extends Node {
             node = MledSimulator.getInstance().getLayers().get(this.getLayerID()-1).getNodes().get(this.getNodeID());
         }
         return node;
+    }
+
+    private LinkedList<String> splitFile(String data, int packetSize) {
+        LinkedList<String> packets = new LinkedList<>();
+        int index = 0;
+        while (index < data.length()) {
+            packets.add(data.substring(index, Math.min(index + packetSize,data.length())));
+            index += packetSize;
+        }
+        return packets;
     }
 }

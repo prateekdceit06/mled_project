@@ -1,4 +1,3 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,21 +8,20 @@ public class Packet {
     private HashMap<String, String> nodeNameValueMap;
     private String sendTo;
     private String sentFrom;
-    private int seqnum;
-    private int acknum;
+    private int seqNum;
+    private int ackNum;
     private int size;
 
     private List<String> path;
 
 
-    public Packet(String packetID, String data, String sendTo, String sentFrom,
-                  int seqnum, int acknum) {
+    public Packet(String packetID, String data, String sendTo, String sentFrom, int seqNum, int ackNum) {
         this.packetID = packetID;
         this.data = data;
         this.sendTo = sendTo;
         this.sentFrom = sentFrom;
-        this.seqnum = seqnum;
-        this.acknum = acknum;
+        this.seqNum = seqNum;
+        this.ackNum = ackNum;
         this.size = data.length();
         this.nodeNameValueMap = new HashMap<>();
         this.path = new ArrayList<>();
@@ -69,13 +67,13 @@ public class Packet {
         this.sentFrom = sentFrom;
     }
 
-    public int getSeqnum() {
-        return seqnum;
+    public int getSeqNum() {
+        return seqNum;
     }
 
 
-    public int getAcknum() {
-        return acknum;
+    public int getAckNum() {
+        return ackNum;
     }
 
 
@@ -93,7 +91,7 @@ public class Packet {
     @Override
     public String toString() {
         return "Packet [packetID=" + packetID + ", data=" + data + ",  nodeNameValueMap="
-                + nodeNameValueMap + ", sendTo=" + sendTo + ", sentFrom=" + sentFrom + ", seqnum=" + seqnum
-                + ", acknum=" + acknum + ", size=" + size + ", path=" + path + "]";
+                + nodeNameValueMap + ", sendTo=" + sendTo + ", sentFrom=" + sentFrom + ", seqNum=" + seqNum
+                + ", ackNum=" + ackNum + ", size=" + size + ", path=" + path + "]";
     }
 }

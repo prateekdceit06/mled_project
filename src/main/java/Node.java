@@ -11,7 +11,7 @@ public abstract class Node {
     private final int nodeID;
     private final String nodeName;
     private List<Packet> receivedData = new ArrayList<>();
-    private final int MTU;
+    private final int fragmentationParameter;
     private final ErrorDetectionMethod errorDetectionMethod;
 
     private Node parentNode;
@@ -21,11 +21,11 @@ public abstract class Node {
 
     private ErrorModel errorModel;
 
-    public Node(int layerID, int nodeID, int MTU, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+    public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
         this.layerID = layerID;
         this.nodeID = nodeID;
         this.nodeName = layerID + "-" + nodeID;
-        this.MTU = MTU;
+        this.fragmentationParameter = fragmentationParameter;
         this.errorDetectionMethod = errorDetectionMethod;
         this.parentNode = null;
         this.childNode = null;
@@ -55,10 +55,9 @@ public abstract class Node {
     }
 
 
-    public int getMTU() {
-        return MTU;
+    public int getFragmentationParameter() {
+        return fragmentationParameter;
     }
-
     public ErrorDetectionMethod getErrorDetectionMethod() {
         return errorDetectionMethod;
     }
@@ -108,7 +107,7 @@ public abstract class Node {
                 ", nodeID=" + nodeID +
                 ", nodeName='" + nodeName + '\'' +
                 ", receivedData=" + receivedData +
-                ", MTU=" + MTU +
+                ", Fragmentation Pratameter=" + fragmentationParameter +
                 ", parentNode=" + parentNodeName +
                 ", childNode=" + childNodeName +
                 ", errorModel=" + errorModel +

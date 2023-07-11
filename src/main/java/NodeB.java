@@ -11,8 +11,8 @@ import java.util.List;
 public class NodeB extends Node {
     private List<Packet> packetBuffer = new ArrayList<>();
 
-    public NodeB(int layerID, int nodeID,  int MTU, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
-        super(layerID, nodeID, MTU, errorDetectionMethod, errorModel);
+    public NodeB(int layerID, int nodeID,  int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+        super(layerID, nodeID, fragmentationParameter, errorDetectionMethod, errorModel);
     }
 
     public void receivePacket(Packet packet, int totalFileSize, String valueToCheckOnWholeFile) {
@@ -42,6 +42,10 @@ public class NodeB extends Node {
 
             if (this.getErrorDetectionMethod().verify(receivedFileBytes, valueToCheckOnWholeFile)) {
                 // If the hash matches, write the file to output.txt
+//                for (Packet p : packetBuffer) {
+//                    System.out.println("Packet : " + p + "\n" );
+//                    CommonFunctions.pause();
+//                }
                 writeToFile(new String(receivedFileBytes));
             } else {
                 // If the hash doesn't match, log the packet in errorsFound.txt
