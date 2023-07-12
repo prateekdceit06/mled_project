@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Layer {
     private int layerID;
-    private int fragmentationParameter;
+    private int fragmentationParameter = 1;
     private String errorDetectionMethodName;
 
     private ErrorDetectionMethod errorDetectionMethod;
@@ -13,7 +13,10 @@ public class Layer {
 
     private ErrorModel errorModel;
 
-    public Layer(int layerID, int fragmentationParameter, String errorDetectionMethodName, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+    private int MTU;
+
+    public Layer(int layerID, int fragmentationParameter, String errorDetectionMethodName,
+                 ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
         this.layerID = layerID;
         this.fragmentationParameter = fragmentationParameter;
         this.errorDetectionMethodName = errorDetectionMethodName;
@@ -25,6 +28,9 @@ public class Layer {
         return layerID;
     }
 
+    public void setMTU(int MTU) {
+        this.MTU = MTU;
+    }
 
     public int getFragmentationParameter() {
         return fragmentationParameter;
@@ -49,13 +55,15 @@ public class Layer {
         return nodeIDs;
     }
 
-    public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel){
+    public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod,
+                         ErrorModel errorModel){
         int increment  = (int) Math.pow(2, layerNum - layerID);
         int nodeID = 1;
         Node node;
         NodeFactory nodeFactory = new NodeFactory();
         for (int i = 1; i <= nodeNum; i++ ) {
-            node = nodeFactory.getNewNode(layerID, nodeID,  fragmentationParameter, errorDetectionMethod, errorModel);
+            node = nodeFactory.getNewNode(layerID, nodeID,  fragmentationParameter,
+                    errorDetectionMethod, errorModel, MTU);
 //            System.out.println(PrintColor.printInPurple("Node Name" + node.getNodeName() + ", Node Class: " +
 //                    node.getClass().getName()));
             addNode(node);

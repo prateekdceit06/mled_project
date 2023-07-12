@@ -6,9 +6,6 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
     String getCrcPolynomialBinary;
     String type = "";
 
-    public void setGetCrcPolynomialBinary(String getCrcPolynomialBinary) {
-        this.getCrcPolynomialBinary = getCrcPolynomialBinary;
-    }
 
     public void configure() {
         Menu.crcMenu();
@@ -79,13 +76,13 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
         } while (errorFlag);
     }
     public String calculate(byte[] input) {
-        String binaryString = byteArrayToString(input) + getZeros(getCrcPolynomialBinary.length() - 1);
+        String binaryString = CommonFunctions.byteArrayToString(input) + getZeros(getCrcPolynomialBinary.length() - 1);
         String remainder = divide(binaryString, getCrcPolynomialBinary);
         return remainder;
     }
 
     public boolean verify(byte[] input, String valueToCompare) {
-        String binaryString = byteArrayToString(input) + valueToCompare;
+        String binaryString = CommonFunctions.byteArrayToString(input) + valueToCompare;
         String remainder = divide(binaryString, getCrcPolynomialBinary);
         String zeros = getZeros(getCrcPolynomialBinary.length() - 1);
         if (remainder.equals(zeros)) {
@@ -113,20 +110,6 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
         return bin.replaceFirst("^0+", "");
     }
 
-
-
-
-    private String byteArrayToString(byte[] byteArray) {
-        StringBuilder binaryString = new StringBuilder();
-        for (byte b : byteArray) {
-            String binaryByte = Integer.toBinaryString(b & 0xFF);
-            while (binaryByte.length() < 8) {
-                binaryByte = "0" + binaryByte;
-            }
-            binaryString.append(binaryByte);
-        }
-        return binaryString.toString();
-    }
 
     private String getZeros(int n) {
         StringBuilder result = new StringBuilder(n);

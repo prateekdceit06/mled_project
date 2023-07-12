@@ -1,60 +1,48 @@
 // Concrete class for all other nodes which will have functionality of receiving data from parent node,
 // generate an error check, verify the error check and sending data to child node.
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NodeE extends Node {
-    public NodeE(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
-        super(layerID, nodeID, fragmentationParameter, errorDetectionMethod, errorModel);
+    public NodeE(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
+                 ErrorModel errorModel, int MTU) {
+        super(layerID, nodeID, fragmentationParameter, errorDetectionMethod, errorModel, MTU);
     }
 
-    public void receivePacket(Packet packet, int totalFileSize, String valueToCheckOnWholeFile) {
+    private List<Packet> packetBuffer = new ArrayList<>();
 
+    public void receivePacket(Packet packet) {
         // Retrieve the attached hash from parent node
-
+        this.getReceivedData().add(packet);
         String nodeName = getNodeNameForErrorCheck();
-        String packetValue = packet.getNodeNameValueMap().get(nodeName);
+        PacketHeader packetHeader = packet.getPacketHeaders().get(nodeName);
+        String packetValueToCheck = packetHeader.getValueToCheck();
+        int packetSize = packetHeader.getSize();
 
-        // Verify the hash
-        String packetData = packet.getData();
-        byte[] packetDataBytes = packetData.getBytes();
+        Node sendToNode = this.getSendToNode(packet.getSentFromNodeName());
+        String receivedFromNodeName = packet.getSentFromNodeName();
 
-        if (this.getErrorDetectionMethod().verify(packetDataBytes, packetValue)) {
-
-            // If the hash matches, add the packet to receivedData, generate new hash and send it to the child node
-            this.getReceivedData().add(packet);
-            Node sendToNode = this.getSendToNode(packet.getSentFrom());
-            packet.setSendTo(sendToNode.getNodeName());
-            packet.setSentFrom(this.getNodeName());
-            String newPacketValue = this.getErrorDetectionMethod().calculate(packetDataBytes);
-            packet.addToNodeNameValueMap(this.getNodeName(), newPacketValue);
-            packet.getPath().add(this.getNodeName());
-            sendToNode.receivePacket(packet, totalFileSize, valueToCheckOnWholeFile);
+        if (sendToNode.getLayerID() >= this.getLayerID()) {
+            PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
+            packetsSplitAndSend.splitAndSend(packet, this, sendToNode, receivedFromNodeName);
         } else {
-            // If the hash doesn't match, log the packet in errorsFound.txt
-            logErrorPacket(packet);
-            this.setErrorCount(this.getErrorCount() + 1);
+            packetBuffer.add(packet);
+            PacketsReassembleAndSend packetsReassembleAndSend = new PacketsReassembleAndSend();
+            packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, sendToNode,
+                    packetSize, packetValueToCheck);
         }
     }
 
-    private void logErrorPacket(Packet packet) {
-        try (PrintWriter out = new PrintWriter(new FileWriter("errorsFound.txt", true))) {
-            out.println(packet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Node getSendToNode(String packetSentFrom){
+    public Node getSendToNode(String packetSentFrom) {
         Node node = null;
-        if (this.getParentNode()!=null && !packetSentFrom.equals(this.getParentNode().getNodeName())){
-            node  = this.getParentNode();
+        if (this.getParentNode() != null && !packetSentFrom.equals(this.getParentNode().getNodeName())) {
+            node = this.getParentNode();
         } else if (this.getChildNode() != null) {
             node = this.getChildNode();
         } else {
-            node = MledSimulator.getInstance().getLayers().get(this.getLayerID()-1).getNodes().get(this.getNodeID());
+            node = MledSimulator.getInstance().getLayers().get(this.getLayerID() - 1).getNodes().get(this.getNodeID());
         }
         return node;
     }

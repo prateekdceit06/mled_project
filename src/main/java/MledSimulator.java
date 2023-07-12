@@ -17,7 +17,6 @@ public class MledSimulator {
     private ErrorModel errorModel;
 
     private int lastLayerMTU;
-    private int firstLayerMTU;
 
     private MledSimulator() {
     }
@@ -46,9 +45,6 @@ public class MledSimulator {
         return lastNodeID;
     }
 
-    public int getFirstLayerMTU() {
-        return firstLayerMTU;
-    }
 
     public void initialise() {
         System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
@@ -64,9 +60,17 @@ public class MledSimulator {
                 errorFlag = !Validator.isIntValid(layerNum, 1, 99);
                 if (!errorFlag) {
                     lastNodeID = (int) Math.pow(2,  layerNum- 1) + 1;
-                } else{
-                    continue;
                 }
+            } catch (Exception e) {
+                errorFlag = true;
+            }
+        } while (errorFlag);
+
+        do {
+            if (errorFlag) {
+                System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
+            }
+            try {
                 System.out.print(PrintColor.printInBlue("Enter the number MTU for the last layer [500-10000]: "));
                 lastLayerMTU = scanner.nextInt();
                 scanner.nextLine();
@@ -138,13 +142,18 @@ public class MledSimulator {
                                 System.out.println(PrintColor.printInRed("Invalid input"));
                                 errorFlag = true;
                         }
-                        ErrorDetectionMethod errorDetectionMethod = ErrorDetectionMethodFactory.getErrorDetectionMethod(errorDetectionMethodName);
+                        ErrorDetectionMethod errorDetectionMethod =
+                                ErrorDetectionMethodFactory.getErrorDetectionMethod(errorDetectionMethodName);
                         errorDetectionMethod.configure();
-                        layers.add(new Layer(i, fragmentationParameter, errorDetectionMethodName, errorDetectionMethod, errorModel));
+                        layers.add(new Layer(i, fragmentationParameter, errorDetectionMethodName,
+                                errorDetectionMethod, errorModel));
+
                         // Number of nodes in each layer is 2^(i-1) + 1
                         int numNodes = (int) Math.pow(2, i - 1) + 1;
                         layers.get(i - 1).addNodes(layerNum, numNodes, errorDetectionMethod, errorModel);
-                        System.out.println(PrintColor.printInGreenBack("Layer " + i + " created with fragmentation parameter " + fragmentationParameter + " and error detection method " + errorDetectionMethodName + '\n'));
+                        System.out.println(PrintColor.printInGreenBack("Layer " + i +
+                                " created with fragmentation parameter " + fragmentationParameter +
+                                " and error detection method " + errorDetectionMethodName + '\n'));
                     }
 
                 } catch (Exception e) {
@@ -152,10 +161,11 @@ public class MledSimulator {
                 }
             } while (errorFlag);
         }
-        calculateFirstLayerMTU();
+        calculateMTU();
         createRoute();
         CommonFunctions.printNetwork(layers);
         runNetwork();
+        printStats();
     }
 
     private void createRoute() {
@@ -185,19 +195,32 @@ public class MledSimulator {
         System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
     }
 
-    private void calculateFirstLayerMTU(){
-        int firstLayerMTU = lastLayerMTU;
-        for (int i = layerNum; i > 1; i--) {
-            firstLayerMTU = firstLayerMTU * layers.get(i - 1).getFragmentationParameter();
+    private void calculateMTU(){
+        int LayerMTU = lastLayerMTU;
+        for (int i = layerNum; i >= 1; i--) {
+            layers.get(i-1).setMTU(LayerMTU);
+            for (Node node : layers.get(i - 1).getNodes()) {
+                node.setMTU(LayerMTU);
+            }
+            LayerMTU = LayerMTU * layers.get(i - 1).getFragmentationParameter();
+
         }
-        this.firstLayerMTU = firstLayerMTU;
     }
 
-    public void runNetwork() {
-        ((NodeA) layers.get(0).getNodes().get(0)).readFileAndSendPackets();
+    private void runNetwork() {
+        ApplicationSender applicationSender = new ApplicationSender();
+        applicationSender.readFileAndSendData();
     }
 
-
+    private void printStats() {
+        //loop through all the nodes
+        for (Layer layer: layers){
+            for (Node node: layer.getNodes()){
+                System.out.println("Node Name: " + node.getNodeName() +
+                        ", Errors Detected: " + node.getErrorCount());
+            }
+        }
+    }
 
 
 }

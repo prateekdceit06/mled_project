@@ -6,7 +6,7 @@ import static java.lang.System.exit;
 
 public class ErrorDetectionMethodHash implements ErrorDetectionMethod {
 
-    private String algorithm;
+    private String algorithm = "MD5";
 
     @Override
     public void configure() {

@@ -1,5 +1,8 @@
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,10 +21,14 @@ public abstract class Node {
     private Node childNode;
 
     private int errorCount = 0;
+    private int errorAddedCount = 0;
 
     private ErrorModel errorModel;
 
-    public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
+    private int MTU;
+
+    public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
+                ErrorModel errorModel, int MTU) {
         this.layerID = layerID;
         this.nodeID = nodeID;
         this.nodeName = layerID + "-" + nodeID;
@@ -30,6 +37,7 @@ public abstract class Node {
         this.parentNode = null;
         this.childNode = null;
         this.errorModel = errorModel;
+        this.MTU = MTU;
     }
 
 
@@ -91,6 +99,14 @@ public abstract class Node {
         return errorModel;
     }
 
+    public int getMTU() {
+        return MTU;
+    }
+
+    public void setMTU(int MTU) {
+        this.MTU = MTU;
+    }
+
     //override toString method to print out node information
     @Override
     public String toString() {
@@ -107,7 +123,7 @@ public abstract class Node {
                 ", nodeID=" + nodeID +
                 ", nodeName='" + nodeName + '\'' +
                 ", receivedData=" + receivedData +
-                ", Fragmentation Pratameter=" + fragmentationParameter +
+                ", Fragmentation Parameter=" + fragmentationParameter +
                 ", parentNode=" + parentNodeName +
                 ", childNode=" + childNodeName +
                 ", errorModel=" + errorModel +
@@ -122,7 +138,36 @@ public abstract class Node {
         return nodeName;
     }
 
+    public void addError(Packet packet) {
+        boolean errorAdded = false;
+        byte[] data = packet.getData();
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (errorModel.isError()) {
+                    // Flip j-th bit of data[i]
+                    data[i] = (byte) (data[i] ^ (1 << j));
+                    errorAdded = true;
+                }
+            }
+        }
+        if (errorAdded) {
+            errorAddedCount++;
+            logAddedError(packet);
+        }
+    }
+
+    public abstract void receivePacket(Packet packet);
+
+    private void logAddedError(Packet packet) {
+        try (PrintWriter out = new PrintWriter(new FileWriter("errorsAdded.txt", true))) {
+            out.println("Error: "+ errorAddedCount + " added by Node: " + this.getNodeName() + "\n");
+            out.println(packet);
+            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
+            out.println("\nData: "+ str + "\n-----------------------------------------------------------------\n");
 
 
-    public abstract void receivePacket(Packet packet, int totalFileSize, String valueToCheckonWholeFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -3,95 +3,37 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Packet {
-    private String packetID;
-    private String data;
-    private HashMap<String, String> nodeNameValueMap;
-    private String sendTo;
-    private String sentFrom;
-    private int seqNum;
-    private int ackNum;
-    private int size;
 
-    private List<String> path;
+    private byte[] data;
 
+    private String sentFromNodeName;
+    private HashMap<String, PacketHeader> packetHeaders = new HashMap<>();
 
-    public Packet(String packetID, String data, String sendTo, String sentFrom, int seqNum, int ackNum) {
-        this.packetID = packetID;
+    public Packet(byte[] data, PacketHeader packetHeaders) {
         this.data = data;
-        this.sendTo = sendTo;
-        this.sentFrom = sentFrom;
-        this.seqNum = seqNum;
-        this.ackNum = ackNum;
-        this.size = data.length();
-        this.nodeNameValueMap = new HashMap<>();
-        this.path = new ArrayList<>();
+        this.packetHeaders.put(packetHeaders.getPacketCreatingNodeName(), packetHeaders);
+        this.sentFromNodeName = packetHeaders.getSentFrom();
     }
 
-    public String getPacketID() {
-        return packetID;
+    public HashMap<String, PacketHeader> getPacketHeaders() {
+        return packetHeaders;
     }
 
-    public String getData() {
+    public byte[] getData() {
         return data;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public String getSentFromNodeName() {
+        return sentFromNodeName;
     }
-
-    public HashMap<String, String> getNodeNameValueMap() {
-        return nodeNameValueMap;
-    }
-
-    public void addToNodeNameValueMap(String nodeName, String value) {
-        this.nodeNameValueMap.put(nodeName, value);
-    }
-
-    public String getSendTo() {
-        return sendTo;
-    }
-
-    public List<String> getPath() {
-        return path;
-    }
-
-    public void setSendTo(String sendTo) {
-        this.sendTo = sendTo;
-    }
-
-    public String getSentFrom() {
-        return sentFrom;
-    }
-
-    public void setSentFrom(String sentFrom) {
-        this.sentFrom = sentFrom;
-    }
-
-    public int getSeqNum() {
-        return seqNum;
-    }
-
-
-    public int getAckNum() {
-        return ackNum;
-    }
-
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-
 
     //override tostring
     @Override
     public String toString() {
-        return "Packet [packetID=" + packetID + ", data=" + data + ",  nodeNameValueMap="
-                + nodeNameValueMap + ", sendTo=" + sendTo + ", sentFrom=" + sentFrom + ", seqNum=" + seqNum
-                + ", ackNum=" + ackNum + ", size=" + size + ", path=" + path + "]";
+        return "Packet{" +
+                "data='" + data + '\'' +
+                ", packetHeaders=" + packetHeaders +
+                '}';
+
     }
 }
