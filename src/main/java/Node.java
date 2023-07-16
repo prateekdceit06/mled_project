@@ -147,6 +147,7 @@ public abstract class Node {
                     // Flip j-th bit of data[i]
                     data[i] = (byte) (data[i] ^ (1 << j));
                     errorAdded = true;
+
                 }
             }
         }

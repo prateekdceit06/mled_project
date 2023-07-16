@@ -14,15 +14,15 @@ public class NodeB extends Node {
 
     public void receivePacket(Packet packet) {
         this.getReceivedData().add(packet);
-        String nodeName = getNodeNameForErrorCheck();
-        PacketHeader packetHeader = packet.getPacketHeaders().get(nodeName);
-        String packetValueToCheck = packetHeader.getValueToCheck();
-        int packetSize = packetHeader.getSize();
+        String nodeNameToGetHeaderToCheckValue = getNodeNameForErrorCheck();
+        PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
+        int mtu = packetHeaderToCheck.getSize();
+
+
         packetBuffer.add(packet);
-        Node sendToNode = null;
         PacketsReassembleAndSend packetsReassembleAndSend = new PacketsReassembleAndSend();
-        packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, sendToNode,
-                packetSize, packetValueToCheck);
+        packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, null,
+                mtu, packetHeaderToCheck);
     }
 
 

@@ -14,24 +14,33 @@ public class NodeE extends Node {
     private List<Packet> packetBuffer = new ArrayList<>();
 
     public void receivePacket(Packet packet) {
-        // Retrieve the attached hash from parent node
         this.getReceivedData().add(packet);
-        String nodeName = getNodeNameForErrorCheck();
-        PacketHeader packetHeader = packet.getPacketHeaders().get(nodeName);
-        String packetValueToCheck = packetHeader.getValueToCheck();
-        int packetSize = packetHeader.getSize();
-
         Node sendToNode = this.getSendToNode(packet.getSentFromNodeName());
         String receivedFromNodeName = packet.getSentFromNodeName();
 
-        if (sendToNode.getLayerID() >= this.getLayerID()) {
-            PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
-            packetsSplitAndSend.splitAndSend(packet, this, sendToNode, receivedFromNodeName);
-        } else {
+        if (!packet.getPacketHeaders().containsKey(this.getNodeName())) {
+            // Retrieve the attached hash from parent node
+
+            String nodeNameToGetHeaderToCheckValue = getNodeNameForErrorCheck();
+            PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
+//        System.out.println("NodeE: " + this.getNodeName()+" Packet: "+packetSize);
             packetBuffer.add(packet);
+
+            int mtu = this.getMTU();
+
             PacketsReassembleAndSend packetsReassembleAndSend = new PacketsReassembleAndSend();
             packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, sendToNode,
-                    packetSize, packetValueToCheck);
+                    mtu, packetHeaderToCheck);
+
+        } else {
+
+//            System.out.println("NodeE: " + this.getNodeName() + " \nPacket: " + packet);
+//            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
+//            System.out.println("\nPacket Data: " + str);
+//            CommonFunctions.pause();
+
+            PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
+            packetsSplitAndSend.splitAndSend(packet, this, sendToNode, receivedFromNodeName);
         }
     }
 

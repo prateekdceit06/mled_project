@@ -9,6 +9,8 @@ public class Packet {
     private String sentFromNodeName;
     private HashMap<String, PacketHeader> packetHeaders = new HashMap<>();
 
+
+
     public Packet(byte[] data, PacketHeader packetHeaders) {
         this.data = data;
         this.packetHeaders.put(packetHeaders.getPacketCreatingNodeName(), packetHeaders);

@@ -10,8 +10,9 @@ public class NodeC extends Node {
     public void receivePacket(Packet packet) {
         this.getReceivedData().add(packet);
         Node sendToNode = getSendToNode();
-        PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
         String receivedFromNodeName = packet.getSentFromNodeName();
+
+        PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
         packetsSplitAndSend.splitAndSend(packet, this, sendToNode, receivedFromNodeName);
     }
 

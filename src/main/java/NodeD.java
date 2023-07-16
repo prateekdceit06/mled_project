@@ -15,16 +15,17 @@ public class NodeD extends Node {
 
     public void receivePacket(Packet packet) {
         this.getReceivedData().add(packet);
-        String nodeName = getNodeNameForErrorCheck();
-        PacketHeader packetHeader = packet.getPacketHeaders().get(nodeName);
-        String packetValueToCheck = packetHeader.getValueToCheck();
-        int packetSize = packetHeader.getSize();
+        String nodeNameToGetHeaderToCheckValue = getNodeNameForErrorCheck();
+        PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
         packetBuffer.add(packet);
         Node sendToNode = this.getSendToNode();
+        int mtu = this.getMTU();
+
+//        System.out.println("NodeD: " + this.getNodeName()+" Packet: "+packetSize);
 
         PacketsReassembleAndSend packetsReassembleAndSend = new PacketsReassembleAndSend();
         packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, sendToNode,
-                packetSize, packetValueToCheck);
+                mtu, packetHeaderToCheck);
     }
 
 

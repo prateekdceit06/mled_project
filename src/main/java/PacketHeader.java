@@ -13,8 +13,13 @@ public class PacketHeader {
     private int size;
     private List<String> path = new ArrayList<>();
 
+    private boolean isLastBatch = false;
+
+    private int lastBatchSize = 0;
+
     public PacketHeader(String packetCreatingNodeName, String sendTo, String sentFrom,
-                        int seqNum, int ackNum, int size, String valueToCheck, List<String> path){
+                        int seqNum, int ackNum, int size, String valueToCheck, List<String> path,
+                        boolean isLastBatch, int lastBatchSize){
         this.packetCreatingNodeName = packetCreatingNodeName;
         this.packetID = packetCreatingNodeName + "-" + seqNum;
         this.sendTo = sendTo;
@@ -27,7 +32,8 @@ public class PacketHeader {
         if (seqNum==1){
             this.path = path;
         }
-
+        this.isLastBatch = isLastBatch;
+        this.lastBatchSize = lastBatchSize;
     }
 
     public String getPacketID() {
@@ -94,6 +100,14 @@ public class PacketHeader {
         this.path = path;
     }
 
+    public boolean isLastBatch() {
+        return isLastBatch;
+    }
+
+    public int getLastBatchSize() {
+        return lastBatchSize;
+    }
+
     //override tostring
     @Override
     public String toString() {
@@ -106,6 +120,8 @@ public class PacketHeader {
                 ", ackNum=" + ackNum +
                 ", size=" + size +
                 ", path=" + path +
+                ", isLastBatch=" + isLastBatch +
+                ", lastBatchSize=" + lastBatchSize +
                 '}';
     }
 }

@@ -20,16 +20,20 @@ public class ApplicationReceiver {
         return instance;
     }
     public void receivePacketAndWriteToFile(Packet packet) {
-        String nodeName = Constants.applicationLevel.SENDER.toString();
-        PacketHeader packetHeader = packet.getPacketHeaders().get(nodeName);
+        String nodeNameToGetHeaderToCheckValue = Constants.applicationLevel.SENDER.toString();
+        PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
 
 
-        if (packetHeader !=null){
-            packetValueToCheck = packetHeader.getValueToCheck();
-            packetSize = packetHeader.getSize();
+        if (packetHeaderToCheck !=null){
+            packetValueToCheck = packetHeaderToCheck.getValueToCheck();
+            packetSize = packetHeaderToCheck.getSize();
         }
         packetBuffer.add(packet);
         int receivedDataSize = packetBuffer.stream().mapToInt(p -> p.getData().length).sum();
+        for (Packet p : packetBuffer) {
+//            System.out.println(p);
+//            CommonFunctions.pause();
+        }
         if (receivedDataSize >= packetSize) {
             // If we have all the data, join all packets' data into one string
             byte[] receivedData = new byte[packetSize];
@@ -41,13 +45,14 @@ public class ApplicationReceiver {
             }
             ErrorDetectionMethodHash errorDetectionMethod = new ErrorDetectionMethodHash();
             boolean isCorrect = errorDetectionMethod.verify(receivedData, packetValueToCheck);
-            if(isCorrect){
+//            if(isCorrect){
                 try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.txt",true))) {
                     out.print(new String(receivedData));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+//            }
+
             packetBuffer.clear();
         }
 
