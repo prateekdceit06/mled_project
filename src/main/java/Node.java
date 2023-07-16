@@ -1,12 +1,9 @@
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public abstract class Node {
 
@@ -41,7 +38,6 @@ public abstract class Node {
     }
 
 
-
     public int getLayerID() {
         return layerID;
     }
@@ -66,6 +62,7 @@ public abstract class Node {
     public int getFragmentationParameter() {
         return fragmentationParameter;
     }
+
     public ErrorDetectionMethod getErrorDetectionMethod() {
         return errorDetectionMethod;
     }
@@ -130,10 +127,10 @@ public abstract class Node {
                 '}';
     }
 
-    public String getNodeNameForErrorCheck(){
+    public String getNodeNameForErrorCheck() {
         int layerIDForNodeCheck = this.getLayerID();
         int nodeIDForNodeCheck = (int) (this.getNodeID() -
-                Math.pow(2, MledSimulator.getInstance().getLayerNum()- layerIDForNodeCheck));
+                Math.pow(2, MledSimulator.getInstance().getLayerNum() - layerIDForNodeCheck));
         String nodeName = layerIDForNodeCheck + "-" + nodeIDForNodeCheck;
         return nodeName;
     }
@@ -161,10 +158,10 @@ public abstract class Node {
 
     private void logAddedError(Packet packet) {
         try (PrintWriter out = new PrintWriter(new FileWriter("errorsAdded.txt", true))) {
-            out.println("Error: "+ errorAddedCount + " added by Node: " + this.getNodeName() + "\n");
+            out.println("Error: " + errorAddedCount + " added by Node: " + this.getNodeName() + "\n");
             out.println(packet);
             String str = new String(packet.getData(), StandardCharsets.US_ASCII);
-            out.println("\nData: "+ str + "\n-----------------------------------------------------------------\n");
+            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
 
 
         } catch (Exception e) {

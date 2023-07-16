@@ -8,7 +8,7 @@ public class PacketsSplitAndSend {
 
         List<String> path = new ArrayList<>();
         path = packet.getPath();
-        if(!path.get(path.size()-1).equals(thisNode.getNodeName())){
+        if (!path.get(path.size() - 1).equals(thisNode.getNodeName())) {
             path.add(thisNode.getNodeName());
         }
 

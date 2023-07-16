@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class ErrorModelGilbertElliot implements ErrorModel{
+public class ErrorModelGilbertElliot implements ErrorModel {
 
     private final double goodToBad;
     private final double badToGood;
@@ -59,7 +59,7 @@ public class ErrorModelGilbertElliot implements ErrorModel{
     //override toString method to print the parameters
     @Override
     public String toString() {
-        return "Error Model Name: " + errorModelName+
+        return "Error Model Name: " + errorModelName +
                 ", Good to Bad: " + goodToBad +
                 ", Bad to Good: " + badToGood +
                 ", Error Probability Good: " + errorProbabilityGood +

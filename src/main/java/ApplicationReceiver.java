@@ -19,12 +19,13 @@ public class ApplicationReceiver {
         }
         return instance;
     }
+
     public void receivePacketAndWriteToFile(Packet packet) {
         String nodeNameToGetHeaderToCheckValue = Constants.applicationLevel.SENDER.toString();
         PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
 
 
-        if (packetHeaderToCheck !=null){
+        if (packetHeaderToCheck != null) {
             packetValueToCheck = packetHeaderToCheck.getValueToCheck();
             packetSize = packetHeaderToCheck.getSize();
         }
@@ -46,11 +47,11 @@ public class ApplicationReceiver {
             ErrorDetectionMethodHash errorDetectionMethod = new ErrorDetectionMethodHash();
             boolean isCorrect = errorDetectionMethod.verify(receivedData, packetValueToCheck);
 //            if(isCorrect){
-                try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.txt",true))) {
-                    out.print(new String(receivedData));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.txt", true))) {
+                out.print(new String(receivedData));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 //            }
 
             packetBuffer.clear();

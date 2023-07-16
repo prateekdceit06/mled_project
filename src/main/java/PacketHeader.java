@@ -1,7 +1,3 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public class PacketHeader {
     private String packetCreatingNodeName;
     private String packetID;
@@ -18,7 +14,7 @@ public class PacketHeader {
 
     public PacketHeader(String packetCreatingNodeName, String sendTo, String sentFrom,
                         int seqNum, int ackNum, int size, String valueToCheck,
-                        boolean isLastBatch, int lastBatchSize){
+                        boolean isLastBatch, int lastBatchSize) {
         this.packetCreatingNodeName = packetCreatingNodeName;
         this.packetID = packetCreatingNodeName + "-" + seqNum;
         this.sendTo = sendTo;

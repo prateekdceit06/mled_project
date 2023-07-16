@@ -3,7 +3,7 @@ public class CrcFactory {
         if (crcType == null) {
             return null;
         }
-        if(crcType.equalsIgnoreCase(Constants.CRC8Variant.CRC_8.getVariantName())){
+        if (crcType.equalsIgnoreCase(Constants.CRC8Variant.CRC_8.getVariantName())) {
             return new Crc8();
         } else if (crcType.equalsIgnoreCase(Constants.CRC16Variant.CRC_16.getVariantName())) {
             return new Crc16();

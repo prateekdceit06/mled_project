@@ -1,6 +1,6 @@
+import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import javax.xml.bind.DatatypeConverter;
 
 import static java.lang.System.exit;
 

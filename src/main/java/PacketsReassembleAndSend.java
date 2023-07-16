@@ -17,7 +17,7 @@ public class PacketsReassembleAndSend {
         if (receivedDataSize >= mtu || (isLastBatch && receivedDataSize == lastBatchSize)) {
             List<String> path = new ArrayList<>();
             path = packetBuffer.get(0).getPath();
-            if(!path.get(path.size()-1).equals(thisNode.getNodeName())){
+            if (!path.get(path.size() - 1).equals(thisNode.getNodeName())) {
                 path.add(thisNode.getNodeName());
             }
             // If we have all the data, join all packets' data into one string

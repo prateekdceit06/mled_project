@@ -1,6 +1,6 @@
 import static java.lang.System.exit;
 
-public class Crc64 implements Crc{
+public class Crc64 implements Crc {
     @Override
     public String getPolynomial(int choice) {
         String crcPolynomial = "";
@@ -11,7 +11,7 @@ public class Crc64 implements Crc{
             }
             try {
                 if (!errorFlag) {
-                    switch (choice){
+                    switch (choice) {
                         case 1:
                             crcPolynomial = Constants.CRC64Variant.CRC_64.getPolynomial();
                             break;

@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ApplicationSender {
 
-    public void readFileAndSendData(){
-        try{
+    public void readFileAndSendData() {
+        try {
             String data = new String(Files.readAllBytes(Paths.get("astroMLData.txt")));
             // Calculate the hash of the entire file content
             ErrorDetectionMethodHash errorDetectionMethod = new ErrorDetectionMethodHash();
@@ -22,7 +22,7 @@ public class ApplicationSender {
             Packet packet = new Packet(dataBytes, packetHeader, path);
             // Send the packet to the first layer
             MledSimulator.getInstance().getLayers().get(0).getNodes().get(0).receivePacket(packet);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

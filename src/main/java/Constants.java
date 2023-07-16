@@ -3,6 +3,7 @@ public class Constants {
     enum errorDetectionMethodEnum {CRC, CHECKSUM, HASH}
 
     enum hashAlgorithmsEnum {MD5, SHA1, SHA256}
+
     enum applicationLevel {SENDER, RECEIVER}
 
     public enum CRC8Variant {

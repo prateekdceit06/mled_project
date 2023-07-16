@@ -10,7 +10,7 @@ public class Crc8 implements Crc {
             }
             try {
                 if (!errorFlag) {
-                    switch (choice){
+                    switch (choice) {
                         case 1:
                             crcPolynomial = Constants.CRC8Variant.CRC_8.getPolynomial();
                             break;

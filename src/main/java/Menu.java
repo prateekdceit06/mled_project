@@ -16,7 +16,7 @@ public class Menu {
         System.out.println(PrintColor.printInCyan("4. Exit"));
     }
 
-    public static void crcMenu(){
+    public static void crcMenu() {
         System.out.println(PrintColor.printInCyan("CRC Menu"));
         System.out.println(PrintColor.printInCyan("1. CRC-8"));
         System.out.println(PrintColor.printInCyan("2. CRC-16"));
@@ -26,7 +26,7 @@ public class Menu {
         System.out.println(PrintColor.printInCyan("6. Exit"));
     }
 
-    public static void crc8Menu(){
+    public static void crc8Menu() {
         System.out.println(PrintColor.printInCyan("CRC-8 Menu"));
         int index = 1;
         for (Constants.CRC8Variant variant : Constants.CRC8Variant.values()) {
@@ -36,7 +36,7 @@ public class Menu {
         System.out.println(PrintColor.printInCyan(index + ". Exit"));
     }
 
-    public static void crc16Menu(){
+    public static void crc16Menu() {
         System.out.println(PrintColor.printInCyan("CRC-16 Menu"));
         int index = 1;
         for (Constants.CRC16Variant variant : Constants.CRC16Variant.values()) {
@@ -46,7 +46,7 @@ public class Menu {
         System.out.println(PrintColor.printInCyan(index + ". Exit"));
     }
 
-    public static void crc32Menu(){
+    public static void crc32Menu() {
         System.out.println(PrintColor.printInCyan("CRC-32 Menu"));
         int index = 1;
         for (Constants.CRC32Variant variant : Constants.CRC32Variant.values()) {
@@ -56,7 +56,7 @@ public class Menu {
         System.out.println(PrintColor.printInCyan(index + ". Exit"));
     }
 
-    public static void crc64Menu(){
+    public static void crc64Menu() {
         System.out.println(PrintColor.printInCyan("CRC-64 Menu"));
         int index = 1;
         for (Constants.CRC64Variant variant : Constants.CRC64Variant.values()) {
@@ -66,10 +66,10 @@ public class Menu {
         System.out.println(PrintColor.printInCyan(index + ". Exit"));
     }
 
-    public static void errorModelMenu(){
+    public static void errorModelMenu() {
         System.out.println(PrintColor.printInPurple("Error Model Menu"));
         System.out.println(PrintColor.printInPurple("1. Default " +
-                "[ Good to Bad-"+ Constants.GOOD_TO_BAD +
+                "[ Good to Bad-" + Constants.GOOD_TO_BAD +
                 ", Bad to Good-" + Constants.BAD_TO_GOOD +
                 ", Error Probability Good-" + Constants.errorProbabilityGood +
                 ", Error Probability Bad-" + Constants.errorProbabilityBad +
@@ -78,8 +78,6 @@ public class Menu {
         System.out.println(PrintColor.printInPurple("3. Exit"));
 
     }
-
-
 
 
 }

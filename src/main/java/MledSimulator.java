@@ -59,7 +59,7 @@ public class MledSimulator {
                 scanner.nextLine();
                 errorFlag = !Validator.isIntValid(layerNum, 1, 99);
                 if (!errorFlag) {
-                    lastNodeID = (int) Math.pow(2,  layerNum- 1) + 1;
+                    lastNodeID = (int) Math.pow(2, layerNum - 1) + 1;
                 }
             } catch (Exception e) {
                 errorFlag = true;
@@ -88,7 +88,7 @@ public class MledSimulator {
                     System.out.println(PrintColor.printInRed("Error: Invalid input. Please try again."));
                 }
                 try {
-                    if (i!=1){
+                    if (i != 1) {
                         System.out.print(PrintColor.printInYellow("Enter the fragmentation parameter for layer " + i + " [1-10]: "));
                         fragmentationParameter = scanner.nextInt();
                         scanner.nextLine();
@@ -195,10 +195,10 @@ public class MledSimulator {
         System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
     }
 
-    private void calculateMTU(){
+    private void calculateMTU() {
         int LayerMTU = lastLayerMTU;
         for (int i = layerNum; i >= 1; i--) {
-            layers.get(i-1).setMTU(LayerMTU);
+            layers.get(i - 1).setMTU(LayerMTU);
             for (Node node : layers.get(i - 1).getNodes()) {
                 node.setMTU(LayerMTU);
             }
@@ -214,8 +214,8 @@ public class MledSimulator {
 
     private void printStats() {
         //loop through all the nodes
-        for (Layer layer: layers){
-            for (Node node: layer.getNodes()){
+        for (Layer layer : layers) {
+            for (Node node : layer.getNodes()) {
                 System.out.println("Node Name: " + node.getNodeName() +
                         ", Errors Detected: " + node.getErrorCount());
             }

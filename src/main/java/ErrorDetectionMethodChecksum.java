@@ -1,5 +1,3 @@
-import static java.lang.System.exit;
-
 public class ErrorDetectionMethodChecksum implements ErrorDetectionMethod {
 
     private int checksumLength;
@@ -7,6 +5,7 @@ public class ErrorDetectionMethodChecksum implements ErrorDetectionMethod {
     public int getChecksumLength() {
         return checksumLength;
     }
+
     @Override
 
     public void configure() {
@@ -26,6 +25,7 @@ public class ErrorDetectionMethodChecksum implements ErrorDetectionMethod {
             }
         } while (errorFlag);
     }
+
     public String calculate(byte[] input) {
         int sum = 0;
         for (int i = 0; i < input.length; i += checksumLength) {
@@ -35,6 +35,7 @@ public class ErrorDetectionMethodChecksum implements ErrorDetectionMethod {
         int checksum = ~sum;
         return String.valueOf(checksum);
     }
+
     public boolean verify(byte[] input, String valueToCompare) {
         String calculatedChecksum = calculate(input);
         return calculatedChecksum.equals(valueToCompare);

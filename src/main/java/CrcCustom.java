@@ -1,10 +1,10 @@
-public class CrcCustom implements Crc{
+public class CrcCustom implements Crc {
     @Override
     public String getPolynomial(int choice) {
         String crcPolynomial = "";
         boolean errorFlag = false;
-        do{
-            try{
+        do {
+            try {
                 if (errorFlag) {
                     System.out.println(PrintColor.printInRed("Error: Invalid input. Please try again."));
                 }

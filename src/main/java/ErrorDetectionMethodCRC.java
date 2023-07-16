@@ -22,7 +22,7 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
 
                 if (!errorFlag) {
                     int choice2 = 0;
-                    switch (choice){
+                    switch (choice) {
                         case 1:
                             Menu.crc8Menu();
                             System.out.print(PrintColor.printInRed("Enter the CRC you want to use: "));
@@ -60,7 +60,7 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
                         case 6:
                             exit(1);
                     }
-                    if (!errorFlag){
+                    if (!errorFlag) {
                         Crc crc = new CrcFactory().getCrcObject(type);
                         crcPolynomialHex = crc.getPolynomial(choice2);
                         getCrcPolynomialBinary = hexToBin(crcPolynomialHex);
@@ -75,6 +75,7 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
             }
         } while (errorFlag);
     }
+
     public String calculate(byte[] input) {
         String binaryString = CommonFunctions.byteArrayToString(input) + getZeros(getCrcPolynomialBinary.length() - 1);
         String remainder = divide(binaryString, getCrcPolynomialBinary);
@@ -91,18 +92,18 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
         return false;
     }
 
-    public String hexToBin(String hex){
+    public String hexToBin(String hex) {
         String bin = "";
         String binFragment = "";
         int iHex;
         hex = hex.trim();
         hex = hex.replaceFirst("0x", "");
 
-        for(int i = 0; i < hex.length(); i++){
-            iHex = Integer.parseInt(""+hex.charAt(i),16);
+        for (int i = 0; i < hex.length(); i++) {
+            iHex = Integer.parseInt("" + hex.charAt(i), 16);
             binFragment = Integer.toBinaryString(iHex);
 
-            while(binFragment.length() < 4){
+            while (binFragment.length() < 4) {
                 binFragment = "0" + binFragment;
             }
             bin += binFragment;

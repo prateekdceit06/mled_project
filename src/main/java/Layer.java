@@ -56,13 +56,13 @@ public class Layer {
     }
 
     public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod,
-                         ErrorModel errorModel){
-        int increment  = (int) Math.pow(2, layerNum - layerID);
+                         ErrorModel errorModel) {
+        int increment = (int) Math.pow(2, layerNum - layerID);
         int nodeID = 1;
         Node node;
         NodeFactory nodeFactory = new NodeFactory();
-        for (int i = 1; i <= nodeNum; i++ ) {
-            node = nodeFactory.getNewNode(layerID, nodeID,  fragmentationParameter,
+        for (int i = 1; i <= nodeNum; i++) {
+            node = nodeFactory.getNewNode(layerID, nodeID, fragmentationParameter,
                     errorDetectionMethod, errorModel, MTU);
 //            System.out.println(PrintColor.printInPurple("Node Name" + node.getNodeName() + ", Node Class: " +
 //                    node.getClass().getName()));

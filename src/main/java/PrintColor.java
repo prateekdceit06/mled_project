@@ -27,10 +27,13 @@ public class PrintColor {
     public final static String WHITE_BACKGROUND = "\u001B[47m";
     public static final String RED_BACKGROUND_BRIGHT = "\033[0;101m";
 
-    public static String printInBrightRedBack(String s) {return RED_BACKGROUND_BRIGHT + s + RESET;}
+    public static String printInBrightRedBack(String s) {
+        return RED_BACKGROUND_BRIGHT + s + RESET;
+    }
 
     /**
      * Return the given static String in black color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in black color
      */
@@ -40,6 +43,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in black background color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in black background color
      */
@@ -49,6 +53,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in red color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in red color
      */
@@ -58,6 +63,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in red background color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in red background color
      */
@@ -67,6 +73,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in green color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in green color
      */
@@ -76,6 +83,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in green background color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in green background color
      */
@@ -85,6 +93,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in yellow color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in yellow color
      */
@@ -94,6 +103,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in yellow background color
+     *
      * @param s String the static String that is going to be changed
      * @return the given static String in yellow background color
      */
@@ -103,6 +113,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in blue color
+     *
      * @param s String the static String that is going to be changed
      * @return the given static String in blue color
      */
@@ -112,6 +123,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in blue background color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in blue background color
      */
@@ -121,6 +133,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in purple color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in purple color
      */
@@ -130,6 +143,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in purple background color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in purple background color
      */
@@ -139,6 +153,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in cyan color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in cyan color
      */
@@ -148,15 +163,17 @@ public class PrintColor {
 
     /**
      * Return the given static String in cyan background color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in cyan background color
      */
-    public static String printInCyanBack(String s){
+    public static String printInCyanBack(String s) {
         return CYAN_BACKGROUND + s + RESET;
     }
 
     /**
      * Return the given static String in white color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in white color
      */
@@ -166,6 +183,7 @@ public class PrintColor {
 
     /**
      * Return the given static String in white background color
+     *
      * @param s the static String that is going to be changed
      * @return the given static String in white background color
      */
@@ -175,6 +193,7 @@ public class PrintColor {
 
     /**
      * Return a line to divide
+     *
      * @return a divider line
      */
     public static String divider() {
