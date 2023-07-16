@@ -2,6 +2,9 @@
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public abstract class Node {
     private ErrorModel errorModel;
 
     private int MTU;
+
 
     public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
                 ErrorModel errorModel, int MTU) {
@@ -104,6 +108,10 @@ public abstract class Node {
         this.MTU = MTU;
     }
 
+    public int getErrorAddedCount() {
+        return errorAddedCount;
+    }
+
     //override toString method to print out node information
     @Override
     public String toString() {
@@ -157,6 +165,14 @@ public abstract class Node {
     public abstract void receivePacket(Packet packet);
 
     private void logAddedError(Packet packet) {
+        try {
+            Path path = Paths.get("errorsAdded.txt");
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try (PrintWriter out = new PrintWriter(new FileWriter("errorsAdded.txt", true))) {
             out.println("Error: " + errorAddedCount + " added by Node: " + this.getNodeName() + "\n");
             out.println(packet);

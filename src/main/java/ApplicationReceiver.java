@@ -1,5 +1,6 @@
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +32,10 @@ public class ApplicationReceiver {
         }
         packetBuffer.add(packet);
         int receivedDataSize = packetBuffer.stream().mapToInt(p -> p.getData().length).sum();
-        for (Packet p : packetBuffer) {
-            System.out.println(p);
-            CommonFunctions.pause();
-        }
+//        for (Packet p : packetBuffer) {
+//            System.out.println(p);
+//            CommonFunctions.pause();
+//        }
         if (receivedDataSize >= packetSize) {
             // If we have all the data, join all packets' data into one string
             byte[] receivedData = new byte[packetSize];
@@ -46,13 +47,27 @@ public class ApplicationReceiver {
             }
             ErrorDetectionMethodHash errorDetectionMethod = new ErrorDetectionMethodHash();
             boolean isCorrect = errorDetectionMethod.verify(receivedData, packetValueToCheck);
-//            if(isCorrect){
+            System.out.println();
+            if(isCorrect){
+                System.out.println(PrintColor.printInGreenBack("Received data is correct"));
+            } else{
+                System.out.println(PrintColor.printInRedBack("Received data is incorrect"));
+            }
+            System.out.println();
+            try {
+                Path path = Paths.get("receivedData.txt");
+                if (Files.exists(path)) {
+                    Files.delete(path);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.txt", true))) {
                 out.print(new String(receivedData));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-//            }
+
 
             packetBuffer.clear();
         }

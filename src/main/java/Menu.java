@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+
 public class Menu {
 
     public static void errorCheckMethodMenu() {
@@ -68,15 +70,34 @@ public class Menu {
 
     public static void errorModelMenu() {
         System.out.println(PrintColor.printInPurple("Error Model Menu"));
-        System.out.println(PrintColor.printInPurple("1. Default " +
-                "[ Good to Bad-" + Constants.GOOD_TO_BAD +
-                ", Bad to Good-" + Constants.BAD_TO_GOOD +
-                ", Error Probability Good-" + Constants.errorProbabilityGood +
-                ", Error Probability Bad-" + Constants.errorProbabilityBad +
-                "]: "));
-        System.out.println(PrintColor.printInPurple("2. Custom"));
-        System.out.println(PrintColor.printInPurple("3. Exit"));
+        int index = 1;
+        DecimalFormat df = new DecimalFormat("#.#####");  // Adjust number of decimal places as needed
+        for (Constants.ErrorType errorType : Constants.ErrorType.values()) {
 
+            double[] errorValues = errorType.getErrorValues();
+
+            String output = String.format("%d. %-30s ---> GOOD_TO_BAD: %-10s BAD_TO_GOOD: %-10s errorProbabilityGood: %-10s errorProbabilityBad: %-10s",
+                    index,
+                    errorType.getErrorName(),
+                    df.format(errorValues[0]),
+                    df.format(errorValues[1]),
+                    df.format(errorValues[2]),
+                    df.format(errorValues[3]));
+
+            System.out.println(PrintColor.printInPurple(output));
+            index++;
+        }
+        System.out.println(PrintColor.printInPurple(index++ + ". Custom Error Model"));
+
+        System.out.println(PrintColor.printInPurple(index + ". Exit"));
+
+    }
+
+    public static void initialiseSimulatorMenu() {
+        System.out.println(PrintColor.printInYellow("Initialise Simulator Menu"));
+        System.out.println(PrintColor.printInYellow("1. Initialise Simulator from default configuration file"));
+        System.out.println(PrintColor.printInYellow("2. Initialise Simulator with custom configuration."));
+        System.out.println(PrintColor.printInYellow("3. Exit"));
     }
 
 

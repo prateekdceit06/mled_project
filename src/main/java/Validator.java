@@ -9,6 +9,13 @@ public class Validator {
         return false;
     }
 
+    public static boolean isDoubleValid(double option, double min, double max) {
+        if (option >= min && option <= max) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isCharValid(char option, String values) {
         String[] splitValues = values.split(" ");
         for (String value : splitValues) {

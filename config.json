@@ -1,0 +1,18 @@
+{
+    "appName": "MyJavaApp",
+    "appVersion": "1.0",
+    "database": {
+        "url": "jdbc:mysql://localhost:3306/mydatabase",
+        "users": [
+            {
+                "Name": "John",
+                "Age": 15
+            },
+            {
+                "Name": "Doe",
+                "Age": 16
+            }
+        ],
+        "password": "password"
+    }
+}

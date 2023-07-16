@@ -3,6 +3,9 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
@@ -58,6 +61,15 @@ public class CommonFunctions {
     }
 
     public static void logErrorPacket(Packet packet, int errorCount) {
+        try {
+            Path path = Paths.get("errorsFound.txt");
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         try (PrintWriter out = new PrintWriter(new FileWriter("errorsFound.txt", true))) {
             out.println("Error: "+ errorCount + " found by Node: " + packet.getSentFromNodeName() + "\n");
             out.println(packet);

@@ -56,7 +56,11 @@ public class PacketsSplitAndSend {
                     thisNode.getNodeName(), previousPacketHeader.getSeqNum(), 0, data.length, valueToCheck,
                     true, data.length);
             Packet newPacket = new Packet(data, newPacketHeader, path);
-            originalPacketHeaders.forEach((key, value) -> newPacket.getPacketHeaders().put(key, value));
+            for (String key : originalPacketHeaders.keySet()) {
+                if (!key.equals(thisNode.getNodeName())) {
+                    newPacket.getPacketHeaders().put(key, originalPacketHeaders.get(key));
+                }
+            }
             thisNode.addError(newPacket);
 
             sendToNode.receivePacket(newPacket);

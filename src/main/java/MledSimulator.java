@@ -46,8 +46,52 @@ public class MledSimulator {
     }
 
 
-    public void initialise() {
+    public void start() {
+        boolean errorFlag = false;
+        do {
+            if (errorFlag) {
+                System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
+            }
+            Menu.initialiseSimulatorMenu();
+            try {
+                System.out.print(PrintColor.printInYellow("How do you want to initialise the simulator: "));
+                int initialise = scanner.nextInt();
+                scanner.nextLine();
+                errorFlag = !Validator.isIntValid(initialise, 1, 3);
+                switch (initialise) {
+                    case 1:
+                        initializeFromDefaultConfigFile();
+                        break;
+                    case 2:
+                        initialiseCustomSimulator();
+                        break;
+                    case 3:
+                        exit(0);
+                }
+            } catch (Exception e) {
+                errorFlag = true;
+            }
+        } while (errorFlag);
+
+    }
+
+    private void initializeFromDefaultConfigFile() {
+
+    }
+
+    public void initialiseCustomSimulator() {
+        configureSimulator();
+        calculateMTU();
+        createRoute();
         System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
+        CommonFunctions.printNetwork(layers);
+        System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
+        CommonFunctions.pause();
+        runNetwork();
+        printStats();
+    }
+
+    private void configureSimulator() {
         boolean errorFlag = false;
         do {
             if (errorFlag) {
@@ -101,20 +145,19 @@ public class MledSimulator {
                     System.out.print(PrintColor.printInPurple("Enter the error model for layer " + i + ": "));
                     int edModel = scanner.nextInt();
                     scanner.nextLine();
-                    errorFlag = !Validator.isIntValid(edModel, 1, 3);
-                    switch (edModel) {
-                        case 1:
-                            errorModel = new ErrorModelGilbertElliot();
-                            break;
-                        case 2:
-                            errorModel = new ErrorModelGilbertElliot();
-                            errorModel.configure();
-                            break;
-                        case 3:
-                            exit(1);
-                        default:
-                            System.out.println(PrintColor.printInRedBack("Invalid input"));
-                            errorFlag = true;
+                    errorFlag = !Validator.isIntValid(edModel, 1, 8);
+                    if (edModel > 0 && edModel <= Constants.ErrorType.values().length) {
+                        Constants.ErrorType selectedErrorType = Constants.ErrorType.values()[edModel - 1];
+                        double[] errorValues = selectedErrorType.getErrorValues();
+                        errorModel = new ErrorModelGilbertElliot(errorValues[0], errorValues[1], errorValues[2], errorValues[3]);
+                    } else if (edModel == Constants.ErrorType.values().length + 1) {
+                        errorModel = new ErrorModelGilbertElliot();
+                        errorModel.configure();
+                    } else if (edModel == Constants.ErrorType.values().length + 2) {
+                        exit(1);
+                    } else {
+                        System.out.println(PrintColor.printInRedBack("Invalid input"));
+                        errorFlag = true;
                     }
                     if (errorFlag) {
                         continue;
@@ -161,11 +204,6 @@ public class MledSimulator {
                 }
             } while (errorFlag);
         }
-        calculateMTU();
-        createRoute();
-        CommonFunctions.printNetwork(layers);
-        runNetwork();
-        printStats();
     }
 
     private void createRoute() {
@@ -192,7 +230,6 @@ public class MledSimulator {
                 }
             }
         }
-        System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
     }
 
     private void calculateMTU() {
@@ -213,12 +250,20 @@ public class MledSimulator {
     }
 
     private void printStats() {
-        //loop through all the nodes
+
         for (Layer layer : layers) {
             for (Node node : layer.getNodes()) {
-                System.out.println("Node Name: " + node.getNodeName() +
-                        ", Errors Detected: " + node.getErrorCount());
+                String output = String.format(
+                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d",
+                        node.getNodeName(),
+                        node.getErrorAddedCount(),
+                        node.getErrorCount()
+                );
+
+                System.out.println(PrintColor.printInRedBack(output));
             }
+
+            System.out.println(PrintColor.printInGreen(PrintColor.divider()));
         }
     }
 

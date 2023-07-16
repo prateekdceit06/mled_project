@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,7 +62,15 @@ public class PacketsReassembleAndSend {
             }
 
             newPacket.getPacketHeaders().entrySet().removeIf(entry -> entry.getValue().equals(packetHeaderToCheck));
-            thisNode.addError(newPacket);
+            if (thisNode instanceof NodeA || thisNode instanceof NodeC || thisNode instanceof NodeD ||
+                    (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
+                    || (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() != null)){
+                thisNode.addError(newPacket);
+            }
+
+//            if(!Arrays.equals(newPacket.getData(),receivedData)){
+//                System.out.println("Error added");
+//            }
             // Verify the hash
             boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
             if (!isCorrect) {

@@ -121,10 +121,31 @@ public class Constants {
         }
     }
 
-    public static final double GOOD_TO_BAD = 0.5;
-    public static final double BAD_TO_GOOD = 0.5;
-    public static final double errorProbabilityGood = 0.5;
-    public static final double errorProbabilityBad = 0.5;
+
+    public enum ErrorType {
+        NO_ERROR("No Errors: ", new double[]{0.00, 0.00, 0.00, 0.00}),
+        DEFAULT_BIT("Bit Errors: ", new double[]{0.01, 0.9, 0.0001, 0.01}),
+        DEFAULT_BURST("Burst Errors: ", new double[]{0.01, 0.02, 0.0001, 0.1}),
+        DEFAULT_RARE_BURST("Rare Burst Errors: ", new double[]{0.001, 0.01, 0.0001, 0.1}),
+        DEFAULT_FREQUENT_SHORT_BURST("Frequent Short Burst Errors: ", new double[]{0.05, 0.1, 0.001, 0.1}),
+        DEFAULT_RANDOM("Random Errors: ", new double[]{0.5, 0.5, 0.01, 0.01});
+
+        private double[] errorValues;
+        private String errorName;
+
+        ErrorType(String errorName, double[] errorValues) {
+            this.errorValues = errorValues;
+            this.errorName = errorName;
+        }
+
+        public double[] getErrorValues() {
+            return this.errorValues;
+        }
+
+        public String getErrorName() {
+            return this.errorName;
+        }
+    }
     public static final int SEED = 123456789;
 
 }
