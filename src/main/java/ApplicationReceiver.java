@@ -31,8 +31,8 @@ public class ApplicationReceiver {
         packetBuffer.add(packet);
         int receivedDataSize = packetBuffer.stream().mapToInt(p -> p.getData().length).sum();
         for (Packet p : packetBuffer) {
-//            System.out.println(p);
-//            CommonFunctions.pause();
+            System.out.println(p);
+            CommonFunctions.pause();
         }
         if (receivedDataSize >= packetSize) {
             // If we have all the data, join all packets' data into one string

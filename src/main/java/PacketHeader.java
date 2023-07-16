@@ -11,14 +11,13 @@ public class PacketHeader {
     private int seqNum;
     private int ackNum;
     private int size;
-    private List<String> path = new ArrayList<>();
 
     private boolean isLastBatch = false;
 
     private int lastBatchSize = 0;
 
     public PacketHeader(String packetCreatingNodeName, String sendTo, String sentFrom,
-                        int seqNum, int ackNum, int size, String valueToCheck, List<String> path,
+                        int seqNum, int ackNum, int size, String valueToCheck,
                         boolean isLastBatch, int lastBatchSize){
         this.packetCreatingNodeName = packetCreatingNodeName;
         this.packetID = packetCreatingNodeName + "-" + seqNum;
@@ -27,11 +26,7 @@ public class PacketHeader {
         this.seqNum = seqNum;
         this.ackNum = ackNum;
         this.size = size;
-        this.path.add(sentFrom);
         this.valueToCheck = valueToCheck;
-        if (seqNum==1){
-            this.path = path;
-        }
         this.isLastBatch = isLastBatch;
         this.lastBatchSize = lastBatchSize;
     }
@@ -92,13 +87,6 @@ public class PacketHeader {
         return packetCreatingNodeName;
     }
 
-    public List<String> getPath() {
-        return path;
-    }
-
-    public void setPath(List<String> path) {
-        this.path = path;
-    }
 
     public boolean isLastBatch() {
         return isLastBatch;
@@ -119,7 +107,6 @@ public class PacketHeader {
                 ", seqNum=" + seqNum +
                 ", ackNum=" + ackNum +
                 ", size=" + size +
-                ", path=" + path +
                 ", isLastBatch=" + isLastBatch +
                 ", lastBatchSize=" + lastBatchSize +
                 '}';

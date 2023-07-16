@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +15,11 @@ public class PacketsReassembleAndSend {
         HashMap<String, PacketHeader> oldPacketHeaders = new HashMap<>();
 
         if (receivedDataSize >= mtu || (isLastBatch && receivedDataSize == lastBatchSize)) {
+            List<String> path = new ArrayList<>();
+            path = packetBuffer.get(0).getPath();
+            if(!path.get(path.size()-1).equals(thisNode.getNodeName())){
+                path.add(thisNode.getNodeName());
+            }
             // If we have all the data, join all packets' data into one string
             byte[] receivedData;
             if(isLastBatch && receivedDataSize == lastBatchSize){
@@ -42,12 +48,11 @@ public class PacketsReassembleAndSend {
 
             String receivedFromNodeName = packetBuffer.get(0).getSentFromNodeName();
 
-            List<String> path = packetHeaderToCheck.getPath();
 
             PacketHeader newPacketHeader = new PacketHeader(thisNode.getNodeName(), sendTo,
                     thisNode.getNodeName(), packetHeaderToCheck.getSeqNum(), 0, receivedData.length,
-                    valueToCheck, path, isLastBatch, lastBatchSize);
-            Packet newPacket = new Packet(receivedData, newPacketHeader);
+                    valueToCheck, isLastBatch, lastBatchSize);
+            Packet newPacket = new Packet(receivedData, newPacketHeader, path);
 
             for (String key : oldPacketHeaders.keySet()) {
                 if (!key.equals(thisNode.getNodeName())) {

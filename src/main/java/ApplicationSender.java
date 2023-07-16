@@ -18,8 +18,8 @@ public class ApplicationSender {
             PacketHeader packetHeader = new PacketHeader(Constants.applicationLevel.SENDER.toString(),
                     Constants.applicationLevel.RECEIVER.toString(),
                     Constants.applicationLevel.SENDER.toString(),
-                    1, 0, totalFileSize, hashOnWholeFile, path, true, totalFileSize);
-            Packet packet = new Packet(dataBytes, packetHeader);
+                    1, 0, totalFileSize, hashOnWholeFile, true, totalFileSize);
+            Packet packet = new Packet(dataBytes, packetHeader, path);
             // Send the packet to the first layer
             MledSimulator.getInstance().getLayers().get(0).getNodes().get(0).receivePacket(packet);
         } catch (Exception e){
