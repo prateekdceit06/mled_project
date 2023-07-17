@@ -1,10 +1,6 @@
-
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,17 +9,16 @@ public abstract class Node {
     private final int layerID;
     private final int nodeID;
     private final String nodeName;
-    private List<Packet> receivedData = new ArrayList<>();
     private final int fragmentationParameter;
     private final ErrorDetectionMethod errorDetectionMethod;
-
+    private List<Packet> receivedData = new ArrayList<>();
     private Node parentNode;
     private Node childNode;
 
     private int errorCount = 0;
     private int errorAddedCount = 0;
 
-    private ErrorModel errorModel;
+    private final ErrorModel errorModel;
 
     private int MTU;
 
@@ -71,22 +66,21 @@ public abstract class Node {
         return errorDetectionMethod;
     }
 
-    public void setParentNode(Node parentNode) {
-        this.parentNode = parentNode;
-    }
-
     public Node getParentNode() {
         return parentNode;
     }
 
-    public void setChildNode(Node childNode) {
-        this.childNode = childNode;
+    public void setParentNode(Node parentNode) {
+        this.parentNode = parentNode;
     }
 
     public Node getChildNode() {
         return childNode;
     }
 
+    public void setChildNode(Node childNode) {
+        this.childNode = childNode;
+    }
 
     public int getErrorCount() {
         return errorCount;

@@ -1,6 +1,5 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,9 +22,9 @@ public class PacketsReassembleAndSend {
             }
             // If we have all the data, join all packets' data into one string
             byte[] receivedData;
-            if(isLastBatch && receivedDataSize == lastBatchSize){
+            if (isLastBatch && receivedDataSize == lastBatchSize) {
                 receivedData = new byte[lastBatchSize];
-            } else{
+            } else {
                 receivedData = new byte[mtu];
             }
 
@@ -65,7 +64,7 @@ public class PacketsReassembleAndSend {
 
             if (thisNode instanceof NodeA || thisNode instanceof NodeC || thisNode instanceof NodeD ||
                     (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
-                    || (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() != null)){
+                    || (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() != null)) {
                 thisNode.addError(newPacket);
             }
 

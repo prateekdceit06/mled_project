@@ -23,7 +23,6 @@ public class ErrorModelGilbertElliot implements ErrorModel {
     }
 
 
-
     public ErrorModelGilbertElliot(double goodToBad, double badToGood, double errorProbabilityGood, double errorProbabilityBad) {
         this.goodToBad = goodToBad;
         this.badToGood = badToGood;
@@ -56,35 +55,35 @@ public class ErrorModelGilbertElliot implements ErrorModel {
 
         Scanner scanner = MledSimulator.getInstance().getScanner();
         boolean errorFlag = false;
-        do{
+        do {
             if (errorFlag) {
                 System.out.println(PrintColor.printInRed("Error: Invalid input. Please try again."));
             }
-            try{
+            try {
                 System.out.print(PrintColor.printInPurple("Please enter GOOD_TO_BAD value: "));
                 double goodToBad = scanner.nextDouble();
                 errorFlag = !Validator.isDoubleValid(goodToBad, 0.0, 1.0);
-                if(errorFlag){
+                if (errorFlag) {
                     continue;
                 }
                 System.out.print(PrintColor.printInPurple("Please enter BAD_TO_GOOD value: "));
                 double badToGood = scanner.nextDouble();
                 errorFlag = !Validator.isDoubleValid(badToGood, 0.0, 1.0);
-                if(errorFlag){
+                if (errorFlag) {
                     continue;
                 }
 
                 System.out.print(PrintColor.printInPurple("Please enter errorProbabilityGood value: "));
                 double errorProbabilityGood = scanner.nextDouble();
                 errorFlag = !Validator.isDoubleValid(errorProbabilityGood, 0.0, 1.0);
-                if(errorFlag){
+                if (errorFlag) {
                     continue;
                 }
 
                 System.out.print(PrintColor.printInPurple("Please enter errorProbabilityBad value: "));
                 double errorProbabilityBad = scanner.nextDouble();
                 errorFlag = !Validator.isDoubleValid(errorProbabilityBad, 0.0, 1.0);
-                if(errorFlag){
+                if (errorFlag) {
                     continue;
                 }
 

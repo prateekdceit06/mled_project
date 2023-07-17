@@ -1,6 +1,8 @@
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +50,9 @@ public class ApplicationReceiver {
             ErrorDetectionMethodHash errorDetectionMethod = new ErrorDetectionMethodHash();
             boolean isCorrect = errorDetectionMethod.verify(receivedData, packetValueToCheck);
             System.out.println();
-            if(isCorrect){
+            if (isCorrect) {
                 System.out.println(PrintColor.printInGreenBack("Received data is correct"));
-            } else{
+            } else {
                 System.out.println(PrintColor.printInRedBack("Received data is incorrect"));
             }
             System.out.println();
