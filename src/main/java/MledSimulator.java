@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -40,11 +41,29 @@ public class MledSimulator {
         return layers;
     }
 
+    public void setLayerNum(int layerNum) {
+        this.layerNum = layerNum;
+    }
+
+    public void setLayers(List<Layer> layers) {
+        this.layers = layers;
+    }
+
+    public void setErrorModel(ErrorModel errorModel) {
+        this.errorModel = errorModel;
+    }
+
+    public void setLastLayerMTU(int lastLayerMTU) {
+        this.lastLayerMTU = lastLayerMTU;
+    }
 
     public int getLastNodeID() {
         return lastNodeID;
     }
 
+    public void setLastNodeID(int lastNodeID) {
+        this.lastNodeID = lastNodeID;
+    }
 
     public void start() {
         boolean errorFlag = false;
@@ -69,6 +88,7 @@ public class MledSimulator {
                         exit(0);
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 errorFlag = true;
             }
         } while (errorFlag);
@@ -76,7 +96,16 @@ public class MledSimulator {
     }
 
     private void initializeFromDefaultConfigFile() {
-
+        SimulatorConfig config = new SimulatorConfig();
+        config.readConfig("config.json", this);
+        calculateMTU();
+        createRoute();
+        System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
+        CommonFunctions.printNetwork(layers);
+        System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
+        CommonFunctions.pause();
+        runNetwork();
+        printStats();
     }
 
     public void initialiseCustomSimulator() {
@@ -141,6 +170,7 @@ public class MledSimulator {
                             continue;
                         }
                     }
+
                     Menu.errorModelMenu();
                     System.out.print(PrintColor.printInPurple("Enter the error model for layer " + i + ": "));
                     int edModel = scanner.nextInt();
@@ -162,6 +192,7 @@ public class MledSimulator {
                     if (errorFlag) {
                         continue;
                     }
+
                     Menu.errorCheckMethodMenu();
                     System.out.print(PrintColor.printInCyan("Select the error detection method for layer " + i + ": "));
                     int edm = scanner.nextInt();
@@ -196,7 +227,8 @@ public class MledSimulator {
                         layers.get(i - 1).addNodes(layerNum, numNodes, errorDetectionMethod, errorModel);
                         System.out.println(PrintColor.printInGreenBack("Layer " + i +
                                 " created with fragmentation parameter " + fragmentationParameter +
-                                " and error detection method " + errorDetectionMethodName + '\n'));
+                                " and error detection method " + errorDetectionMethodName));
+                        System.out.println();
                     }
 
                 } catch (Exception e) {

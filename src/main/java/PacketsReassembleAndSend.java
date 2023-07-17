@@ -62,6 +62,7 @@ public class PacketsReassembleAndSend {
             }
 
             newPacket.getPacketHeaders().entrySet().removeIf(entry -> entry.getValue().equals(packetHeaderToCheck));
+
             if (thisNode instanceof NodeA || thisNode instanceof NodeC || thisNode instanceof NodeD ||
                     (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
                     || (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() != null)){

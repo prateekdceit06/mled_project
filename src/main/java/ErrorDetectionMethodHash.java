@@ -8,6 +8,10 @@ public class ErrorDetectionMethodHash implements ErrorDetectionMethod {
 
     private String algorithm = "MD5";
 
+    public void setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
+    }
+
     @Override
     public void configure() {
         Menu.hashAlgorithmMenu();

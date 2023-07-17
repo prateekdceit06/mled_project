@@ -165,14 +165,7 @@ public abstract class Node {
     public abstract void receivePacket(Packet packet);
 
     private void logAddedError(Packet packet) {
-        try {
-            Path path = Paths.get("errorsAdded.txt");
-            if (Files.exists(path)) {
-                Files.delete(path);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         try (PrintWriter out = new PrintWriter(new FileWriter("errorsAdded.txt", true))) {
             out.println("Error: " + errorAddedCount + " added by Node: " + this.getNodeName() + "\n");
             out.println(packet);

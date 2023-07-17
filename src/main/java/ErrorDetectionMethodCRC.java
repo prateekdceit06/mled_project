@@ -6,6 +6,13 @@ public class ErrorDetectionMethodCRC implements ErrorDetectionMethod {
     String getCrcPolynomialBinary;
     String type = "";
 
+    public void setCrcPolynomialHex(String crcPolynomialHex) {
+        this.crcPolynomialHex = crcPolynomialHex;
+    }
+
+    public void setCrcPolynomialBinary(String crcPolynomialBinary) {
+        this.getCrcPolynomialBinary = crcPolynomialBinary;
+    }
 
     public void configure() {
         Menu.crcMenu();

@@ -79,9 +79,9 @@ public class Layer {
                 "layerID=" + layerID +
                 ", Fragmentation Parameter=" + fragmentationParameter +
                 ", errorDetectionMethodName='" + errorDetectionMethodName + '\'' +
+                ", errorDetectionMethod=" + errorDetectionMethod +
                 ", nodes=" + nodes +
                 ", nodeIDs=" + nodeIDs +
-                ", errorDetectionMethod=" + errorDetectionMethod +
                 ", errorModel=" + errorModel +
                 '}';
     }

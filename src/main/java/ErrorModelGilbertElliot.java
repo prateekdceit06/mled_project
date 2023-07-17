@@ -11,9 +11,18 @@ public class ErrorModelGilbertElliot implements ErrorModel {
     private int seed;
     private boolean state;  // true is bad, false is good
 
+    public void setSeed(int seed) {
+        this.seed = seed;
+    }
+
     //empty constructor
     public ErrorModelGilbertElliot() {
+        this.seed = Constants.SEED;
+        this.random = new Random(this.seed);
+        this.state = false; // start with good state
     }
+
+
 
     public ErrorModelGilbertElliot(double goodToBad, double badToGood, double errorProbabilityGood, double errorProbabilityBad) {
         this.goodToBad = goodToBad;
@@ -94,8 +103,7 @@ public class ErrorModelGilbertElliot implements ErrorModel {
     //override toString method to print the parameters
     @Override
     public String toString() {
-        return "Selected Error Mode Configuration = " +
-                " Good to Bad: " + goodToBad +
+        return " Good to Bad: " + goodToBad +
                 ", Bad to Good: " + badToGood +
                 ", Error Probability Good: " + errorProbabilityGood +
                 ", Error Probability Bad: " + errorProbabilityBad;

@@ -1,18 +1,51 @@
 {
-    "appName": "MyJavaApp",
-    "appVersion": "1.0",
-    "database": {
-        "url": "jdbc:mysql://localhost:3306/mydatabase",
-        "users": [
-            {
-                "Name": "John",
-                "Age": 15
-            },
-            {
-                "Name": "Doe",
-                "Age": 16
-            }
-        ],
-        "password": "password"
+  "simulator": {
+    "numberOfLayers": 3,
+    "lastLayerMTU": 500,
+    "seed": 123456789
+  },
+  "layers": [
+    {
+      "id": 1,
+      "fragmentationParameter": 1,
+      "errorModel": {
+        "goodToBad": 0.01,
+        "badToGood": 0.9,
+        "errorProbabilityGood": 0.0001,
+        "errorProbabilityBad": 0.01
+      },
+      "errorDetectionMethod": {
+        "name": "CHECKSUM",
+        "checksumLength": 1
+      }
+    },
+    {
+      "id": 2,
+      "fragmentationParameter": 2,
+      "errorModel": {
+        "goodToBad": 0.01,
+        "badToGood": 0.9,
+        "errorProbabilityGood": 0.0001,
+        "errorProbabilityBad": 0.01
+      },
+      "errorDetectionMethod": {
+        "name": "CHECKSUM",
+        "checksumLength": 1
+      }
+    },
+    {
+      "id": 3,
+      "fragmentationParameter": 2,
+      "errorModel": {
+        "goodToBad": 0.01,
+        "badToGood": 0.9,
+        "errorProbabilityGood": 0.0001,
+        "errorProbabilityBad": 0.01
+      },
+      "errorDetectionMethod": {
+        "name": "CHECKSUM",
+        "checksumLength": 1
+      }
     }
+  ]
 }

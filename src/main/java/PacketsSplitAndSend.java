@@ -42,8 +42,11 @@ public class PacketsSplitAndSend {
                     }
                 }
 
+                if(!(thisNode instanceof NodeE && thisNode.getParentNode()!=null && thisNode.getChildNode() == null)){
+                    thisNode.addError(newPacket);
+                }
 
-                thisNode.addError(newPacket);
+
                 sendToNode.receivePacket(newPacket);
 
             }
@@ -61,8 +64,9 @@ public class PacketsSplitAndSend {
                     newPacket.getPacketHeaders().put(key, originalPacketHeaders.get(key));
                 }
             }
-            thisNode.addError(newPacket);
-
+            if(!(thisNode instanceof NodeE && thisNode.getParentNode()!=null && thisNode.getChildNode() == null)){
+                thisNode.addError(newPacket);
+            }
             sendToNode.receivePacket(newPacket);
         }
     }

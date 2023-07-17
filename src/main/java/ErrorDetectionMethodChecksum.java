@@ -6,6 +6,10 @@ public class ErrorDetectionMethodChecksum implements ErrorDetectionMethod {
         return checksumLength;
     }
 
+    public void setChecksumLength(int checksumLength) {
+        this.checksumLength = checksumLength;
+    }
+
     @Override
 
     public void configure() {

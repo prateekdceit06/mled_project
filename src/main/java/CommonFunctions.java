@@ -61,14 +61,6 @@ public class CommonFunctions {
     }
 
     public static void logErrorPacket(Packet packet, int errorCount) {
-        try {
-            Path path = Paths.get("errorsFound.txt");
-            if (Files.exists(path)) {
-                Files.delete(path);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         try (PrintWriter out = new PrintWriter(new FileWriter("errorsFound.txt", true))) {
             out.println("Error: "+ errorCount + " found by Node: " + packet.getSentFromNodeName() + "\n");
