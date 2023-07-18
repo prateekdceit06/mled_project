@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -97,7 +98,40 @@ public class MledSimulator {
 
     private void initializeFromDefaultConfigFile() {
         SimulatorConfig config = new SimulatorConfig();
-        config.readConfig("config.json", this);
+        boolean errorFlag = false;
+        do{
+            try{
+                if (errorFlag) {
+                    System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
+                }
+                String currentWorkingDirectory = System.getProperty("user.dir");
+                File directory = new File(currentWorkingDirectory + File.separator + "configs");
+                File[] files = directory.listFiles();
+                int fileCount = (files != null) ? files.length : 0;
+                Menu.fileMenu(files, fileCount);
+
+                System.out.print(PrintColor.printInYellow("Enter the number of the file you want to select: "));
+                int choice = scanner.nextInt();
+
+                if (choice > 0 && choice <= fileCount) {
+                    String fileName = directory + File.separator + files[choice - 1].getName();
+                    config.readConfig(fileName, this);
+
+                } else if (choice == fileCount + 1) {
+                    exit(0);
+                } else{
+                    errorFlag = true;
+                }
+            } catch (Exception e) {
+                System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
+                errorFlag = true;
+                e.printStackTrace();
+            }
+
+        } while (errorFlag);
+
+
+
         calculateMTU();
         createRoute();
         System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));

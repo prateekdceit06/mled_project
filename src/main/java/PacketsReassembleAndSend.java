@@ -62,16 +62,6 @@ public class PacketsReassembleAndSend {
 
             newPacket.getPacketHeaders().entrySet().removeIf(entry -> entry.getValue().equals(packetHeaderToCheck));
 
-            if (thisNode instanceof NodeA || thisNode instanceof NodeC || thisNode instanceof NodeD ||
-                    (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
-                    || (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() != null)) {
-                thisNode.addError(newPacket);
-            }
-
-//            if(!Arrays.equals(newPacket.getData(),receivedData)){
-//                System.out.println("Error added");
-//            }
-            // Verify the hash
             boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
             if (!isCorrect) {
                 // If the hash doesn't match, log the packet in errorsFound.txt
@@ -79,10 +69,29 @@ public class PacketsReassembleAndSend {
                 thisNode.setErrorCount(thisNode.getErrorCount() + 1);
             }
 
-            if (sendToNode != null && receivedFromNodeName.equals(sendToNode.getNodeName())) {
-                PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
-                packetsSplitAndSend.splitAndSend(newPacket, thisNode, sendToNode, receivedFromNodeName);
-            } else if (sendToNode != null) {
+            if (thisNode instanceof NodeA || thisNode instanceof NodeC ||
+                    (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
+                    || (thisNode instanceof NodeE && thisNode.getChildNode() != null && thisNode.getParentNode() == null)) {
+                thisNode.addError(newPacket);
+            }
+
+//            if(!Arrays.equals(newPacket.getData(),receivedData)){
+//                System.out.println("Error added");
+//            }
+            // Verify the hash
+
+
+//            if (sendToNode != null && receivedFromNodeName.equals(sendToNode.getNodeName())) {
+//                PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
+//                packetsSplitAndSend.splitAndSend(newPacket, thisNode, sendToNode, receivedFromNodeName);
+//            } else if (sendToNode != null) {
+//                sendToNode.receivePacket(newPacket);
+//            } else {
+//                ApplicationReceiver applicationReceiver = ApplicationReceiver.getInstance();
+//                applicationReceiver.receivePacketAndWriteToFile(newPacket);
+//            }
+
+            if (sendToNode != null) {
                 sendToNode.receivePacket(newPacket);
             } else {
                 ApplicationReceiver applicationReceiver = ApplicationReceiver.getInstance();

@@ -1,12 +1,10 @@
 {
   "simulator": {
-    "numberOfLayers": 3,
     "lastLayerMTU": 500,
     "seed": 123456789
   },
   "layers": [
     {
-      "id": 1,
       "fragmentationParameter": 1,
       "errorModel": {
         "goodToBad": 0.01,
@@ -20,7 +18,6 @@
       }
     },
     {
-      "id": 2,
       "fragmentationParameter": 2,
       "errorModel": {
         "goodToBad": 0.01,
@@ -34,7 +31,6 @@
       }
     },
     {
-      "id": 3,
       "fragmentationParameter": 2,
       "errorModel": {
         "goodToBad": 0.01,

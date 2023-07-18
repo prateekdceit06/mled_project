@@ -1,3 +1,4 @@
+import java.io.File;
 import java.text.DecimalFormat;
 
 public class Menu {
@@ -95,9 +96,21 @@ public class Menu {
 
     public static void initialiseSimulatorMenu() {
         System.out.println(PrintColor.printInYellow("Initialise Simulator Menu"));
-        System.out.println(PrintColor.printInYellow("1. Initialise Simulator from default configuration file"));
+        System.out.println(PrintColor.printInYellow("1. Initialise Simulator from configuration file"));
         System.out.println(PrintColor.printInYellow("2. Initialise Simulator with custom configuration."));
         System.out.println(PrintColor.printInYellow("3. Exit"));
+    }
+
+    public static void fileMenu(File[] files, int fileCount) {
+
+        System.out.println(PrintColor.printInYellow("Please select a file from the list below: "));
+        int count = 1;
+        for (int i = 0; i < fileCount; i++) {
+            System.out.println(PrintColor.printInYellow((i + 1) + ". " + files[i].getName()));
+            count++;
+        }
+        System.out.println(PrintColor.printInYellow(count + ". Exit"));
+
     }
 
 
