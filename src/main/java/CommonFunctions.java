@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -57,7 +58,11 @@ public class CommonFunctions {
 
     public static void logErrorPacket(Packet packet, int errorCount) {
 
-        try (PrintWriter out = new PrintWriter(new FileWriter("errorsFound.txt", true))) {
+        String directoryName = createFolder("output");
+        String fileName = directoryName + File.separator + "errorsFound.txt";
+
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
             out.println("Error: " + errorCount + " found by Node: " + packet.getSentFromNodeName() + "\n");
             out.println(packet);
             String str = new String(packet.getData(), StandardCharsets.US_ASCII);
@@ -67,6 +72,18 @@ public class CommonFunctions {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String createFolder(String folderName){
+        File folder = new File(folderName);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+
+        String currentWorkingDirectory = System.getProperty("user.dir");
+        File directory = new File(currentWorkingDirectory + File.separator + "output");
+        return directory.getName();
     }
 
 }

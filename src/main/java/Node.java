@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -159,8 +160,11 @@ public abstract class Node {
     public abstract void receivePacket(Packet packet);
 
     private void logAddedError(Packet packet) {
+        String directoryName = CommonFunctions.createFolder("output");
+        String fileName = directoryName + File.separator + "errorsAdded.txt";
 
-        try (PrintWriter out = new PrintWriter(new FileWriter("errorsAdded.txt", true))) {
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
             out.println("Error: " + errorAddedCount + " added by Node: " + this.getNodeName() + "\n");
             out.println(packet);
             String str = new String(packet.getData(), StandardCharsets.US_ASCII);

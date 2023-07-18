@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -50,25 +51,45 @@ public class ApplicationReceiver {
             ErrorDetectionMethodHash errorDetectionMethod = new ErrorDetectionMethodHash();
             boolean isCorrect = errorDetectionMethod.verify(receivedData, packetValueToCheck);
             System.out.println();
+
             if (isCorrect) {
+
+                try {
+                    Path path = Paths.get("receivedData.txt");
+                    if (Files.exists(path)) {
+                        Files.delete(path);
+                    }
+                    try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.txt", true))) {
+                        out.print(new String(receivedData));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 System.out.println(PrintColor.printInGreenBack("Received data is correct"));
             } else {
+                String directoryName = CommonFunctions.createFolder("output");
+                String fileName = directoryName + File.separator + "receivedData.txt";
+                try {
+                    Path path = Paths.get(fileName);
+                    if (Files.exists(path)) {
+                        Files.delete(path);
+                    }
+                    try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
+                        out.print(new String(receivedData));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 System.out.println(PrintColor.printInRedBack("Received data is incorrect"));
             }
             System.out.println();
-            try {
-                Path path = Paths.get("receivedData.txt");
-                if (Files.exists(path)) {
-                    Files.delete(path);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.txt", true))) {
-                out.print(new String(receivedData));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+
 
 
             packetBuffer.clear();
