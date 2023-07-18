@@ -1,8 +1,6 @@
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static java.lang.System.exit;
 
@@ -66,7 +64,7 @@ public class MledSimulator {
         this.lastNodeID = lastNodeID;
     }
 
-    public void start() {
+    public void getOptionToStartSimulator() {
         boolean errorFlag = false;
         do {
             if (errorFlag) {
@@ -97,61 +95,14 @@ public class MledSimulator {
     }
 
     private void initializeFromDefaultConfigFile() {
-        SimulatorConfig config = new SimulatorConfig();
-        boolean errorFlag = false;
-        do{
-            try{
-                if (errorFlag) {
-                    System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
-                }
-                String currentWorkingDirectory = System.getProperty("user.dir");
-                File directory = new File(currentWorkingDirectory + File.separator + "configs");
-                File[] files = directory.listFiles();
-                int fileCount = (files != null) ? files.length : 0;
-                Menu.fileMenu(files, fileCount);
-
-                System.out.print(PrintColor.printInYellow("Enter the number of the file you want to select: "));
-                int choice = scanner.nextInt();
-
-                if (choice > 0 && choice <= fileCount) {
-                    String fileName = directory + File.separator + files[choice - 1].getName();
-                    config.readConfig(fileName, this);
-
-                } else if (choice == fileCount + 1) {
-                    exit(0);
-                } else{
-                    errorFlag = true;
-                }
-            } catch (Exception e) {
-                System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
-                errorFlag = true;
-                e.printStackTrace();
-            }
-
-        } while (errorFlag);
-
-
-
-        calculateMTU();
-        createRoute();
-        System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
-        CommonFunctions.printNetwork(layers);
-        System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
-        CommonFunctions.pause();
-        runNetwork();
-        printStats();
+        readConfigFromFile();
+        start();
     }
 
     public void initialiseCustomSimulator() {
         configureSimulator();
-        calculateMTU();
-        createRoute();
-        System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
-        CommonFunctions.printNetwork(layers);
-        System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
-        CommonFunctions.pause();
-        runNetwork();
-        printStats();
+        start();
+
     }
 
     private void configureSimulator() {
@@ -315,23 +266,57 @@ public class MledSimulator {
         applicationSender.readFileAndSendData();
     }
 
-    private void printStats() {
+    private void start(){
+        calculateMTU();
+        createRoute();
+        System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
+        CommonFunctions.printNetwork(layers);
+        System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
+        CommonFunctions.pause();
+        runNetwork();
+        CommonFunctions.printStats(layers);
+        CommonFunctions.printInterestingPacketNames(layers);
+        AnalyseNodesForErrorDetection analyseNodesForErrorDetection = new AnalyseNodesForErrorDetection();
+        analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
+    }
 
-        for (Layer layer : layers) {
-            for (Node node : layer.getNodes()) {
-                String output = String.format(
-                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d",
-                        node.getNodeName(),
-                        node.getErrorAddedCount(),
-                        node.getErrorCount()
-                );
+    private void readConfigFromFile(){
+        SimulatorConfig config = new SimulatorConfig();
+        boolean errorFlag = false;
+        do {
+            try {
+                if (errorFlag) {
+                    System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
+                }
+                String currentWorkingDirectory = System.getProperty("user.dir");
+                File directory = new File(currentWorkingDirectory + File.separator + "configs");
+                File[] files = directory.listFiles();
+                int fileCount = (files != null) ? files.length : 0;
+                Menu.fileMenu(files, fileCount);
 
-                System.out.println(PrintColor.printInRedBack(output));
+                System.out.print(PrintColor.printInYellow("Enter the number of the file you want to select: "));
+                int choice = scanner.nextInt();
+
+                if (choice > 0 && choice <= fileCount) {
+                    String fileName = directory + File.separator + files[choice - 1].getName();
+                    config.readConfig(fileName, this);
+
+                } else if (choice == fileCount + 1) {
+                    exit(0);
+                } else {
+                    errorFlag = true;
+                }
+            } catch (Exception e) {
+                System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
+                errorFlag = true;
+                e.printStackTrace();
             }
 
-            System.out.println(PrintColor.printInGreen(PrintColor.divider()));
-        }
+        } while (errorFlag);
     }
+
+
+
 
 
 }

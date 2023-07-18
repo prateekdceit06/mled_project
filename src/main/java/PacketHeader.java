@@ -12,11 +12,11 @@ public class PacketHeader {
 
     private int lastBatchSize = 0;
 
-    public PacketHeader(String packetCreatingNodeName, String sendTo, String sentFrom,
+    public PacketHeader(String packetID, String packetCreatingNodeName, String sendTo, String sentFrom,
                         int seqNum, int ackNum, int size, String valueToCheck,
                         boolean isLastBatch, int lastBatchSize) {
         this.packetCreatingNodeName = packetCreatingNodeName;
-        this.packetID = packetCreatingNodeName + "-" + seqNum;
+        this.packetID = packetID;
         this.sendTo = sendTo;
         this.sentFrom = sentFrom;
         this.seqNum = seqNum;

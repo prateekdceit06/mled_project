@@ -16,6 +16,7 @@ public class ApplicationSender {
             List<String> path = new ArrayList<>();
             path.add(Constants.applicationLevel.SENDER.toString());
             PacketHeader packetHeader = new PacketHeader(Constants.applicationLevel.SENDER.toString(),
+                    Constants.applicationLevel.SENDER.toString(),
                     Constants.applicationLevel.RECEIVER.toString(),
                     Constants.applicationLevel.SENDER.toString(),
                     1, 0, totalFileSize, hashOnWholeFile, true, totalFileSize);

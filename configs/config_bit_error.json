@@ -39,8 +39,8 @@
         "errorProbabilityBad": 0.01
       },
       "errorDetectionMethod": {
-        "name": "HASH",
-        "algorithm": "SHA1"
+        "name": "CHECKSUM",
+        "checksumLength": 1
       }
     },
     {
@@ -52,8 +52,8 @@
         "errorProbabilityBad": 0.01
       },
       "errorDetectionMethod": {
-        "name": "CRC",
-        "crcPolynomial": "0x07"
+        "name": "CHECKSUM",
+        "checksumLength": 1
       }
     }
   ]

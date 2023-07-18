@@ -13,7 +13,7 @@ public class NodeB extends Node {
     }
 
     public void receivePacket(Packet packet) {
-        this.getReceivedData().add(packet);
+//        this.getReceivedData().add(packet);
         String nodeNameToGetHeaderToCheckValue = getNodeNameForErrorCheck();
         PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
         int mtu = packetHeaderToCheck.getSize();
@@ -24,6 +24,11 @@ public class NodeB extends Node {
         packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, null,
                 mtu, packetHeaderToCheck);
     }
+
+//    @Override
+//    public Node getSendToNode() {
+//        return null;
+//    }
 
 
 }

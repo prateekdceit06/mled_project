@@ -14,7 +14,7 @@ public class NodeE extends Node {
     private List<Packet> packetBuffer = new ArrayList<>();
 
     public void receivePacket(Packet packet) {
-        this.getReceivedData().add(packet);
+//        this.getReceivedData().add(packet);
         Node sendToNode = this.getSendToNode(packet.getSentFromNodeName());
         String receivedFromNodeName = packet.getSentFromNodeName();
 

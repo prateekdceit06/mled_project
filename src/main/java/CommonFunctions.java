@@ -56,7 +56,10 @@ public class CommonFunctions {
 
     }
 
-    public static void logErrorPacket(Packet packet, int errorCount) {
+    public static void logErrorPacket(Packet packet, int errorCount, Node thisNode) {
+
+        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size()-1)).getPacketID();
+        thisNode.getErrorDetectedInPackets().add(packetID);
 
         String directoryName = createFolder("output");
         String fileName = directoryName + File.separator + "errorsFound.txt";
@@ -84,6 +87,62 @@ public class CommonFunctions {
         String currentWorkingDirectory = System.getProperty("user.dir");
         File directory = new File(currentWorkingDirectory + File.separator + "output");
         return directory.getName();
+    }
+
+
+    public static void printStats(List<Layer> layers) {
+
+        for (Layer layer : layers) {
+            for (Node node : layer.getNodes()) {
+                String output = String.format(
+                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d ",
+                        node.getNodeName(),
+                        node.getErrorAddedCount(),
+                        node.getErrorDetectedCount()
+                );
+
+                System.out.println(PrintColor.printInRedBack(output));
+
+
+            }
+
+            System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+        }
+
+    }
+
+    public static void printInterestingPacketNames(List<Layer> layers) {
+        for (Layer layer : layers) {
+            for (Node node : layer.getNodes()) {
+                String output = String.format(
+                        "Node Name: %-15s Errors Added: %-7d ",
+                        node.getNodeName(),
+                        node.getErrorAddedCount()
+                );
+                System.out.print(PrintColor.printInRedBack(output));
+
+                if (!node.getErrorAddedToPackets().isEmpty()) {
+                    System.out.println(PrintColor.printInRedBack(node.getErrorAddedToPackets().toString()));
+                } else {
+                    System.out.println();
+                }
+                output = String.format(
+                        "Node Name: %-15s Errors Detected: %-4d ",
+                        node.getNodeName(),
+                        node.getErrorDetectedCount()
+                );
+
+                System.out.print(PrintColor.printInGreenBack(output));
+                if (!node.getErrorDetectedInPackets().isEmpty()) {
+                    System.out.println(PrintColor.printInGreenBack(node.getErrorDetectedInPackets().toString()));
+                } else {
+                    System.out.println();
+                }
+            }
+        }
+        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+
+
     }
 
 }

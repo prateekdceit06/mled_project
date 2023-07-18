@@ -16,10 +16,11 @@ public class PacketsSplitAndSend {
         packet.getPacketHeaders().forEach((key, value) -> originalPacketHeaders.put(key, value));
 
         PacketHeader previousPacketHeader = packet.getPacketHeaders().get(receivedFromNodeName);
-
+        int seqNum = 0;
+        String packetID;
         if (data.length > thisNode.getMTU()) {
             LinkedList<byte[]> packets = splitPackets(data, thisNode.getMTU());
-            int seqNum = 0;
+
 
             for (byte[] packetDataBytes : packets) {
                 boolean isLastBatch = seqNum == packets.size() - 1;
@@ -30,8 +31,10 @@ public class PacketsSplitAndSend {
                 String valueToCheck = thisNode.getErrorDetectionMethod().calculate(packetDataBytes);
                 seqNum++;
 
+                packetID = previousPacketHeader.getPacketID() + "." + thisNode.getNodeName() + "-" + seqNum;
 
-                PacketHeader newPacketHeader = new PacketHeader(thisNode.getNodeName(), sendToNode.getNodeName(),
+
+                PacketHeader newPacketHeader = new PacketHeader(packetID, thisNode.getNodeName(), sendToNode.getNodeName(),
                         thisNode.getNodeName(), seqNum, 0, packetDataBytes.length, valueToCheck,
                         isLastBatch, lastBatchSize);
                 Packet newPacket = new Packet(packetDataBytes, newPacketHeader, path);
@@ -42,18 +45,20 @@ public class PacketsSplitAndSend {
                     }
                 }
 
-                thisNode.addError(newPacket);
+                thisNode.getReceivedData().add(packet);
 
+                thisNode.addError(newPacket);
                 sendToNode.receivePacket(newPacket);
 
             }
         } else {
+            seqNum++;
+            packetID = previousPacketHeader.getPacketID() + "." + thisNode.getNodeName() + "-" + seqNum;
 
             String valueToCheck = thisNode.getErrorDetectionMethod().calculate(data);
 
-
-            PacketHeader newPacketHeader = new PacketHeader(thisNode.getNodeName(), sendToNode.getNodeName(),
-                    thisNode.getNodeName(), previousPacketHeader.getSeqNum(), 0, data.length, valueToCheck,
+            PacketHeader newPacketHeader = new PacketHeader(packetID, thisNode.getNodeName(), sendToNode.getNodeName(),
+                    thisNode.getNodeName(), seqNum, 0, data.length, valueToCheck,
                     true, data.length);
             Packet newPacket = new Packet(data, newPacketHeader, path);
             for (String key : originalPacketHeaders.keySet()) {
@@ -61,6 +66,8 @@ public class PacketsSplitAndSend {
                     newPacket.getPacketHeaders().put(key, originalPacketHeaders.get(key));
                 }
             }
+
+            thisNode.getReceivedData().add(packet);
 
             thisNode.addError(newPacket);
 

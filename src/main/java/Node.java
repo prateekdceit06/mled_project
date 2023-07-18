@@ -16,12 +16,15 @@ public abstract class Node {
     private Node parentNode;
     private Node childNode;
 
-    private int errorCount = 0;
+    private int errorDetectedCount = 0;
     private int errorAddedCount = 0;
 
     private final ErrorModel errorModel;
 
     private int MTU;
+
+    private List<String> errorAddedToPackets;
+    private List<String> errorDetectedInPackets;
 
 
     public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
@@ -35,6 +38,8 @@ public abstract class Node {
         this.childNode = null;
         this.errorModel = errorModel;
         this.MTU = MTU;
+        this.errorAddedToPackets = new ArrayList<>();
+        this.errorDetectedInPackets = new ArrayList<>();
     }
 
 
@@ -83,12 +88,12 @@ public abstract class Node {
         this.childNode = childNode;
     }
 
-    public int getErrorCount() {
-        return errorCount;
+    public int getErrorDetectedCount() {
+        return errorDetectedCount;
     }
 
-    public void setErrorCount(int errorCount) {
-        this.errorCount = errorCount;
+    public void setErrorDetectedCount(int errorDetectedCount) {
+        this.errorDetectedCount = errorDetectedCount;
     }
 
     public ErrorModel getErrorModel() {
@@ -105,6 +110,14 @@ public abstract class Node {
 
     public int getErrorAddedCount() {
         return errorAddedCount;
+    }
+
+    public List<String> getErrorAddedToPackets() {
+        return errorAddedToPackets;
+    }
+
+    public List<String> getErrorDetectedInPackets() {
+        return errorDetectedInPackets;
     }
 
     //override toString method to print out node information
@@ -158,8 +171,12 @@ public abstract class Node {
     }
 
     public abstract void receivePacket(Packet packet);
+//    public abstract Node getSendToNode();
 
     private void logAddedError(Packet packet) {
+        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size()-1)).getPacketID();
+        errorAddedToPackets.add(packetID);
+
         String directoryName = CommonFunctions.createFolder("output");
         String fileName = directoryName + File.separator + "errorsAdded.txt";
 
@@ -175,4 +192,6 @@ public abstract class Node {
             e.printStackTrace();
         }
     }
+
+
 }

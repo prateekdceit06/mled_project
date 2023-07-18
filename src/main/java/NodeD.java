@@ -14,7 +14,7 @@ public class NodeD extends Node {
     }
 
     public void receivePacket(Packet packet) {
-        this.getReceivedData().add(packet);
+//        this.getReceivedData().add(packet);
         String nodeNameToGetHeaderToCheckValue = getNodeNameForErrorCheck();
         PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
         packetBuffer.add(packet);

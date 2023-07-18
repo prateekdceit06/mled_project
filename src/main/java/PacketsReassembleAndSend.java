@@ -46,7 +46,11 @@ public class PacketsReassembleAndSend {
                 sendTo = sendToNode.getNodeName();
             }
 
-            PacketHeader newPacketHeader = new PacketHeader(thisNode.getNodeName(), sendTo,
+
+
+            String packetID = packetHeaderToCheck.getPacketID();
+
+            PacketHeader newPacketHeader = new PacketHeader(packetID,thisNode.getNodeName(), sendTo,
                     thisNode.getNodeName(), packetHeaderToCheck.getSeqNum(), 0, receivedData.length,
                     valueToCheck, isLastBatch, lastBatchSize);
             Packet newPacket = new Packet(receivedData, newPacketHeader, path);
@@ -62,13 +66,16 @@ public class PacketsReassembleAndSend {
             boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
             if (!isCorrect) {
                 // If the hash doesn't match, log the packet in errorsFound.txt
-                CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorCount() + 1);
-                thisNode.setErrorCount(thisNode.getErrorCount() + 1);
+                CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
+                thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
             }
+
+            thisNode.getReceivedData().add(newPacket);
 
             if (thisNode instanceof NodeA || thisNode instanceof NodeC ||
                     (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
                     || (thisNode instanceof NodeE && thisNode.getChildNode() != null && thisNode.getParentNode() == null)) {
+
                 thisNode.addError(newPacket);
             }
 
