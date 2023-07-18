@@ -8,7 +8,6 @@ import java.io.Reader;
 
 import static java.lang.System.exit;
 
-//todo: create read me.. describe configuration file.. add validation checks for configuration... describe config file.
 public class SimulatorConfig {
     public void readConfig(String configFile, MledSimulator simulator) {
 
@@ -97,9 +96,6 @@ public class SimulatorConfig {
                         ((ErrorDetectionMethodCRC) errorDetectionMethod).setCrcPolynomialBinary(getCrcPolynomialBinary);
                         if (getCrcPolynomialBinary.charAt(0) != '1' || getCrcPolynomialBinary.charAt(getCrcPolynomialBinary.length() - 1) != '1') {
                             System.out.println(PrintColor.printInRedBack("Invalid generator polynomial. The first and last bits must be 1."));
-                        } else{
-                            System.out.println(PrintColor.printInRedBack("Error: Invalid CRC polynomial. " +
-                                    "The first and the last bit should be 1. Please try again."));
                             exit(0);
                         }
                     } else{
@@ -123,7 +119,7 @@ public class SimulatorConfig {
                             exit(0);
                         }
                     } else{
-                        System.out.println(PrintColor.printInRedBack("Error: You have to add 'algorithm' in the configuration file for CRC error detection method. " +
+                        System.out.println(PrintColor.printInRedBack("Error: You have to add 'algorithm' in the configuration file for HASH error detection method. " +
                                 "Please try again."));
                         exit(0);
                     }

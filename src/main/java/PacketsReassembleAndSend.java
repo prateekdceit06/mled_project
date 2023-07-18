@@ -46,9 +46,6 @@ public class PacketsReassembleAndSend {
                 sendTo = sendToNode.getNodeName();
             }
 
-            String receivedFromNodeName = packetBuffer.get(0).getSentFromNodeName();
-
-
             PacketHeader newPacketHeader = new PacketHeader(thisNode.getNodeName(), sendTo,
                     thisNode.getNodeName(), packetHeaderToCheck.getSeqNum(), 0, receivedData.length,
                     valueToCheck, isLastBatch, lastBatchSize);
@@ -75,21 +72,6 @@ public class PacketsReassembleAndSend {
                 thisNode.addError(newPacket);
             }
 
-//            if(!Arrays.equals(newPacket.getData(),receivedData)){
-//                System.out.println("Error added");
-//            }
-            // Verify the hash
-
-
-//            if (sendToNode != null && receivedFromNodeName.equals(sendToNode.getNodeName())) {
-//                PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
-//                packetsSplitAndSend.splitAndSend(newPacket, thisNode, sendToNode, receivedFromNodeName);
-//            } else if (sendToNode != null) {
-//                sendToNode.receivePacket(newPacket);
-//            } else {
-//                ApplicationReceiver applicationReceiver = ApplicationReceiver.getInstance();
-//                applicationReceiver.receivePacketAndWriteToFile(newPacket);
-//            }
 
             if (sendToNode != null) {
                 sendToNode.receivePacket(newPacket);

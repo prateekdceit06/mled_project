@@ -6,7 +6,7 @@ public class PacketsSplitAndSend {
         byte[] data = packet.getData();
 
 
-        List<String> path = new ArrayList<>();
+        List<String> path;
         path = packet.getPath();
         if (!path.get(path.size() - 1).equals(thisNode.getNodeName())) {
             path.add(thisNode.getNodeName());
@@ -42,12 +42,7 @@ public class PacketsSplitAndSend {
                     }
                 }
 
-//                if (!(thisNode instanceof NodeE && thisNode.getParentNode() != null && thisNode.getChildNode() == null)) {
-//                }
-
                 thisNode.addError(newPacket);
-
-
 
                 sendToNode.receivePacket(newPacket);
 
@@ -66,9 +61,6 @@ public class PacketsSplitAndSend {
                     newPacket.getPacketHeaders().put(key, originalPacketHeaders.get(key));
                 }
             }
-//            if (!(thisNode instanceof NodeE && thisNode.getParentNode() != null && thisNode.getChildNode() == null)) {
-//                thisNode.addError(newPacket);
-//            }
 
             thisNode.addError(newPacket);
 
