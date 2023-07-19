@@ -1,6 +1,6 @@
 # Multi Layered Detection Model (MLED) for Error Detection
 
-<div style="text-align:justify">
+<p align="justify">
 
 Multi-Layer Error Detection (MLED) is a layered architecture designed to significantly reduce the Undetected Error Probability (UEP) in file transfers. This is particularly important for petabyte-scale file transfers, which are often used for data collected from scientific instruments.
 
@@ -177,4 +177,4 @@ You can modify the values in this JSON file to match your desired configuration.
 directory and then run the program. You will be prompted to select a configuration file. Choose the file you just saved
 to start the simulation with your specified configurations.
 
-</div>
+</p>
