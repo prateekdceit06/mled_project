@@ -97,11 +97,11 @@ public class PacketsReassembleAndSend {
         if (thisNode instanceof NodeA || thisNode instanceof NodeC ||
                 (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
                 || (thisNode instanceof NodeE && thisNode.getChildNode() != null && thisNode.getParentNode() == null)) {
-            //todo: change if you need an error in a single packet
-            if(thisNode.getNodeName().equals("4-6") && packetHeaderToCheck.getPacketID().equals("SENDER.1-1-1.2-1-1.3-5-1.4-5-1")){
-                thisNode.addError(newPacket);
-            }
+            //todo: change if you need an error in a single packet ---> addError() method
+//            if(thisNode.getNodeName().equals("4-6") && packetHeaderToCheck.getPacketID().equals("SENDER.1-1-1.2-1-1.3-5-1.4-5-1")){
 //                thisNode.addError(newPacket);
+//            }
+                thisNode.addError(newPacket);
         }
 
         thisNode.getSentDataAfterError().add(newPacket);

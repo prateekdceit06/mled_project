@@ -1,0 +1,47 @@
+{
+  "simulator": {
+    "lastLayerMTU": 500,
+    "seed": 3826142
+  },
+  "layers": [
+    {
+      "fragmentationParameter": 1,
+      "errorModel": {
+        "goodToBad": 0.001,
+        "badToGood": 0.9,
+        "errorProbabilityGood": 0.00001,
+        "errorProbabilityBad": 0.001
+      },
+      "errorDetectionMethod": {
+        "name": "CRC",
+        "crcPolynomial": "0x1B"
+      }
+    },
+    {
+      "fragmentationParameter": 2,
+      "errorModel": {
+        "goodToBad": 0.001,
+        "badToGood": 0.9,
+        "errorProbabilityGood": 0.00001,
+        "errorProbabilityBad": 0.001
+      },
+      "errorDetectionMethod": {
+        "name": "CRC",
+        "crcPolynomial": "0x07"
+      }
+    },
+    {
+      "fragmentationParameter": 2,
+      "errorModel": {
+        "goodToBad": 0.001,
+        "badToGood": 0.9,
+        "errorProbabilityGood": 0.00001,
+        "errorProbabilityBad": 0.001
+      },
+      "errorDetectionMethod": {
+        "name": "CHECKSUM",
+        "checksumLength": 1
+      }
+    }
+  ]
+}

@@ -1,12 +1,17 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Node {
 
+    private static final Logger logger = LogManager.getLogger(Node.class);
     private final int layerID;
     private final int nodeID;
     private final String nodeName;
@@ -174,15 +179,21 @@ public abstract class Node {
     }
 
     public void addError(Packet packet) {
-        boolean errorAdded = false;
+        //todo: change to toggle between bit level errors and byte level errors.
+        //addBitLevelErrors(packet);
+        addByteLevelErrors(packet);
+    }
+
+    public void addBitLevelErrors(Packet packet) {
         byte[] data = packet.getData();
+        boolean errorAdded = false;
+
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < 8; j++) {
                 if (errorModel.isError()) {
                     // Flip j-th bit of data[i]
                     data[i] = (byte) (data[i] ^ (1 << j));
                     errorAdded = true;
-
                 }
             }
         }
@@ -191,6 +202,32 @@ public abstract class Node {
             logAddedError(packet);
         }
     }
+
+    public void addByteLevelErrors(Packet packet) {
+        boolean errorAdded = false;
+        byte[] data = packet.getData();
+
+        Random rand = new Random();
+
+        // Process bytes
+        for (int i = 0; i < data.length; i++) {
+            if (errorModel.isError()) {
+                char c = (char) data[i];
+                if (c >= '1' && c <= '9') {
+                    data[i] = (byte) (rand.nextInt(9) + 1 + '0'); // Random number between 1 and 9, then converted to ASCII
+                    errorAdded = true;
+                }
+            }
+
+        }
+
+        if (errorAdded) {
+            errorAddedCount++;
+            logAddedError(packet);
+        }
+
+    }
+
 
     public abstract void receivePacket(Packet packet);
 //    public abstract Node getSendToNode();

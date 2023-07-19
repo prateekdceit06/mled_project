@@ -292,6 +292,8 @@ public class MledSimulator {
         CommonFunctions.printNetwork(layers);
         System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
         CommonFunctions.pause();
+        //todo:change print statements
+        System.out.println(PrintColor.printInGreenBack("Running Simulation...."));
         runNetwork();
         CommonFunctions.printStats(layers);
         CommonFunctions.pause();

@@ -34,6 +34,10 @@ public class Packet {
         return path;
     }
 
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
     //override tostring
     @Override
     public String toString() {

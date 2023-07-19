@@ -55,11 +55,11 @@ public class ApplicationReceiver {
             if (isCorrect) {
 
                 try {
-                    Path path = Paths.get("receivedData.txt");
+                    Path path = Paths.get("receivedData.csv");
                     if (Files.exists(path)) {
                         Files.delete(path);
                     }
-                    try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.txt", true))) {
+                    try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.csv", true))) {
                         out.print(new String(receivedData));
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -71,7 +71,7 @@ public class ApplicationReceiver {
                 System.out.println(PrintColor.printInGreenBack("Received data is correct"));
             } else {
                 String directoryName = CommonFunctions.createFolder("output");
-                String fileName = directoryName + File.separator + "receivedData.txt";
+                String fileName = directoryName + File.separator + "receivedData.csv";
                 try {
                     Path path = Paths.get(fileName);
                     if (Files.exists(path)) {
