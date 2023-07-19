@@ -23,9 +23,6 @@ public class NodeD extends Node {
         packetBuffer.add(packet);
         Node sendToNode = this.getSendToNode();
         int mtu = this.getMTU();
-
-//        System.out.println("NodeD: " + this.getNodeName()+" Packet: "+packetSize);
-
         PacketsReassembleAndSend packetsReassembleAndSend = new PacketsReassembleAndSend();
         packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, sendToNode,
                 mtu, packetHeaderToCheck, nodeToCheckValue);

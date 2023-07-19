@@ -26,9 +26,6 @@ public class NodeE extends Node {
             Node nodeToCheckValue = CommonFunctions.getNodeByName(nodeNameToGetHeaderToCheckValue,
                     MledSimulator.getInstance().getLayerNum(),
                     MledSimulator.getInstance().getLayers());
-//            System.out.println("Node : " + nodeToCheckValue);
-//            CommonFunctions.pause();
-//        System.out.println("NodeE: " + this.getNodeName()+" Packet: "+packetSize);
             packetBuffer.add(packet);
 
             int mtu = this.getMTU();
@@ -38,12 +35,6 @@ public class NodeE extends Node {
                     mtu, packetHeaderToCheck, nodeToCheckValue);
 
         } else {
-
-//            System.out.println("NodeE: " + this.getNodeName() + " \nPacket: " + packet);
-//            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
-//            System.out.println("\nPacket Data: " + str);
-//            CommonFunctions.pause();
-
             PacketsSplitAndSend packetsSplitAndSend = new PacketsSplitAndSend();
             packetsSplitAndSend.splitAndSend(packet, this, sendToNode, receivedFromNodeName);
         }

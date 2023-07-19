@@ -16,6 +16,8 @@ public class PacketsReassembleAndSend {
         HashMap<String, PacketHeader> oldPacketHeaders = new HashMap<>();
 
         if (receivedDataSize >= mtu || (isLastBatch && receivedDataSize == lastBatchSize)) {
+
+            //add path
             List<String> path = new ArrayList<>();
             path = packetBuffer.get(0).getPath();
             if (!path.get(path.size() - 1).equals(thisNode.getNodeName())) {
@@ -47,7 +49,6 @@ public class PacketsReassembleAndSend {
                 sendTo = sendToNode.getNodeName();
             }
 
-
             String packetID = packetHeaderToCheck.getPacketID();
 
             PacketHeader newPacketHeader = new PacketHeader(packetID, thisNode.getNodeName(), sendTo,
@@ -63,37 +64,9 @@ public class PacketsReassembleAndSend {
 
             newPacket.getPacketHeaders().entrySet().removeIf(entry -> entry.getValue().equals(packetHeaderToCheck));
 
-            boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
-            if (!isCorrect) {
-////                 If the hash doesn't match, log the packet in errorsFound.txt
-//                boolean checkFailed = isCheckFailed(packetHeaderToCheck, nodeToCheckValue, receivedData);
-//                if(checkFailed){
-//                    CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
-//                    thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
-//                    thisNode.getCheckSumIncorrect().add(newPacket);
-//                } else{
-//                    thisNode.getCheckSumCorrect().add(newPacket);
-//                }
+            logIncorrectPacket(thisNode, newPacket, packetValueToCheck, receivedData);
 
-
-                CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
-                thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
-
-            }
-
-            thisNode.getSentDataBeforeError().add(newPacket);
-
-            if (thisNode instanceof NodeA || thisNode instanceof NodeC ||
-                    (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
-                    || (thisNode instanceof NodeE && thisNode.getChildNode() != null && thisNode.getParentNode() == null)) {
-//todo: remove if condition
-                if(thisNode.getNodeName().equals("4-6") && packetHeaderToCheck.getPacketID().equals("SENDER.1-1-1.2-1-1.3-5-1.4-5-1")){
-                    thisNode.addError(newPacket);
-                }
-            }
-
-            thisNode.getSentDataAfterError().add(newPacket);
-
+            addError(thisNode, newPacket, packetHeaderToCheck);
 
             if (sendToNode != null) {
                 sendToNode.receivePacket(newPacket);
@@ -116,5 +89,42 @@ public class PacketsReassembleAndSend {
             }
         }
         return false;
+    }
+
+    private void addError(Node thisNode, Packet newPacket, PacketHeader packetHeaderToCheck) {
+        thisNode.getSentDataBeforeError().add(newPacket);
+
+        if (thisNode instanceof NodeA || thisNode instanceof NodeC ||
+                (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
+                || (thisNode instanceof NodeE && thisNode.getChildNode() != null && thisNode.getParentNode() == null)) {
+            //todo: change if you need an error in a single packet
+            if(thisNode.getNodeName().equals("4-6") && packetHeaderToCheck.getPacketID().equals("SENDER.1-1-1.2-1-1.3-5-1.4-5-1")){
+                thisNode.addError(newPacket);
+            }
+//                thisNode.addError(newPacket);
+        }
+
+        thisNode.getSentDataAfterError().add(newPacket);
+    }
+
+
+    private void logIncorrectPacket(Node thisNode, Packet newPacket, String packetValueToCheck, byte[] receivedData){
+        boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
+        if (!isCorrect) {
+////                 If the hash doesn't match, log the packet in errorsFound.txt
+//                boolean checkFailed = isCheckFailed(packetHeaderToCheck, nodeToCheckValue, receivedData);
+//                if(checkFailed){
+//                    CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
+//                    thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
+//                    thisNode.getCheckSumIncorrect().add(newPacket);
+//                } else{
+//                    thisNode.getCheckSumCorrect().add(newPacket);
+//                }
+
+
+            CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
+            thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
+
+        }
     }
 }

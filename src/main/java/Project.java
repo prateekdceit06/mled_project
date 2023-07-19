@@ -1,7 +1,7 @@
 
 public class Project {
     public static void main(String[] args) {
-        //todo: change if testing to be done
+        //todo: change if you need an error in a single packet
 //        int runCount = 0;
 //        do{
 //            runCount++;

@@ -196,7 +196,7 @@ public abstract class Node {
 //    public abstract Node getSendToNode();
 
     private void logAddedError(Packet packet) {
-        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size()-1)).getPacketID();
+        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
         errorAddedToPackets.add(packetID);
 
         String directoryName = CommonFunctions.createFolder("output");

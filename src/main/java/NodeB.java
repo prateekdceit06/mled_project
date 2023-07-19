@@ -27,12 +27,5 @@ public class NodeB extends Node {
         packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, null,
                 mtu, packetHeaderToCheck, nodeToCheckValue);
     }
-
-//    @Override
-//    public Node getSendToNode() {
-//        return null;
-//    }
-
-
 }
 

@@ -23,10 +23,10 @@ public class SimulatorConfig {
             int seed = simulatorObject.get("seed").getAsInt();
 
             errorFlag = !Validator.isIntValid(lastLayerMTU, 500, 10000);
-            if(errorFlag){
-               System.out.println(PrintColor.printInRedBack("Error: Invalid last layer MTU. " +
-                       "Enter a value between [500-10000]. Please try again."));
-               exit(0);
+            if (errorFlag) {
+                System.out.println(PrintColor.printInRedBack("Error: Invalid last layer MTU. " +
+                        "Enter a value between [500-10000]. Please try again."));
+                exit(0);
             }
 
             simulator.setLastLayerMTU(lastLayerMTU);
@@ -45,7 +45,7 @@ public class SimulatorConfig {
                 JsonObject layerObject = layerElement.getAsJsonObject();
                 int fragmentationParameter = layerObject.get("fragmentationParameter").getAsInt();
                 errorFlag = !Validator.isIntValid(fragmentationParameter, 1, 10);
-                if(errorFlag){
+                if (errorFlag) {
                     System.out.println(PrintColor.printInRedBack("Error: Invalid fragmentation parameter." +
                             "Enter a value between [1-10]. Please try again."));
                     exit(0);
@@ -63,7 +63,7 @@ public class SimulatorConfig {
                     errorDetectionMethod =
                             ErrorDetectionMethodFactory.getErrorDetectionMethod(errorDetectionMethodName);
 
-                } else{
+                } else {
                     System.out.println(PrintColor.printInRedBack("Error: Invalid error detection method. " +
                             "Enter a value from CHECKSUM, HASH or CRC" +
                             "Please try again."));
@@ -71,18 +71,17 @@ public class SimulatorConfig {
                 }
 
 
-
                 if (errorDetectionMethodName.equals(Constants.errorDetectionMethodEnum.CHECKSUM.toString())) {
                     if (errorDetectionMethodObject.has("checksumLength")) {
                         int checksumLength = errorDetectionMethodObject.get("checksumLength").getAsInt();
-                        if(checksumLength < 1 || checksumLength > 10){
+                        if (checksumLength < 1 || checksumLength > 10) {
                             System.out.println(PrintColor.printInRedBack("Error: Invalid checksum length. " +
                                     "Enter a value between [1-10]. Please try again."));
                             exit(0);
-                        } else{
+                        } else {
                             ((ErrorDetectionMethodChecksum) errorDetectionMethod).setChecksumLength(checksumLength);
                         }
-                    } else{
+                    } else {
                         System.out.println(PrintColor.printInRedBack("Error: You have to add 'checksumLength' in the configuration file for CHECKSUM error detection method. " +
                                 "Please try again."));
                         exit(0);
@@ -98,7 +97,7 @@ public class SimulatorConfig {
                             System.out.println(PrintColor.printInRedBack("Invalid generator polynomial. The first and last bits must be 1."));
                             exit(0);
                         }
-                    } else{
+                    } else {
                         System.out.println(PrintColor.printInRedBack("Error: You have to add 'crcPolynomial' in the configuration file for CRC error detection method. " +
                                 "Please try again."));
                         exit(0);
@@ -112,13 +111,13 @@ public class SimulatorConfig {
                                 algorithm.equals("SHA1") ||
                                 algorithm.equals("SHA256")) {
                             ((ErrorDetectionMethodHash) errorDetectionMethod).setAlgorithm(algorithm);
-                        } else{
+                        } else {
                             System.out.println(PrintColor.printInRedBack("Error: Invalid error detection method. " +
                                     "Enter a value from CHECKSUM, HASH or CRC" +
                                     "Please try again."));
                             exit(0);
                         }
-                    } else{
+                    } else {
                         System.out.println(PrintColor.printInRedBack("Error: You have to add 'algorithm' in the configuration file for HASH error detection method. " +
                                 "Please try again."));
                         exit(0);
@@ -129,28 +128,28 @@ public class SimulatorConfig {
                 JsonObject errorModelObject = layerObject.getAsJsonObject("errorModel");
                 double goodToBad = errorModelObject.get("goodToBad").getAsDouble();
                 errorFlag = !Validator.isDoubleValid(goodToBad, 0, 1);
-                if(errorFlag){
+                if (errorFlag) {
                     System.out.println(PrintColor.printInRedBack("Error: Invalid goodToBad probability. " +
                             "Enter a value between [0-1]. Please try again."));
                     exit(0);
                 }
                 double badToGood = errorModelObject.get("badToGood").getAsDouble();
                 errorFlag = !Validator.isDoubleValid(badToGood, 0, 1);
-                if(errorFlag){
+                if (errorFlag) {
                     System.out.println(PrintColor.printInRedBack("Error: Invalid badToGood probability. " +
                             "Enter a value between [0-1]. Please try again."));
                     exit(0);
                 }
                 double errorProbabilityGood = errorModelObject.get("errorProbabilityGood").getAsDouble();
                 errorFlag = !Validator.isDoubleValid(errorProbabilityGood, 0, 1);
-                if(errorFlag){
+                if (errorFlag) {
                     System.out.println(PrintColor.printInRedBack("Error: Invalid errorProbabilityGood probability. " +
                             "Enter a value between [0-1]. Please try again."));
                     exit(0);
                 }
                 double errorProbabilityBad = errorModelObject.get("errorProbabilityBad").getAsDouble();
                 errorFlag = !Validator.isDoubleValid(errorProbabilityBad, 0, 1);
-                if(errorFlag){
+                if (errorFlag) {
                     System.out.println(PrintColor.printInRedBack("Error: Invalid errorProbabilityBad probability. " +
                             "Enter a value between [0-1]. Please try again."));
                     exit(0);

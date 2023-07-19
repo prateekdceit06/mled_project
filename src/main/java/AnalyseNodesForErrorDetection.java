@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AnalyseNodesForErrorDetection {
-    public void analyseNodesForErrorDetection( int layerNum, List<Layer> layers) {
+    public void analyseNodesForErrorDetection(int layerNum, List<Layer> layers) {
         HashMap<Node, List<String>> nodeUndetectedErrorMap = new HashMap<>();
         for (int i = layerNum; i >= 1; i--) {
             for (Node thisNode : layers.get(i - 1).getNodes()) {
@@ -52,7 +52,7 @@ public class AnalyseNodesForErrorDetection {
                             System.out.println("Node Name: " + thisNode.getNodeName() +
                                     " packetNameToCheckInUndetectedPacketsOnLayerAbove: " +
                                     packetNameToCheckInUndetectedPacketsOnLayerAbove);
-                            if(nodeOfHigherLayerToCheck.getErrorDetectedInPackets()!=null){
+                            if (nodeOfHigherLayerToCheck.getErrorDetectedInPackets() != null) {
                                 if (nodeOfHigherLayerToCheck.getErrorDetectedInPackets()
                                         .contains(packetNameToCheckInUndetectedPacketsOnLayerAbove)) {
                                     nodeUndetectedErrorCountMap.put(
@@ -68,10 +68,22 @@ public class AnalyseNodesForErrorDetection {
                                             nodeOfHigherLayerToCheck.getNodeName(),
                                             packetNameToCheckInUndetectedPacketsOnLayerAbove
                                     );
-                                    System.out.println(PrintColor.printInRedBack(output));
+                                    System.out.println(PrintColor.printInGreenBack(output));
                                     System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 
                                     break;
+                                } else{
+                                    //todo:change print statements
+
+                                    String output = String.format("Node %s could not find error in packet %s formed by " +
+                                                    "packet %s. The error was initially missed by node %s.",
+                                            nodeOfHigherLayerToCheck.getNodeName(),
+                                            packetNameToCheckInUndetectedPacketsOnLayerAbove,
+                                            undetectedErrorPacketName,
+                                            thisNode.getNodeName()
+                                    );
+                                    System.out.println(PrintColor.printInRedBack(output));
+                                    System.out.println(PrintColor.printInGreen(PrintColor.divider()));
                                 }
                             }
                         }
@@ -104,7 +116,6 @@ public class AnalyseNodesForErrorDetection {
 //        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 
     }
-
 
 
     private int getNodeIDOfHigherLayerNodeToCheck(List<Integer> nodeIDsofLayerAbove, int thisNodeID) {

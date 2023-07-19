@@ -5,7 +5,7 @@ public class PacketsSplitAndSend {
     public void splitAndSend(Packet packet, Node thisNode, Node sendToNode, String receivedFromNodeName) {
         byte[] data = packet.getData();
 
-
+        //add path
         List<String> path;
         path = packet.getPath();
         if (!path.get(path.size() - 1).equals(thisNode.getNodeName())) {
@@ -15,7 +15,7 @@ public class PacketsSplitAndSend {
         HashMap<String, PacketHeader> originalPacketHeaders = new HashMap<>();
         packet.getPacketHeaders().forEach((key, value) -> originalPacketHeaders.put(key, value));
 
-        PacketHeader previousPacketHeader = packet.getPacketHeaders().get(receivedFromNodeName);
+        PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(receivedFromNodeName);
         int seqNum = 0;
         String packetID;
         if (data.length > thisNode.getMTU()) {
@@ -31,7 +31,7 @@ public class PacketsSplitAndSend {
                 String valueToCheck = thisNode.getErrorDetectionMethod().calculate(packetDataBytes);
                 seqNum++;
 
-                packetID = previousPacketHeader.getPacketID() + "." + thisNode.getNodeName() + "-" + seqNum;
+                packetID = packetHeaderToCheck.getPacketID() + "." + thisNode.getNodeName() + "-" + seqNum;
 
 
                 PacketHeader newPacketHeader = new PacketHeader(packetID, thisNode.getNodeName(), sendToNode.getNodeName(),
@@ -45,18 +45,15 @@ public class PacketsSplitAndSend {
                     }
                 }
 
-                thisNode.getSentDataBeforeError().add(newPacket);
-                //todo: add error comment remove
-//                thisNode.addError(newPacket);
+                addError(thisNode, newPacket);
 
-                thisNode.getSentDataAfterError().add(newPacket);
 
                 sendToNode.receivePacket(newPacket);
 
             }
         } else {
             seqNum++;
-            packetID = previousPacketHeader.getPacketID() + "." + thisNode.getNodeName() + "-" + seqNum;
+            packetID = packetHeaderToCheck.getPacketID() + "." + thisNode.getNodeName() + "-" + seqNum;
 
             String valueToCheck = thisNode.getErrorDetectionMethod().calculate(data);
 
@@ -70,11 +67,7 @@ public class PacketsSplitAndSend {
                 }
             }
 
-            thisNode.getSentDataBeforeError().add(newPacket);
-            //todo: add remove error comment
-//          thisNode.addError(newPacket);
-
-            thisNode.getSentDataAfterError().add(newPacket);
+            addError(thisNode, newPacket);
 
             sendToNode.receivePacket(newPacket);
         }
@@ -89,6 +82,14 @@ public class PacketsSplitAndSend {
             index += packetSize;
         }
         return packets;
+    }
+
+    private void addError(Node thisNode, Packet newPacket){
+        thisNode.getSentDataBeforeError().add(newPacket);
+        //todo: change if you need an error in a single packet
+        //thisNode.addError(newPacket);
+
+        thisNode.getSentDataAfterError().add(newPacket);
     }
 
 }

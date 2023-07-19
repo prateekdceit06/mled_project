@@ -34,20 +34,13 @@ public class MledSimulator {
     }
 
 
-    //todo: remove this method
-    public static MledSimulator newSimulator() {
-        instance = new MledSimulator();
-        return instance;
-    }
+    //todo: change if you need an error in a single packet
+//    public static MledSimulator newSimulator() {
+//        instance = new MledSimulator();
+//        return instance;
+//    }
 
     public static MledSimulator getInstance() {
-
-        logger.error("Instance of MledSimulator is null: " + (instance == null));
-        logger.warn("Instance of MledSimulator is null: " + (instance == null));
-        logger.info("Getting instance of MledSimulator");
-        logger.debug("Instance of MledSimulator: " + instance);
-        logger.trace("Instance of MledSimulator is null: " + (instance == null));
-
         if (instance == null) {
             instance = new MledSimulator();
         }
@@ -298,7 +291,7 @@ public class MledSimulator {
         System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
         CommonFunctions.printNetwork(layers);
         System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
-        CommonFunctions.pause();
+//        CommonFunctions.pause();
         runNetwork();
         CommonFunctions.printStats(layers);
         CommonFunctions.printInterestingPacketNames(layers);
@@ -342,8 +335,7 @@ public class MledSimulator {
     }
 
 
-    //todo: remove this method
-
+    //todo: change if you need an error in a single packet
     public boolean quickRun() {
 
         SimulatorConfig config = new SimulatorConfig();

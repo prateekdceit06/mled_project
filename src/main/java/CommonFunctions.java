@@ -58,7 +58,7 @@ public class CommonFunctions {
 
     public static void logErrorPacket(Packet packet, int errorCount, Node thisNode) {
 
-        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size()-1)).getPacketID();
+        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
         thisNode.getErrorDetectedInPackets().add(packetID);
 
         String directoryName = createFolder("output");
@@ -77,7 +77,7 @@ public class CommonFunctions {
         }
     }
 
-    public static String createFolder(String folderName){
+    public static String createFolder(String folderName) {
         File folder = new File(folderName);
         if (!folder.exists()) {
             folder.mkdir();
