@@ -166,9 +166,11 @@ public class SimulatorConfig {
 
                 int numNodes = (int) Math.pow(2, layerID - 1) + 1;
                 simulator.getLayers().get(layerID - 1).addNodes(numberOfLayers, numNodes, errorDetectionMethod, errorModel);
+                //todo:change print statements
                 System.out.println(PrintColor.printInGreenBack("Layer " + layerID +
                         " created with fragmentation parameter " + fragmentationParameter +
-                        " and error detection method " + errorDetectionMethodName));
+                        " and error detection method " + errorDetectionMethodName +
+                        " by reading configuration from the file."));
                 System.out.println();
             }
         } catch (Exception e) {

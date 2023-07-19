@@ -13,6 +13,7 @@ public class ErrorModelGilbertElliot implements ErrorModel {
 
     public void setSeed(int seed) {
         this.seed = seed;
+        this.random = new Random(seed);
     }
 
     //empty constructor

@@ -14,7 +14,7 @@ public class NodeE extends Node {
     private List<Packet> packetBuffer = new ArrayList<>();
 
     public void receivePacket(Packet packet) {
-//        this.getReceivedData().add(packet);
+        this.getReceivedData().add(packet);
         Node sendToNode = this.getSendToNode(packet.getSentFromNodeName());
         String receivedFromNodeName = packet.getSentFromNodeName();
 
@@ -23,6 +23,11 @@ public class NodeE extends Node {
 
             String nodeNameToGetHeaderToCheckValue = getNodeNameForErrorCheck();
             PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
+            Node nodeToCheckValue = CommonFunctions.getNodeByName(nodeNameToGetHeaderToCheckValue,
+                    MledSimulator.getInstance().getLayerNum(),
+                    MledSimulator.getInstance().getLayers());
+//            System.out.println("Node : " + nodeToCheckValue);
+//            CommonFunctions.pause();
 //        System.out.println("NodeE: " + this.getNodeName()+" Packet: "+packetSize);
             packetBuffer.add(packet);
 
@@ -30,7 +35,7 @@ public class NodeE extends Node {
 
             PacketsReassembleAndSend packetsReassembleAndSend = new PacketsReassembleAndSend();
             packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, sendToNode,
-                    mtu, packetHeaderToCheck);
+                    mtu, packetHeaderToCheck, nodeToCheckValue);
 
         } else {
 

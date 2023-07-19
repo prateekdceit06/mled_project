@@ -45,9 +45,12 @@ public class PacketsSplitAndSend {
                     }
                 }
 
-                thisNode.getReceivedData().add(packet);
+                thisNode.getSentDataBeforeError().add(newPacket);
+                //todo: add error comment remove
+//                thisNode.addError(newPacket);
 
-                thisNode.addError(newPacket);
+                thisNode.getSentDataAfterError().add(newPacket);
+
                 sendToNode.receivePacket(newPacket);
 
             }
@@ -67,9 +70,11 @@ public class PacketsSplitAndSend {
                 }
             }
 
-            thisNode.getReceivedData().add(packet);
+            thisNode.getSentDataBeforeError().add(newPacket);
+            //todo: add remove error comment
+//          thisNode.addError(newPacket);
 
-            thisNode.addError(newPacket);
+            thisNode.getSentDataAfterError().add(newPacket);
 
             sendToNode.receivePacket(newPacket);
         }

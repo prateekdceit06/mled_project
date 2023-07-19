@@ -145,4 +145,15 @@ public class CommonFunctions {
 
     }
 
+    public static Node getNodeByName(String nodeNameForErrorCheck, int layerNum, List<Layer> layers) {
+        for (int i = layerNum; i >= 1; i--) {
+            for (Node node : layers.get(i - 1).getNodes()) {
+                if (node.getNodeName().equals(nodeNameForErrorCheck)) {
+                    return node;
+                }
+            }
+        }
+        return null;
+    }
+
 }

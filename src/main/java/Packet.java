@@ -12,6 +12,8 @@ public class Packet {
     private List<String> path = new ArrayList<>();
 
 
+
+
     public Packet(byte[] data, PacketHeader packetHeaders, List<String> path) {
         this.data = data;
         this.packetHeaders.put(packetHeaders.getPacketCreatingNodeName(), packetHeaders);
@@ -34,6 +36,8 @@ public class Packet {
     public List<String> getPath() {
         return path;
     }
+
+
 
     //override tostring
     @Override

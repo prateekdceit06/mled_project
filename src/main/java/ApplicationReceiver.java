@@ -68,7 +68,7 @@ public class ApplicationReceiver {
                     e.printStackTrace();
                 }
 
-                System.out.println(PrintColor.printInGreenBack("Received data is correct"));
+//                System.out.println(PrintColor.printInGreenBack("Received data is correct"));
             } else {
                 String directoryName = CommonFunctions.createFolder("output");
                 String fileName = directoryName + File.separator + "receivedData.txt";
@@ -85,7 +85,7 @@ public class ApplicationReceiver {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                System.out.println(PrintColor.printInRedBack("Received data is incorrect"));
+//                System.out.println(PrintColor.printInRedBack("Received data is incorrect"));
             }
             System.out.println();
 

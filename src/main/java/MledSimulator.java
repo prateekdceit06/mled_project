@@ -1,6 +1,14 @@
 
-import java.io.File;
-import java.util.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 import static java.lang.System.exit;
 
@@ -19,6 +27,13 @@ public class MledSimulator {
     private int lastLayerMTU;
 
     private MledSimulator() {
+    }
+
+
+    //todo: remove this method
+    public static MledSimulator newSimulator() {
+        instance = new MledSimulator();
+        return instance;
     }
 
     public static MledSimulator getInstance() {
@@ -266,7 +281,7 @@ public class MledSimulator {
         applicationSender.readFileAndSendData();
     }
 
-    private void start(){
+    private void start() {
         calculateMTU();
         createRoute();
         System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
@@ -280,7 +295,7 @@ public class MledSimulator {
         analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
     }
 
-    private void readConfigFromFile(){
+    private void readConfigFromFile() {
         SimulatorConfig config = new SimulatorConfig();
         boolean errorFlag = false;
         do {
@@ -316,7 +331,69 @@ public class MledSimulator {
     }
 
 
+    //todo: remove this method
 
+    public boolean quickRun() {
+
+        SimulatorConfig config = new SimulatorConfig();
+        try {
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();  // create Gson instance with pretty printing
+            Random random = new Random();  // create Random instance for generating random numbers
+
+            try (Reader reader = new FileReader("./configs/input_file_for_testing_model_with_different_seed.json")) {
+                JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();  // read JSON file
+
+                // Generate a random integer
+                int newValue = random.nextInt(10000000);  // Generate random integers in range 0 to 1000000, change range as per your need
+
+                // Modify the 'seed' property under 'simulator' with the random integer
+                jsonObject.getAsJsonObject("simulator").addProperty("seed", newValue);
+                System.out.println(newValue);
+
+                try (Writer writer = new FileWriter("configs/output.json")) {
+                    gson.toJson(jsonObject, writer);  // write modified JSON to a new file
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            config.readConfig("output.json", this);
+
+
+            calculateMTU();
+            createRoute();
+            runNetwork();
+            AnalyseNodesForErrorDetection analyseNodesForErrorDetection = new AnalyseNodesForErrorDetection();
+            analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
+
+
+            int errorAdded = 0;
+            int errorDetected = 0;
+            for (Layer layer : layers) {
+                for (Node node : layer.getNodes()) {
+                    errorAdded += node.getErrorAddedCount();
+                    errorDetected += node.getErrorDetectedCount();
+                }
+            }
+
+            if (errorAdded == 1 && errorDetected == 0) {
+                return true;
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
+            e.printStackTrace();
+
+        }
+        return false;
+
+    }
 
 
 }

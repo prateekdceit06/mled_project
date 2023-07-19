@@ -1,11 +1,12 @@
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class PacketsReassembleAndSend {
     public void reassembleAndSend(List<Packet> packetBuffer, Node thisNode, Node sendToNode,
-                                  int mtu, PacketHeader packetHeaderToCheck) {
+                                  int mtu, PacketHeader packetHeaderToCheck, Node nodeToCheckValue) {
 
         int receivedDataSize = packetBuffer.stream().mapToInt(p -> p.getData().length).sum();
         boolean isLastBatch = packetHeaderToCheck.isLastBatch();
@@ -47,10 +48,9 @@ public class PacketsReassembleAndSend {
             }
 
 
-
             String packetID = packetHeaderToCheck.getPacketID();
 
-            PacketHeader newPacketHeader = new PacketHeader(packetID,thisNode.getNodeName(), sendTo,
+            PacketHeader newPacketHeader = new PacketHeader(packetID, thisNode.getNodeName(), sendTo,
                     thisNode.getNodeName(), packetHeaderToCheck.getSeqNum(), 0, receivedData.length,
                     valueToCheck, isLastBatch, lastBatchSize);
             Packet newPacket = new Packet(receivedData, newPacketHeader, path);
@@ -65,19 +65,34 @@ public class PacketsReassembleAndSend {
 
             boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
             if (!isCorrect) {
-                // If the hash doesn't match, log the packet in errorsFound.txt
+////                 If the hash doesn't match, log the packet in errorsFound.txt
+//                boolean checkFailed = isCheckFailed(packetHeaderToCheck, nodeToCheckValue, receivedData);
+//                if(checkFailed){
+//                    CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
+//                    thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
+//                    thisNode.getCheckSumIncorrect().add(newPacket);
+//                } else{
+//                    thisNode.getCheckSumCorrect().add(newPacket);
+//                }
+
+
                 CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
                 thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
+
             }
 
-            thisNode.getReceivedData().add(newPacket);
+            thisNode.getSentDataBeforeError().add(newPacket);
 
             if (thisNode instanceof NodeA || thisNode instanceof NodeC ||
                     (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
                     || (thisNode instanceof NodeE && thisNode.getChildNode() != null && thisNode.getParentNode() == null)) {
-
-                thisNode.addError(newPacket);
+//todo: remove if condition
+                if(thisNode.getNodeName().equals("4-6") && packetHeaderToCheck.getPacketID().equals("SENDER.1-1-1.2-1-1.3-5-1.4-5-1")){
+                    thisNode.addError(newPacket);
+                }
             }
+
+            thisNode.getSentDataAfterError().add(newPacket);
 
 
             if (sendToNode != null) {
@@ -89,5 +104,17 @@ public class PacketsReassembleAndSend {
             packetBuffer.clear();
         }
 
+    }
+
+    private boolean isCheckFailed(PacketHeader packetHeaderToCheck, Node nodeToCheckValue, byte[] receivedData) {
+        String packetID = packetHeaderToCheck.getPacketID();
+        for (Packet packet : nodeToCheckValue.getSentDataBeforeError()) {
+            if (packet.getPacketHeaders().get(nodeToCheckValue.getNodeName()).getPacketID().equals(packetID)) {
+                if (!Arrays.equals(packet.getData(), receivedData)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

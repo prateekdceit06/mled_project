@@ -13,6 +13,8 @@ public abstract class Node {
     private final int fragmentationParameter;
     private final ErrorDetectionMethod errorDetectionMethod;
     private List<Packet> receivedData = new ArrayList<>();
+    private List<Packet> sentDataBeforeError = new ArrayList<>();
+    private List<Packet> sentDataAfterError = new ArrayList<>();
     private Node parentNode;
     private Node childNode;
 
@@ -25,6 +27,9 @@ public abstract class Node {
 
     private List<String> errorAddedToPackets;
     private List<String> errorDetectedInPackets;
+
+    private List<Packet> checkSumCorrect = new ArrayList<>();
+    private List<Packet> checkSumIncorrect = new ArrayList<>();
 
 
     public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
@@ -118,6 +123,22 @@ public abstract class Node {
 
     public List<String> getErrorDetectedInPackets() {
         return errorDetectedInPackets;
+    }
+
+    public List<Packet> getSentDataBeforeError() {
+        return sentDataBeforeError;
+    }
+
+    public List<Packet> getSentDataAfterError() {
+        return sentDataAfterError;
+    }
+
+    public List<Packet> getCheckSumCorrect() {
+        return checkSumCorrect;
+    }
+
+    public List<Packet> getCheckSumIncorrect() {
+        return checkSumIncorrect;
     }
 
     //override toString method to print out node information

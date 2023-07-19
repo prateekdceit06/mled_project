@@ -8,3 +8,5 @@ target/classes/**
 
 **.iml
 
+output/**
+

@@ -10,16 +10,18 @@ public class AnalyseNodesForErrorDetection {
             for (Node thisNode : layers.get(i - 1).getNodes()) {
                 if (!(thisNode instanceof NodeA) && !(thisNode instanceof NodeC)) {
                     String nodeNameForErrorCheck = thisNode.getNodeNameForErrorCheck();
-                    Node nodeForErrorCheck = getNodeByeName(nodeNameForErrorCheck, layerNum, layers);
+                    Node nodeForErrorCheck = CommonFunctions.getNodeByName(nodeNameForErrorCheck, layerNum, layers);
                     List<String> detectedErrorsForThisNode = thisNode.getErrorDetectedInPackets();
                     List<String> addedErrorsByErrorCheckNode = nodeForErrorCheck.getErrorAddedToPackets();
                     addedErrorsByErrorCheckNode.removeAll(detectedErrorsForThisNode);
                     List<String> undetectedErrors = new ArrayList<>(addedErrorsByErrorCheckNode);
+                    //todo:change print statements
                     System.out.println("Node Name: " + thisNode.getNodeName() + " " + undetectedErrors);
                     nodeUndetectedErrorMap.put(thisNode, undetectedErrors);
                 }
             }
         }
+        //todo:change print statements
         System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 
 
@@ -38,13 +40,15 @@ public class AnalyseNodesForErrorDetection {
                                             getNodeIDOfHigherLayerNodeToCheck(nodeIDsofLayerAbove, thisNode.getNodeID())
                                     );
                             String nodeNameOfHigherLayerNodeToCheck = i + "-" + nodeIDOfHigherLayerNodeToCheck;
+                            //todo:change print statements
                             System.out.println("Node Name: " + thisNode.getNodeName() +
                                     " nodeNameOfHigherLayerNodeToCheck: " + nodeNameOfHigherLayerNodeToCheck);
                             Node nodeOfHigherLayerToCheck =
-                                    getNodeByeName(nodeNameOfHigherLayerNodeToCheck, layerNum, layers);
+                                    CommonFunctions.getNodeByName(nodeNameOfHigherLayerNodeToCheck, layerNum, layers);
 
                             String packetNameToCheckInUndetectedPacketsOnLayerAbove =
                                     getPacketNameToCheckInUndetectedPacketsOnLayerAbove(undetectedErrorPacketName, i);
+                            //todo:change print statements
                             System.out.println("Node Name: " + thisNode.getNodeName() +
                                     " packetNameToCheckInUndetectedPacketsOnLayerAbove: " +
                                     packetNameToCheckInUndetectedPacketsOnLayerAbove);
@@ -55,6 +59,7 @@ public class AnalyseNodesForErrorDetection {
                                             nodeOfHigherLayerToCheck,
                                             nodeUndetectedErrorCountMap
                                                     .getOrDefault(nodeOfHigherLayerToCheck, 0) + 1);
+                                    //todo:change print statements
 
                                     String output = String.format("Node %s could not find error in packet %s " +
                                                     "but node %s could find error in packet %s",
@@ -76,27 +81,31 @@ public class AnalyseNodesForErrorDetection {
 
 
         }
+        //todo:change print statements (Not necessary)
 
-        for (Map.Entry<Node, Integer> entry : nodeUndetectedErrorCountMap.entrySet()) {
-            String output = String.format("Node %s could find %d undetected error in packets",
-                    entry.getKey().getNodeName(),
-                    entry.getValue()
-            );
-            System.out.println(PrintColor.printInGreenBack(output));
-        }
-        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+//        for (Map.Entry<Node, Integer> entry : nodeUndetectedErrorCountMap.entrySet()) {
+//            String output = String.format("Node %s could find %d undetected error in packets",
+//                    entry.getKey().getNodeName(),
+//                    entry.getValue()
+//            );
+//            System.out.println(PrintColor.printInGreenBack(output));
+//        }
+//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+
+//        for (int i = layerNum; i >= 1; i--) {
+//            for (Node thisNode : layers.get(i - 1).getNodes()) {
+//                System.out.println("Node Name: " + thisNode.getNodeName() + " Correct Checksum: " + thisNode.getCheckSumCorrect());
+//                System.out.println("Node Name: " + thisNode.getNodeName() + " Incorrect Checksum: " + thisNode.getCheckSumIncorrect());
+//            }
+//            System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+//
+//        }
+//
+//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+
     }
 
-    private Node getNodeByeName(String nodeNameForErrorCheck, int layerNum, List<Layer> layers) {
-        for (int i = layerNum; i >= 1; i--) {
-            for (Node node : layers.get(i - 1).getNodes()) {
-                if (node.getNodeName().equals(nodeNameForErrorCheck)) {
-                    return node;
-                }
-            }
-        }
-        return null;
-    }
+
 
     private int getNodeIDOfHigherLayerNodeToCheck(List<Integer> nodeIDsofLayerAbove, int thisNodeID) {
         Integer minGreater = null;
