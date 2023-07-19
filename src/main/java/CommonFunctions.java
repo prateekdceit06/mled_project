@@ -47,8 +47,9 @@ public class CommonFunctions {
                     virtualConnectionCell.printCell();
                 }
             }
-            System.out.print(PrintColor.printInGreen("  -------> "));
-            System.out.print(layers.get(i - 1));
+            //todo:change print statements to print layer information
+//            System.out.print(PrintColor.printInGreen("  -------> "));
+//            System.out.print(layers.get(i - 1));
             System.out.println();
         }
         System.out.println(PrintColor.printInGreen("=====================================================================================================" +
@@ -110,6 +111,7 @@ public class CommonFunctions {
         }
 
     }
+
 
     public static void printInterestingPacketNames(List<Layer> layers) {
         for (Layer layer : layers) {

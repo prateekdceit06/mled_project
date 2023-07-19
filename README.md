@@ -102,7 +102,7 @@ Please note that the number of layers should be within the range of 1 to 99.
       between 1 and 10.
 
     - `crcPolynomial`: (Required for "CRC" method) A hexadecimal string representing the CRC polynomial. For Example, "
-      0x1B" represents the polynomial x<sup>64</sup> + x<sup>4</sup> + x<sup>3</sup> + x<sup>1</sup> + 1. Make sure that
+      0x1B" represents the polynomial x<sup>4</sup> + x<sup>3</sup> + x<sup>1</sup> + 1. Make sure that
       the first and last bits of the polynomial are 1.
 
     - `algorithm`: (Required for "HASH" method) The hashing algorithm used. Can be "MD5", "SHA1", or "SHA256".

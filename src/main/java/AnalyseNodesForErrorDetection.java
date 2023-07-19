@@ -16,13 +16,13 @@ public class AnalyseNodesForErrorDetection {
                     addedErrorsByErrorCheckNode.removeAll(detectedErrorsForThisNode);
                     List<String> undetectedErrors = new ArrayList<>(addedErrorsByErrorCheckNode);
                     //todo:change print statements
-                    System.out.println("Node Name: " + thisNode.getNodeName() + " " + undetectedErrors);
+//                    System.out.println("Node Name: " + thisNode.getNodeName() + " " + undetectedErrors);
                     nodeUndetectedErrorMap.put(thisNode, undetectedErrors);
                 }
             }
         }
         //todo:change print statements
-        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 
 
         HashMap<Node, Integer> nodeUndetectedErrorCountMap = new HashMap<>();
@@ -103,7 +103,7 @@ public class AnalyseNodesForErrorDetection {
 //            System.out.println(PrintColor.printInGreenBack(output));
 //        }
 //        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
-
+//
 //        for (int i = layerNum; i >= 1; i--) {
 //            for (Node thisNode : layers.get(i - 1).getNodes()) {
 //                System.out.println("Node Name: " + thisNode.getNodeName() + " Correct Checksum: " + thisNode.getCheckSumCorrect());

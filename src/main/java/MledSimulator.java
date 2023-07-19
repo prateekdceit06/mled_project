@@ -291,12 +291,16 @@ public class MledSimulator {
         System.out.println(PrintColor.printInGreenBack("MLED Simulator starting.."));
         CommonFunctions.printNetwork(layers);
         System.out.println(PrintColor.printInGreenBack("MLED Simulator started successfully."));
-//        CommonFunctions.pause();
+        CommonFunctions.pause();
         runNetwork();
         CommonFunctions.printStats(layers);
-        CommonFunctions.printInterestingPacketNames(layers);
+        CommonFunctions.pause();
+        //todo:change print statements
+//        CommonFunctions.printInterestingPacketNames(layers);
         AnalyseNodesForErrorDetection analyseNodesForErrorDetection = new AnalyseNodesForErrorDetection();
         analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
+        CommonFunctions.printNetwork(layers);
+
     }
 
     private void readConfigFromFile() {
