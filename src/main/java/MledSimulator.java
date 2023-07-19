@@ -42,11 +42,11 @@ public class MledSimulator {
 
     public static MledSimulator getInstance() {
 
-//        logger.error("Instance of MledSimulator is null: " + (instance == null));
-//        logger.warn("Instance of MledSimulator is null: " + (instance == null));
-//        logger.info("Getting instance of MledSimulator");
-//        logger.debug("Instance of MledSimulator: " + instance);
-//        logger.trace("Instance of MledSimulator is null: " + (instance == null));
+        logger.error("Instance of MledSimulator is null: " + (instance == null));
+        logger.warn("Instance of MledSimulator is null: " + (instance == null));
+        logger.info("Getting instance of MledSimulator");
+        logger.debug("Instance of MledSimulator: " + instance);
+        logger.trace("Instance of MledSimulator is null: " + (instance == null));
 
         if (instance == null) {
             instance = new MledSimulator();

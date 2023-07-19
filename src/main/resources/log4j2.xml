@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Level order from most to least severe:
+      logger.error()
+      logger.warn()
+      logger.info()
+      logger.debug()
+      logger.trace()
+-->
+
 <Configuration status="WARN">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
+    <File name="File" fileName="logs/app.log">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </File>
   </Appenders>
   <Loggers>
+    # Change appender reference to File to log to file
     <Logger name="Node" level="info">
       <AppenderRef ref="Console"/>
     </Logger>
     <Logger name="Layer" level="debug">
       <AppenderRef ref="Console"/>
     </Logger>
-    <Root level="trace">
+    <Root level="error">
       <AppenderRef ref="Console"/>
     </Root>
   </Loggers>
