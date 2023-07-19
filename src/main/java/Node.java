@@ -34,6 +34,7 @@ public abstract class Node {
 
     public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
                 ErrorModel errorModel, int MTU) {
+
         this.layerID = layerID;
         this.nodeID = nodeID;
         this.nodeName = layerID + "-" + nodeID;

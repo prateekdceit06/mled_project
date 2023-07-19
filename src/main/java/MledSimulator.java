@@ -3,6 +3,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.Scanner;
 import static java.lang.System.exit;
 
 public class MledSimulator {
+
+    private static final Logger logger = LogManager.getLogger(MledSimulator.class);
     private static MledSimulator instance = null;
     Scanner scanner = new Scanner(System.in);
 
@@ -37,6 +41,13 @@ public class MledSimulator {
     }
 
     public static MledSimulator getInstance() {
+
+//        logger.error("Instance of MledSimulator is null: " + (instance == null));
+//        logger.warn("Instance of MledSimulator is null: " + (instance == null));
+//        logger.info("Getting instance of MledSimulator");
+//        logger.debug("Instance of MledSimulator: " + instance);
+//        logger.trace("Instance of MledSimulator is null: " + (instance == null));
+
         if (instance == null) {
             instance = new MledSimulator();
         }
