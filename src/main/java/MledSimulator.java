@@ -34,11 +34,11 @@ public class MledSimulator {
     }
 
 
-    //todo: change if you need an error in a single packet
-//    public static MledSimulator newSimulator() {
-//        instance = new MledSimulator();
-//        return instance;
-//    }
+    //todo: change if you want to run code automatically without user input for different seed values
+    public static MledSimulator newSimulator() {
+        instance = new MledSimulator();
+        return instance;
+    }
 
     public static MledSimulator getInstance() {
         if (instance == null) {
@@ -316,17 +316,15 @@ public class MledSimulator {
                 String currentWorkingDirectory = System.getProperty("user.dir");
                 File directory = new File(currentWorkingDirectory + File.separator + "configs");
                 File[] files = directory.listFiles();
-                int fileCount = (files != null) ? files.length : 0;
-                Menu.fileMenu(files, fileCount);
+                ArrayList<File> filteredFiles = Menu.fileMenu(files);
 
                 System.out.print(PrintColor.printInYellow("Enter the number of the file you want to select: "));
                 int choice = scanner.nextInt();
 
-                if (choice > 0 && choice <= fileCount) {
-                    String fileName = directory + File.separator + files[choice - 1].getName();
+                if (choice > 0 && choice <= filteredFiles.size()) {
+                    String fileName = directory + File.separator + filteredFiles.get(choice - 1).getName();
                     config.readConfig(fileName, this);
-
-                } else if (choice == fileCount + 1) {
+                } else if (choice == filteredFiles.size() + 1) {
                     exit(0);
                 } else {
                     errorFlag = true;
@@ -341,7 +339,7 @@ public class MledSimulator {
     }
 
 
-    //todo: change if you need an error in a single packet
+    //todo: change if you want to run code automatically without user input for different seed values
     public boolean quickRun() {
 
         SimulatorConfig config = new SimulatorConfig();
@@ -350,7 +348,7 @@ public class MledSimulator {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();  // create Gson instance with pretty printing
             Random random = new Random();  // create Random instance for generating random numbers
 
-            try (Reader reader = new FileReader("./configs/input_file_for_testing_model_with_different_seed.json")) {
+            try (Reader reader = new FileReader("./configs/input_config_for_autorun_to_find_seed_for_undected_error.json")) {
                 JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();  // read JSON file
 
                 // Generate a random integer
@@ -371,12 +369,13 @@ public class MledSimulator {
                 e.printStackTrace();
             }
 
-            config.readConfig("output.json", this);
+            config.readConfig("./configs/output.json", this);
 
 
             calculateMTU();
             createRoute();
             runNetwork();
+
             AnalyseNodesForErrorDetection analyseNodesForErrorDetection = new AnalyseNodesForErrorDetection();
             analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
 
@@ -389,6 +388,7 @@ public class MledSimulator {
                     errorDetected += node.getErrorDetectedCount();
                 }
             }
+
 
             if (errorAdded == 1 && errorDetected == 0) {
                 return true;

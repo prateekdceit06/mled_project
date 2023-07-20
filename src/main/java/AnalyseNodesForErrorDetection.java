@@ -68,6 +68,7 @@ public class AnalyseNodesForErrorDetection {
                                             nodeOfHigherLayerToCheck.getNodeName(),
                                             packetNameToCheckInUndetectedPacketsOnLayerAbove
                                     );
+
                                     System.out.println(PrintColor.printInGreenBack(output));
                                     System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 

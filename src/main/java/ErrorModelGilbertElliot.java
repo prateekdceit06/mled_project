@@ -16,7 +16,6 @@ public class ErrorModelGilbertElliot implements ErrorModel {
         this.random = new Random(seed);
     }
 
-    //empty constructor
     public ErrorModelGilbertElliot() {
         this.seed = Constants.SEED;
         this.random = new Random(this.seed);

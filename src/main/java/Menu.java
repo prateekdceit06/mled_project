@@ -1,5 +1,8 @@
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Menu {
 
@@ -101,17 +104,27 @@ public class Menu {
         System.out.println(PrintColor.printInYellow("3. Exit"));
     }
 
-    public static void fileMenu(File[] files, int fileCount) {
+    public static ArrayList<File> fileMenu(File[] files) {
+        Arrays.sort(files, Comparator.comparing(File::getName)); // This will sort the files in alphabetical order.
 
+        ArrayList<File> validFiles = new ArrayList<>();
         System.out.println(PrintColor.printInYellow("Please select a file from the list below: "));
         int count = 1;
-        for (int i = 0; i < fileCount; i++) {
-            System.out.println(PrintColor.printInYellow((i + 1) + ". " + files[i].getName()));
-            count++;
-        }
-        System.out.println(PrintColor.printInYellow(count + ". Exit"));
 
+        for (File file : files) {
+            String fileName = file.getName();
+
+            if (!fileName.startsWith(".") && !fileName.startsWith("_")) { // Ignore files starting with a dot (.)
+                System.out.println(PrintColor.printInYellow(fileName));
+                validFiles.add(file);
+                count++;
+            }
+        }
+
+        System.out.println(PrintColor.printInYellow(count + ". Exit"));
+        return validFiles;
     }
+
 
 
 }

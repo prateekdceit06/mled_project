@@ -180,7 +180,7 @@ public abstract class Node {
 
     public void addError(Packet packet) {
         //todo: change to toggle between bit level errors and byte level errors.
-        //addBitLevelErrors(packet);
+//        addBitLevelErrors(packet);
         addByteLevelErrors(packet);
     }
 
@@ -207,18 +207,22 @@ public abstract class Node {
         boolean errorAdded = false;
         byte[] data = packet.getData();
 
-        Random rand = new Random();
+        Random rand = new Random(Constants.SEED);
 
-        // Process bytes
+// Process bytes
         for (int i = 0; i < data.length; i++) {
             if (errorModel.isError()) {
                 char c = (char) data[i];
                 if (c >= '1' && c <= '9') {
-                    data[i] = (byte) (rand.nextInt(9) + 1 + '0'); // Random number between 1 and 9, then converted to ASCII
+                    char newChar;
+                    do {
+                        newChar = (char) (rand.nextInt(9) + 1 + '0'); // Random number between 1 and 9, then converted to ASCII
+                    } while (newChar == c);
+
+                    data[i] = (byte) newChar;
                     errorAdded = true;
                 }
             }
-
         }
 
         if (errorAdded) {
@@ -226,11 +230,11 @@ public abstract class Node {
             logAddedError(packet);
         }
 
+
     }
 
 
     public abstract void receivePacket(Packet packet);
-//    public abstract Node getSendToNode();
 
     private void logAddedError(Packet packet) {
         String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
