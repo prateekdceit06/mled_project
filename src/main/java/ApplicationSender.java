@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationSender {
-
     public void readFileAndSendData() {
         try {
             String data = new String(Files.readAllBytes(Paths.get("astroMLData.csv")));
