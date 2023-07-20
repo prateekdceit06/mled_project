@@ -147,6 +147,8 @@ public abstract class Node {
         return checkSumIncorrect;
     }
 
+
+
     //override toString method to print out node information
     @Override
     public String toString() {
@@ -199,7 +201,7 @@ public abstract class Node {
         }
         if (errorAdded) {
             errorAddedCount++;
-            logAddedError(packet);
+            CommonFunctions.logAddedError(packet, this );
         }
     }
 
@@ -227,7 +229,7 @@ public abstract class Node {
 
         if (errorAdded) {
             errorAddedCount++;
-            logAddedError(packet);
+            CommonFunctions.logAddedError(packet, this );
         }
 
 
@@ -236,25 +238,7 @@ public abstract class Node {
 
     public abstract void receivePacket(Packet packet);
 
-    private void logAddedError(Packet packet) {
-        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
-        errorAddedToPackets.add(packetID);
 
-        String directoryName = CommonFunctions.createFolder("output");
-        String fileName = directoryName + File.separator + "errorsAdded.txt";
-
-
-        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
-            out.println("Error: " + errorAddedCount + " added by Node: " + this.getNodeName() + "\n");
-            out.println(packet);
-            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
-            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }

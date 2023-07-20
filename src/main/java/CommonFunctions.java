@@ -78,6 +78,27 @@ public class CommonFunctions {
         }
     }
 
+
+    public static void logAddedError(Packet packet, Node thisNode) {
+        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
+        thisNode.getErrorAddedToPackets().add(packetID);
+
+        String directoryName = CommonFunctions.createFolder("output");
+        String fileName = directoryName + File.separator + "errorsAdded.txt";
+
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
+            out.println("Error: " + thisNode.getErrorAddedCount() + " added by Node: " + thisNode.getNodeName() + "\n");
+            out.println(packet);
+            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
+            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String createFolder(String folderName) {
         File folder = new File(folderName);
         if (!folder.exists()) {
