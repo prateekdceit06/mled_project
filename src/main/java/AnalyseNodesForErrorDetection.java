@@ -1,9 +1,15 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AnalyseNodesForErrorDetection {
+
+    private static final Logger logger = LogManager.getLogger(AnalyseNodesForErrorDetection.class);
     public void analyseNodesForErrorDetection(int layerNum, List<Layer> layers) {
         HashMap<Node, List<String>> nodeUndetectedErrorMap = new HashMap<>();
         for (int i = layerNum; i >= 1; i--) {
@@ -22,7 +28,7 @@ public class AnalyseNodesForErrorDetection {
             }
         }
         //todo:change print statements
-//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 
 
         HashMap<Node, Integer> nodeUndetectedErrorCountMap = new HashMap<>();
@@ -41,17 +47,17 @@ public class AnalyseNodesForErrorDetection {
                                     );
                             String nodeNameOfHigherLayerNodeToCheck = i + "-" + nodeIDOfHigherLayerNodeToCheck;
                             //todo:change print statements
-                            System.out.println("Node Name: " + thisNode.getNodeName() +
-                                    " nodeNameOfHigherLayerNodeToCheck: " + nodeNameOfHigherLayerNodeToCheck);
+//                            System.out.println("Node Name: " + thisNode.getNodeName() +
+//                                    " nodeNameOfHigherLayerNodeToCheck: " + nodeNameOfHigherLayerNodeToCheck);
                             Node nodeOfHigherLayerToCheck =
                                     CommonFunctions.getNodeByName(nodeNameOfHigherLayerNodeToCheck, layerNum, layers);
 
                             String packetNameToCheckInUndetectedPacketsOnLayerAbove =
                                     getPacketNameToCheckInUndetectedPacketsOnLayerAbove(undetectedErrorPacketName, i);
                             //todo:change print statements
-                            System.out.println("Node Name: " + thisNode.getNodeName() +
-                                    " packetNameToCheckInUndetectedPacketsOnLayerAbove: " +
-                                    packetNameToCheckInUndetectedPacketsOnLayerAbove);
+//                            System.out.println("Node Name: " + thisNode.getNodeName() +
+//                                    " packetNameToCheckInUndetectedPacketsOnLayerAbove: " +
+//                                    packetNameToCheckInUndetectedPacketsOnLayerAbove);
                             if (nodeOfHigherLayerToCheck.getErrorDetectedInPackets() != null) {
                                 if (nodeOfHigherLayerToCheck.getErrorDetectedInPackets()
                                         .contains(packetNameToCheckInUndetectedPacketsOnLayerAbove)) {
@@ -61,16 +67,17 @@ public class AnalyseNodesForErrorDetection {
                                                     .getOrDefault(nodeOfHigherLayerToCheck, 0) + 1);
                                     //todo:change print statements
 
-                                    String output = String.format("Node %s could not find error in packet %s " +
-                                                    "but node %s could find error in packet %s",
-                                            thisNode.getNodeName(),
-                                            undetectedErrorPacketName,
+                                    String output = String.format("Node %s could  find error in packet %s formed by " +
+                                                    "packet %s. The error was initially missed by node %s.",
                                             nodeOfHigherLayerToCheck.getNodeName(),
-                                            packetNameToCheckInUndetectedPacketsOnLayerAbove
+                                            packetNameToCheckInUndetectedPacketsOnLayerAbove,
+                                            undetectedErrorPacketName,
+                                            thisNode.getNodeName()
+
                                     );
 
-                                    System.out.println(PrintColor.printInGreenBack(output));
-                                    System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+                                    logger.info(PrintColor.printInGreenBack(output));
+                                    logger.info(PrintColor.printInGreen(PrintColor.divider()));
 
                                     break;
                                 } else{
@@ -83,8 +90,8 @@ public class AnalyseNodesForErrorDetection {
                                             undetectedErrorPacketName,
                                             thisNode.getNodeName()
                                     );
-                                    System.out.println(PrintColor.printInRedBack(output));
-                                    System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+                                    logger.info(PrintColor.printInRedBack(output));
+                                    logger.info(PrintColor.printInGreen(PrintColor.divider()));
                                 }
                             }
                         }
@@ -94,16 +101,17 @@ public class AnalyseNodesForErrorDetection {
 
 
         }
-        //todo:change print statements (Not necessary)
 
-//        for (Map.Entry<Node, Integer> entry : nodeUndetectedErrorCountMap.entrySet()) {
-//            String output = String.format("Node %s could find %d undetected error in packets",
-//                    entry.getKey().getNodeName(),
-//                    entry.getValue()
-//            );
-//            System.out.println(PrintColor.printInGreenBack(output));
-//        }
-//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+        // todo:change print statements (Not necessary)
+
+        for (Map.Entry<Node, Integer> entry : nodeUndetectedErrorCountMap.entrySet()) {
+            String output = String.format("Node %s could find %d undetected error in packets",
+                    entry.getKey().getNodeName(),
+                    entry.getValue()
+            );
+            System.out.println(PrintColor.printInGreenBack(output));
+        }
+        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 //
 //        for (int i = layerNum; i >= 1; i--) {
 //            for (Node thisNode : layers.get(i - 1).getNodes()) {

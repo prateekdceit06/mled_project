@@ -64,7 +64,43 @@ public class PacketsReassembleAndSend {
 
             newPacket.getPacketHeaders().entrySet().removeIf(entry -> entry.getValue().equals(packetHeaderToCheck));
 
-            logIncorrectPacket(thisNode, newPacket, packetValueToCheck, receivedData);
+            boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
+
+            if (!isCorrect) {
+                CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
+                thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
+                //todo: implement recovery
+
+                byte[] recoveredData = new byte[receivedData.length];
+                for (Packet packet : nodeToCheckValue.getSentDataBeforeError()) {
+                    if (packet.getPacketHeaders().get(nodeToCheckValue.getNodeName()).getPacketID().equals(packetID)) {
+//                        if (!Arrays.equals(packet.getData(), receivedData)) {
+                            recoveredData = packet.getData();
+                            break;
+//                        }
+                    }
+                }
+                if (!Arrays.equals(recoveredData, receivedData)) {
+                    newPacket.setData(recoveredData);
+                }
+
+            } else {
+                for (Packet packet : nodeToCheckValue.getSentDataBeforeError()) {
+                    if (packet.getPacketHeaders().get(nodeToCheckValue.getNodeName()).getPacketID().equals(packetID)) {
+//                        System.out.println("Node Name: " + thisNode.getNodeName());
+//                        System.out.println("Packet ID: " + packetID);
+//                        System.out.println("packet.getPacketHeaders().get(nodeToCheckValue.getNodeName()).getPacketID() "
+//                                + packet.getPacketHeaders().get(nodeToCheckValue.getNodeName()));
+//                        System.out.println("nodeToCheckValue.getNodeName(): " + nodeToCheckValue.getNodeName());
+//                        CommonFunctions.pause();
+                        if (!Arrays.equals(packet.getData(), receivedData)) {
+                            thisNode.setActualUndetectedErrorsCount(thisNode.getActualUndetectedErrorsCount() + 1);
+                            thisNode.getUndetectedErrors().add(newPacket);
+                            break;
+                        }
+                    }
+                }
+            }
 
             addError(thisNode, newPacket, packetHeaderToCheck);
 
@@ -79,16 +115,18 @@ public class PacketsReassembleAndSend {
 
     }
 
-    private boolean isCheckFailed(PacketHeader packetHeaderToCheck, Node nodeToCheckValue, byte[] receivedData) {
+    private byte[] recover(PacketHeader packetHeaderToCheck, Node nodeToCheckValue, byte[] receivedData) {
+        byte[] recoveredData = new byte[receivedData.length];
         String packetID = packetHeaderToCheck.getPacketID();
         for (Packet packet : nodeToCheckValue.getSentDataBeforeError()) {
             if (packet.getPacketHeaders().get(nodeToCheckValue.getNodeName()).getPacketID().equals(packetID)) {
                 if (!Arrays.equals(packet.getData(), receivedData)) {
-                    return true;
+                    recoveredData = packet.getData();
+                    break;
                 }
             }
         }
-        return false;
+        return recoveredData;
     }
 
     private void addError(Node thisNode, Packet newPacket, PacketHeader packetHeaderToCheck) {
@@ -98,34 +136,14 @@ public class PacketsReassembleAndSend {
                 (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
                 || (thisNode instanceof NodeE && thisNode.getChildNode() != null && thisNode.getParentNode() == null)) {
             //todo: change if you need an error in a single packet ---> addError() method
-            if(thisNode.getNodeName().equals("4-6") && packetHeaderToCheck.getPacketID().equals("SENDER.1-1-1.2-1-1.3-5-1.4-5-1")){
-                thisNode.addError(newPacket);
-            }
+//            if (thisNode.getNodeName().equals("4-6") && packetHeaderToCheck.getPacketID().equals("SENDER.1-1-1.2-1-1.3-5-1.4-5-1")) {
+//                thisNode.addError(newPacket);
+//            }
             //todo: change if you need an error in a single packet ---> addError() method
-            //thisNode.addError(newPacket);
+            thisNode.addError(newPacket);
         }
 
         thisNode.getSentDataAfterError().add(newPacket);
     }
 
-
-    private void logIncorrectPacket(Node thisNode, Packet newPacket, String packetValueToCheck, byte[] receivedData){
-        boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
-        if (!isCorrect) {
-////                 If the hash doesn't match, log the packet in errorsFound.txt
-//                boolean checkFailed = isCheckFailed(packetHeaderToCheck, nodeToCheckValue, receivedData);
-//                if(checkFailed){
-//                    CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
-//                    thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
-//                    thisNode.getCheckSumIncorrect().add(newPacket);
-//                } else{
-//                    thisNode.getCheckSumCorrect().add(newPacket);
-//                }
-
-
-            CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
-            thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
-
-        }
-    }
 }

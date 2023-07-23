@@ -87,7 +87,7 @@ public class PacketsSplitAndSend {
     private void addError(Node thisNode, Packet newPacket){
         thisNode.getSentDataBeforeError().add(newPacket);
         //todo: change if you need an error in a single packet ---> addError() method
-//        thisNode.addError(newPacket);
+        thisNode.addError(newPacket);
 
         thisNode.getSentDataAfterError().add(newPacket);
     }

@@ -379,30 +379,38 @@ public class MledSimulator {
             AnalyseNodesForErrorDetection analyseNodesForErrorDetection = new AnalyseNodesForErrorDetection();
             analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
 
+//todo: Uncomment to find 1 undetected error
 
-            int errorAdded = 0;
-            int errorDetected = 0;
-            for (Layer layer : layers) {
-                for (Node node : layer.getNodes()) {
-                    errorAdded += node.getErrorAddedCount();
-                    errorDetected += node.getErrorDetectedCount();
-                }
-            }
+//            int errorAdded = 0;
+//            int errorDetected = 0;
+//            for (Layer layer : layers) {
+//                for (Node node : layer.getNodes()) {
+//                    errorAdded += node.getErrorAddedCount();
+//                    errorDetected += node.getErrorDetectedCount();
+//                }
+//            }
+//
+//
+//            if (errorAdded == 1 && errorDetected == 0) {
+//                return true;
+//            }
 
+            boolean fileExists = CommonFunctions.checkFileExistsInRoot("receivedData.csv");
 
-            if (errorAdded == 1 && errorDetected == 0) {
+            if (fileExists) {
                 return true;
+            } else {
+                return false;
             }
 
+            } catch(Exception e){
+                System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
+                e.printStackTrace();
 
-        } catch (Exception e) {
-            System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
-            e.printStackTrace();
+            }
+            return false;
 
         }
-        return false;
+
 
     }
-
-
-}

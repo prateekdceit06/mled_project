@@ -36,6 +36,10 @@ public abstract class Node {
     private List<Packet> checkSumCorrect = new ArrayList<>();
     private List<Packet> checkSumIncorrect = new ArrayList<>();
 
+    private int actualUndetectedErrorsCount = 0;
+
+    private List<Packet> undetectedErrors = new ArrayList<>();
+
 
     public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
                 ErrorModel errorModel, int MTU) {
@@ -145,6 +149,18 @@ public abstract class Node {
 
     public List<Packet> getCheckSumIncorrect() {
         return checkSumIncorrect;
+    }
+
+    public int getActualUndetectedErrorsCount() {
+        return actualUndetectedErrorsCount;
+    }
+
+    public void setActualUndetectedErrorsCount(int actualUndetectedErrorsCount) {
+        this.actualUndetectedErrorsCount = actualUndetectedErrorsCount;
+    }
+
+    public List<Packet> getUndetectedErrors() {
+        return undetectedErrors;
     }
 
 

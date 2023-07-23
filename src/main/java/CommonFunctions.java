@@ -116,11 +116,20 @@ public class CommonFunctions {
 
         for (Layer layer : layers) {
             for (Node node : layer.getNodes()) {
+//                String output = String.format(
+//                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d ",
+//                        node.getNodeName(),
+//                        node.getErrorAddedCount(),
+//                        node.getErrorDetectedCount()
+//                );
+//todo:Change print statement for recovery
+
                 String output = String.format(
-                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d ",
+                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d Actual Undetected Errors: %-7d",
                         node.getNodeName(),
                         node.getErrorAddedCount(),
-                        node.getErrorDetectedCount()
+                        node.getErrorDetectedCount(),
+                        node.getActualUndetectedErrorsCount()
                 );
 
                 System.out.println(PrintColor.printInRedBack(output));
@@ -177,6 +186,12 @@ public class CommonFunctions {
             }
         }
         return null;
+    }
+
+    public static boolean checkFileExistsInRoot(String fileName) {
+        String rootDirectoryPath = System.getProperty("user.dir");
+        File file = new File(rootDirectoryPath, fileName);
+        return file.exists();
     }
 
 }
