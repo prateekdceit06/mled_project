@@ -384,40 +384,43 @@ public class MledSimulator {
 
 //todo: Uncomment to find 1 undetected error
 
-            int errorAdded = 0;
-            int errorDetected = 0;
-            for (Layer layer : layers) {
-                for (Node node : layer.getNodes()) {
-                    errorAdded += node.getErrorAddedCount();
-                    errorDetected += node.getErrorDetectedCount();
-                }
-            }
-
-
-            if (errorAdded == 1 && errorDetected == 0) {
-                return true;
-            }
+//            int errorAdded = 0;
+//            int errorDetected = 0;
+//            for (Layer layer : layers) {
+//                for (Node node : layer.getNodes()) {
+//                    errorAdded += node.getErrorAddedCount();
+//                    errorDetected += node.getErrorDetectedCount();
+//                }
+//            }
+//
+//
+//            if (errorAdded == 1 && errorDetected == 0) {
+//                return true;
+//            }
 
             //todo: Uncomment to find configuration in which hash misses the undetected error
 //
-//            int actualUndetectedError = 0;
-//
-//            actualUndetectedError = layers.get(0).getNodes().get(1).getActualUndetectedErrorsCount();
-//
-//            boolean fileExists = CommonFunctions.checkFileExistsInFolder("", "receivedData.csv");
-//
-//
+
+            boolean fileExists = CommonFunctions.checkFileExistsInFolder("", "receivedData.csv");
+
+
 //            Path path = Paths.get("receivedData.csv");
 //            if (Files.exists(path)) {
 //                Files.delete(path);
 //            }
-//
-//
-//            if (fileExists && actualUndetectedError != 0) {
-//                return true;
-//            } else {
-//                return false;
-//            }
+
+
+            if (fileExists) {
+                try {
+                    byte[] file1Bytes = Files.readAllBytes(Paths.get("receivedData.csv"));
+                    byte[] file2Bytes = Files.readAllBytes(Paths.get("astroMLDataTest.csv"));
+
+                    return !java.util.Arrays.equals(file1Bytes, file2Bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
 
         } catch (Exception e) {
             System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
