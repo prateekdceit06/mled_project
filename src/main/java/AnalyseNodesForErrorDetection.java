@@ -104,24 +104,13 @@ public class AnalyseNodesForErrorDetection {
 
         // todo:change print statements (Not necessary)
 
-        for (Map.Entry<Node, Integer> entry : nodeUndetectedErrorCountMap.entrySet()) {
-            String output = String.format("Node %s could find %d undetected error in packets",
-                    entry.getKey().getNodeName(),
-                    entry.getValue()
-            );
-            System.out.println(PrintColor.printInGreenBack(output));
-        }
-        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
-//
-//        for (int i = layerNum; i >= 1; i--) {
-//            for (Node thisNode : layers.get(i - 1).getNodes()) {
-//                System.out.println("Node Name: " + thisNode.getNodeName() + " Correct Checksum: " + thisNode.getCheckSumCorrect());
-//                System.out.println("Node Name: " + thisNode.getNodeName() + " Incorrect Checksum: " + thisNode.getCheckSumIncorrect());
-//            }
-//            System.out.println(PrintColor.printInGreen(PrintColor.divider()));
-//
+//        for (Map.Entry<Node, Integer> entry : nodeUndetectedErrorCountMap.entrySet()) {
+//            String output = String.format("Node %s could find %d undetected error in packets",
+//                    entry.getKey().getNodeName(),
+//                    entry.getValue()
+//            );
+//            System.out.println(PrintColor.printInGreenBack(output));
 //        }
-//
 //        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 
     }

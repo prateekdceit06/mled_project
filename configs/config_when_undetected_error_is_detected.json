@@ -1,7 +1,7 @@
 {
   "simulator": {
     "lastLayerMTU": 500,
-    "seed": 8522929
+    "seed": 8396827
   },
   "layers": [
     {
@@ -26,7 +26,7 @@
         "errorProbabilityBad": 0.0
       },
       "errorDetectionMethod": {
-        "name": "CRC",
+        "name": "crc",
         "crcPolynomial": "0x07"
       }
     },

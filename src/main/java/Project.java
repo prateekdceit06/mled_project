@@ -21,6 +21,9 @@ public class Project {
         //todo: change if you want to run code automatically without user input for different seed values
         MledSimulator simulator = MledSimulator.getInstance();
         simulator.getOptionToStartSimulator();
+
+        //check the time it takes tot run the program
+
 //        long endTime = System.currentTimeMillis();
 //        long elapsedTime = endTime - startTime;
 //        System.out.println("Total time taken: " + elapsedTime/1000 + " seconds");

@@ -67,20 +67,23 @@ public class PacketsReassembleAndSend {
             boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
 
             if (!isCorrect) {
-                CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
-                thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
+
                 //todo: implement recovery
 
                 byte[] recoveredData = new byte[receivedData.length];
                 for (Packet packet : nodeToCheckValue.getSentDataBeforeError()) {
                     if (packet.getPacketHeaders().get(nodeToCheckValue.getNodeName()).getPacketID().equals(packetID)) {
 //                        if (!Arrays.equals(packet.getData(), receivedData)) {
+                        CommonFunctions.logErrorPacket(newPacket, thisNode.getErrorDetectedCount() + 1, thisNode);
+                        thisNode.setErrorDetectedCount(thisNode.getErrorDetectedCount() + 1);
                             recoveredData = packet.getData();
                             break;
 //                        }
                     }
                 }
                 if (!Arrays.equals(recoveredData, receivedData)) {
+                    String recoveredValueToCheck = thisNode.getErrorDetectionMethod().calculate(recoveredData);
+                    newPacket.getPacketHeaders().get(thisNode.getNodeName()).setValueToCheck(recoveredValueToCheck);
                     newPacket.setData(recoveredData);
                 }
 
@@ -95,7 +98,8 @@ public class PacketsReassembleAndSend {
 //                        CommonFunctions.pause();
                         if (!Arrays.equals(packet.getData(), receivedData)) {
                             thisNode.setActualUndetectedErrorsCount(thisNode.getActualUndetectedErrorsCount() + 1);
-                            thisNode.getUndetectedErrors().add(newPacket);
+                            Packet tempPacket = new Packet(newPacket.getData(), newPacket.getPacketHeaders(), newPacket.getPath());
+                            thisNode.getUndetectedErrors().add(tempPacket);
                             break;
                         }
                     }
@@ -130,7 +134,8 @@ public class PacketsReassembleAndSend {
     }
 
     private void addError(Node thisNode, Packet newPacket, PacketHeader packetHeaderToCheck) {
-        thisNode.getSentDataBeforeError().add(newPacket);
+        Packet tempPacket = new Packet(newPacket.getData(), newPacket.getPacketHeaders(), newPacket.getPath());
+        thisNode.getSentDataBeforeError().add(tempPacket);
 
         if (thisNode instanceof NodeA || thisNode instanceof NodeC ||
                 (thisNode instanceof NodeE && thisNode.getChildNode() == null && thisNode.getParentNode() == null)
@@ -143,7 +148,10 @@ public class PacketsReassembleAndSend {
             thisNode.addError(newPacket);
         }
 
-        thisNode.getSentDataAfterError().add(newPacket);
+        tempPacket = new Packet(newPacket.getData(), newPacket.getPacketHeaders(), newPacket.getPath());
+
+        thisNode.getSentDataAfterError().add(tempPacket);
+
     }
 
 }

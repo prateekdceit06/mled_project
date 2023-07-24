@@ -33,9 +33,6 @@ public abstract class Node {
     private List<String> errorAddedToPackets;
     private List<String> errorDetectedInPackets;
 
-    private List<Packet> checkSumCorrect = new ArrayList<>();
-    private List<Packet> checkSumIncorrect = new ArrayList<>();
-
     private int actualUndetectedErrorsCount = 0;
 
     private List<Packet> undetectedErrors = new ArrayList<>();
@@ -141,14 +138,6 @@ public abstract class Node {
 
     public List<Packet> getSentDataAfterError() {
         return sentDataAfterError;
-    }
-
-    public List<Packet> getCheckSumCorrect() {
-        return checkSumCorrect;
-    }
-
-    public List<Packet> getCheckSumIncorrect() {
-        return checkSumIncorrect;
     }
 
     public int getActualUndetectedErrorsCount() {

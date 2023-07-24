@@ -188,9 +188,15 @@ public class CommonFunctions {
         return null;
     }
 
-    public static boolean checkFileExistsInRoot(String fileName) {
+    public static boolean checkFileExistsInFolder(String folder, String fileName) {
         String rootDirectoryPath = System.getProperty("user.dir");
-        File file = new File(rootDirectoryPath, fileName);
+        String directoryPath;
+        if (folder != null && folder.length() > 0) {
+            directoryPath = rootDirectoryPath + File.separator + folder;
+        } else {
+            directoryPath = rootDirectoryPath;
+        }
+        File file = new File(directoryPath, fileName);
         return file.exists();
     }
 

@@ -26,6 +26,9 @@ public class NodeB extends Node {
         PacketsReassembleAndSend packetsReassembleAndSend = new PacketsReassembleAndSend();
         packetsReassembleAndSend.reassembleAndSend(packetBuffer, this, null,
                 mtu, packetHeaderToCheck, nodeToCheckValue);
+
+
+
     }
 }
 

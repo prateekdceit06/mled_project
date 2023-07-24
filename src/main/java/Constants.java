@@ -147,6 +147,6 @@ public class Constants {
         }
     }
 
-    public static final int SEED = 123456789;
+    public static int SEED = 123456789;
 
 }
