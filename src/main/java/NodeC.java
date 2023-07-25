@@ -8,7 +8,6 @@ public class NodeC extends Node {
     }
 
     public void receivePacket(Packet packet) {
-        this.getReceivedData().add(packet);
         Node sendToNode = getSendToNode();
         String receivedFromNodeName = packet.getSentFromNodeName();
 

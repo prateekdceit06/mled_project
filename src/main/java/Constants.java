@@ -149,4 +149,6 @@ public class Constants {
 
     public static int SEED = 123456789;
 
+    public static int totalFileSize = 0;
+
 }

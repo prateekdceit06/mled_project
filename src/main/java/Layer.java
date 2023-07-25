@@ -55,6 +55,10 @@ public class Layer {
         return nodeIDs;
     }
 
+    public int getMTU() {
+        return MTU;
+    }
+
     public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod,
                          ErrorModel errorModel) {
         int increment = (int) Math.pow(2, layerNum - layerID);

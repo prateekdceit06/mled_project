@@ -1,16 +1,16 @@
 {
   "simulator": {
     "lastLayerMTU": 500,
-    "seed": 3826142
+    "seed": 12343455
   },
   "layers": [
     {
       "fragmentationParameter": 1,
       "errorModel": {
-        "goodToBad": 0.001,
+        "goodToBad": 0.1,
         "badToGood": 0.9,
-        "errorProbabilityGood": 0.00001,
-        "errorProbabilityBad": 0.001
+        "errorProbabilityGood": 0.001,
+        "errorProbabilityBad": 0.01
       },
       "errorDetectionMethod": {
         "name": "CRC",
@@ -20,10 +20,10 @@
     {
       "fragmentationParameter": 2,
       "errorModel": {
-        "goodToBad": 0.001,
+        "goodToBad": 0.1,
         "badToGood": 0.9,
-        "errorProbabilityGood": 0.00001,
-        "errorProbabilityBad": 0.001
+        "errorProbabilityGood": 0.001,
+        "errorProbabilityBad": 0.01
       },
       "errorDetectionMethod": {
         "name": "CRC",
@@ -33,10 +33,10 @@
     {
       "fragmentationParameter": 2,
       "errorModel": {
-        "goodToBad": 0.001,
+        "goodToBad": 0.1,
         "badToGood": 0.9,
-        "errorProbabilityGood": 0.00001,
-        "errorProbabilityBad": 0.001
+        "errorProbabilityGood": 0.001,
+        "errorProbabilityBad": 0.01
       },
       "errorDetectionMethod": {
         "name": "CHECKSUM",

@@ -21,6 +21,7 @@ public class ApplicationSender {
                     Constants.applicationLevel.SENDER.toString(),
                     1, 0, totalFileSize, hashOnWholeFile, true, totalFileSize);
             Packet packet = new Packet(dataBytes, packetHeader, path);
+            Constants.totalFileSize = totalFileSize;
             // Send the packet to the first layer
             MledSimulator.getInstance().getLayers().get(0).getNodes().get(0).receivePacket(packet);
         } catch (Exception e) {

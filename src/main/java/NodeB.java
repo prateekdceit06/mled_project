@@ -13,7 +13,6 @@ public class NodeB extends Node {
     }
 
     public void receivePacket(Packet packet) {
-        this.getReceivedData().add(packet);
         String nodeNameToGetHeaderToCheckValue = getNodeNameForErrorCheck();
         PacketHeader packetHeaderToCheck = packet.getPacketHeaders().get(nodeNameToGetHeaderToCheckValue);
         Node nodeToCheckValue = CommonFunctions.getNodeByName(nodeNameToGetHeaderToCheckValue,
