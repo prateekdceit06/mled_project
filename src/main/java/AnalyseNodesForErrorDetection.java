@@ -141,18 +141,20 @@ public class AnalyseNodesForErrorDetection {
         double efficiency = (double) totalBytesTransmittedForErrorFreeFile / totalBytesTransmitted;
 
         String output = String.format("Total Bytes Transmitted for Error Free File: %d (= %d bits), " +
-                        "Total Bytes Retransmitted: %d (= %d bits), " +
-                        "Total Bytes Transmitted: %d (= %d bits) ",
+                        "Total Bytes Retransmitted: %d (= %d bits), ",
                 totalBytesTransmittedForErrorFreeFile,
                 totalBitsTransmittedForErrorFreeFile,
                 totalBytesRetransmitted,
-                totalBitsRetransmitted,
-                totalBytesTransmitted,
-                totalBitsTransmitted
+                totalBitsRetransmitted
         );
 
         System.out.println(PrintColor.printInGreenBack(output));
 
+        output = String.format("Total Bytes Transmitted: %d (= %d bits) ",
+                totalBytesTransmitted,
+                totalBitsTransmitted
+        );
+        System.out.println(PrintColor.printInGreenBack(output));
 
         output = String.format("Efficiency [totalBytesTransmittedForErrorFreeFile / totalBytesTransmitted]: %.4f ",
                 efficiency
