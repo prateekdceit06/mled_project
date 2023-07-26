@@ -13,6 +13,7 @@ public class SimulatorConfig {
 
         boolean errorFlag = false;
 
+
         try (Reader reader = new FileReader(configFile)) {
             JsonElement rootElement = JsonParser.parseReader(reader);
             JsonObject rootObject = rootElement.getAsJsonObject();
@@ -42,8 +43,15 @@ public class SimulatorConfig {
 
             for (JsonElement layerElement : layersArray) {
                 layerID++;
+                boolean enableErrorDetection = true;
                 JsonObject layerObject = layerElement.getAsJsonObject();
+
+                if (layerObject.has("enableErrorDetection")) {
+                    enableErrorDetection = layerObject.get("enableErrorDetection").getAsBoolean();
+                }
+
                 int fragmentationParameter = layerObject.get("fragmentationParameter").getAsInt();
+
                 errorFlag = !Validator.isIntValid(fragmentationParameter, 1, 10);
                 if (errorFlag) {
                     System.out.println(PrintColor.printInRedBack("Error: Invalid fragmentation parameter." +
@@ -159,12 +167,13 @@ public class SimulatorConfig {
                 errorModel.setSeed(seed);
 
                 Layer layer = new Layer(layerID, fragmentationParameter, errorDetectionMethodName,
-                        errorDetectionMethod, errorModel);
+                        errorDetectionMethod, errorModel, enableErrorDetection);
 
                 simulator.getLayers().add(layer);
 
                 int numNodes = (int) Math.pow(2, layerID - 1) + 1;
-                simulator.getLayers().get(layerID - 1).addNodes(numberOfLayers, numNodes, errorDetectionMethod, errorModel);
+                simulator.getLayers().get(layerID - 1).addNodes(numberOfLayers, numNodes, errorDetectionMethod,
+                        errorModel, enableErrorDetection);
                 //todo:change print statements
 //                System.out.println(PrintColor.printInGreenBack("Layer " + layerID +
 //                        " created with fragmentation parameter " + fragmentationParameter +

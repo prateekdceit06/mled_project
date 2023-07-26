@@ -6,6 +6,7 @@
   "layers": [
     {
       "fragmentationParameter": 1,
+      "enableErrorDetection": true,
       "errorModel": {
         "goodToBad": 0.5,
         "badToGood": 0.5,
@@ -19,6 +20,7 @@
     },
     {
       "fragmentationParameter": 2,
+      "enableErrorDetection": false,
       "errorModel": {
         "goodToBad": 0.5,
         "badToGood": 0.5,

@@ -21,12 +21,14 @@ public abstract class Node {
     private List<String> errorDetectedInPackets;
     private int actualUndetectedErrorsCount = 0;
     private List<Packet> undetectedErrors = new ArrayList<>();
-    private int retransmissionCount = 0;
+    private int retransmittedBytes = 0;
+
+    private boolean enableErrorDetection;
 
 
 
     public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
-                ErrorModel errorModel, int MTU) {
+                ErrorModel errorModel, int MTU, boolean enableErrorDetection) {
 
         this.layerID = layerID;
         this.nodeID = nodeID;
@@ -39,6 +41,7 @@ public abstract class Node {
         this.MTU = MTU;
         this.errorAddedToPackets = new ArrayList<>();
         this.errorDetectedInPackets = new ArrayList<>();
+        this.enableErrorDetection = enableErrorDetection;
     }
 
 
@@ -131,12 +134,16 @@ public abstract class Node {
         return undetectedErrors;
     }
 
-    public int getRetransmissionCount() {
-        return retransmissionCount;
+    public int getRetransmittedBytes() {
+        return retransmittedBytes;
     }
 
-    public void setRetransmissionCount(int retransmissionCount) {
-        this.retransmissionCount = retransmissionCount;
+    public void setRetransmittedBytes(int retransmittedBytes) {
+        this.retransmittedBytes = retransmittedBytes;
+    }
+
+    public boolean isEnableErrorDetection() {
+        return enableErrorDetection;
     }
 
 
@@ -160,6 +167,8 @@ public abstract class Node {
                 ", parentNode=" + parentNodeName +
                 ", childNode=" + childNodeName +
                 ", errorModel=" + errorModel +
+                ", MTU=" + MTU +
+                ",enableErrorDetection=" + enableErrorDetection +
                 '}';
     }
 

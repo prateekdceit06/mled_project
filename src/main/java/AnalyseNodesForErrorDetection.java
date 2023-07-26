@@ -112,12 +112,15 @@ public class AnalyseNodesForErrorDetection {
 
     private void printNetworkStatistics(List<Layer> layers) {
         int totalBytesRetransmitted = 0;
+        int totalRetransmissionHops = 0;
+        int lastLayerMTU = layers.get(layers.size() - 1).getMTU();
         for (Layer layer : layers) {
             for (Node node : layer.getNodes()) {
-                if (node.getRetransmissionCount() != 0) {
+                if (node.getRetransmittedBytes() != 0) {
                     int previousNodeID = layer.getNodeIDs().get(layer.getNodeIDs().indexOf(node.getNodeID()) - 1);
-                    totalBytesRetransmitted += node.getRetransmissionCount() * node.getMTU() *
-                            (node.getNodeID() - previousNodeID);
+                    totalBytesRetransmitted += node.getRetransmittedBytes() * (node.getNodeID() - previousNodeID);
+                    totalRetransmissionHops += (int) Math.ceil((double) node.getRetransmittedBytes() / lastLayerMTU)
+                            * (node.getNodeID() - previousNodeID);
                 }
             }
         }
@@ -125,17 +128,13 @@ public class AnalyseNodesForErrorDetection {
         long totalBitsRetransmitted = totalBytesRetransmitted * 8L;
 
         int totalBytesTransmittedForErrorFreeFile =
-                (Constants.totalFileSize * (layers.get(layers.size()-1).getNodeIDs().size()-1));
+                (Constants.totalFileSize * (layers.get(layers.size() - 1).getNodeIDs().size() - 1));
         long totalBitsTransmittedForErrorFreeFile = totalBytesTransmittedForErrorFreeFile * 8L;
+        int totalHopsForErrorFreeFile = (int) Math.ceil((double) Constants.totalFileSize / lastLayerMTU)
+                * (layers.get(layers.size() - 1).getNodeIDs().size() - 1);
 
         int totalBytesTransmitted = totalBytesTransmittedForErrorFreeFile + totalBytesRetransmitted;
         long totalBitsTransmitted = totalBytesTransmitted * 8L;
-
-
-        int totalRetransmissionHops = totalBytesRetransmitted/layers.get(layers.size()-1).getMTU();
-
-        int totalHopsForErrorFreeFile = (int) Math.ceil((double)Constants.totalFileSize/layers.get(layers.size()-1).getMTU())
-                * (layers.get(layers.size()-1).getNodeIDs().size()-1);
 
         int totalHops = totalHopsForErrorFreeFile + totalRetransmissionHops;
 
@@ -179,7 +178,7 @@ public class AnalyseNodesForErrorDetection {
         int totalHopsIfHashDetectsError = totalHops + totalHopsForErrorFreeFile;
         double efficiencyIfHashDetectsError = (double) totalBytesTransmittedForErrorFreeFile / totalBytesTransmittedIfHashDetectsError;
 
-        output = String.format( "Total Bytes Transmitted: %d (= %d bits), Total Hops: %d, Efficiency: %.4f ",
+        output = String.format("Total Bytes Transmitted: %d (= %d bits), Total Hops: %d, Efficiency: %.4f ",
                 totalBytesTransmittedIfHashDetectsError,
                 totalBitsTransmittedIfHashDetectsError,
                 totalHopsIfHashDetectsError,

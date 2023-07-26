@@ -15,6 +15,8 @@ public class Layer {
 
     private int MTU;
 
+    private boolean enableErrorDetection;
+
     public Layer(int layerID, int fragmentationParameter, String errorDetectionMethodName,
                  ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel) {
         this.layerID = layerID;
@@ -22,6 +24,17 @@ public class Layer {
         this.errorDetectionMethodName = errorDetectionMethodName;
         this.errorDetectionMethod = errorDetectionMethod;
         this.errorModel = errorModel;
+        this.enableErrorDetection = true;
+    }
+
+    public Layer(int layerID, int fragmentationParameter, String errorDetectionMethodName,
+                 ErrorDetectionMethod errorDetectionMethod, ErrorModel errorModel, boolean enableErrorDetection) {
+        this.layerID = layerID;
+        this.fragmentationParameter = fragmentationParameter;
+        this.errorDetectionMethodName = errorDetectionMethodName;
+        this.errorDetectionMethod = errorDetectionMethod;
+        this.errorModel = errorModel;
+        this.enableErrorDetection = enableErrorDetection;
     }
 
     public int getLayerID() {
@@ -60,14 +73,14 @@ public class Layer {
     }
 
     public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod,
-                         ErrorModel errorModel) {
+                         ErrorModel errorModel, boolean enableErrorDetection) {
         int increment = (int) Math.pow(2, layerNum - layerID);
         int nodeID = 1;
         Node node;
         NodeFactory nodeFactory = new NodeFactory();
         for (int i = 1; i <= nodeNum; i++) {
             node = nodeFactory.getNewNode(layerID, nodeID, fragmentationParameter,
-                    errorDetectionMethod, errorModel, MTU);
+                    errorDetectionMethod, errorModel, MTU, enableErrorDetection);
 //            System.out.println(PrintColor.printInPurple("Node Name" + node.getNodeName() + ", Node Class: " +
 //                    node.getClass().getName()));
             addNode(node);
@@ -87,6 +100,8 @@ public class Layer {
                 ", nodes=" + nodes +
                 ", nodeIDs=" + nodeIDs +
                 ", errorModel=" + errorModel +
+                ", MTU=" + MTU +
+                ", enableErrorDetection=" + enableErrorDetection +
                 '}';
     }
 

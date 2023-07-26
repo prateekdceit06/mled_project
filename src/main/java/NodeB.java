@@ -8,8 +8,8 @@ public class NodeB extends Node {
     private List<Packet> packetBuffer = new ArrayList<>();
 
     public NodeB(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
-                 ErrorModel errorModel, int MTU) {
-        super(layerID, nodeID, fragmentationParameter, errorDetectionMethod, errorModel, MTU);
+                 ErrorModel errorModel, int MTU, boolean enableErrorDetection) {
+        super(layerID, nodeID, fragmentationParameter, errorDetectionMethod, errorModel, MTU, enableErrorDetection);
     }
 
     public void receivePacket(Packet packet) {

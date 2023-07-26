@@ -1,6 +1,8 @@
 # Multi Layered Detection Model (MLED) for Error Detection
 
-Multi-Layer Error Detection (MLED) is a layered architecture designed to significantly reduce the Undetected Error Probability (UEP) in file transfers. This is particularly important for petabyte-scale file transfers, which are often used for data collected from scientific instruments.
+Multi-Layer Error Detection (MLED) is a layered architecture designed to significantly reduce the Undetected Error
+Probability (UEP) in file transfers. This is particularly important for petabyte-scale file transfers, which are often
+used for data collected from scientific instruments.
 
 The Multi-Layer Error Detection (MLED) architecture is parameterized by a number of layers *(n)*, and a policy *(P<sub>
 i</sub>)* for each layer that describes its operation. The architecture is flexible and allows a different number of
@@ -67,7 +69,7 @@ The main JSON structure is divided into `simulator` and `layers` sections.
 
 - `lastLayerMTU`: MTU (Maximum Transmission Unit) for the last layer. This represents the maximum amount of data that
   can be transmitted in one packet, excluding headers and trailers. The value should be an integer between 500 and
-  10000.
+    10000.
 
 - `seed`: Seed for the random number generator used in the simulation. Any integer can be used.
 
@@ -78,6 +80,11 @@ Please note that the number of layers should be within the range of 1 to 99.
 
 - `fragmentationParameter`: Parameter that determines how the data is fragmented in the layer. Should be an integer
   value between 1 and 10.
+- `enableErrorDetection`: Boolean value that determines whether error detection is enabled in the layer. If set to
+  `false`, the layer will not perform error detection. If set to `true`, the layer will perform error detection. If this
+  value is not specified, it will be set to `true` by default. Though it is important to note that irrespective of the
+  value of this parameter, the `errorDetectionMethod` parameter (as described below) for the layer has to be specified
+  otherwise the config file will not be read correctly.
 
 - `errorModel`: An object that specifies the error model for the layer. It includes the following properties:
 
@@ -130,6 +137,7 @@ Below is an example of a configuration file:
   "layers": [
     {
       "fragmentationParameter": 1,
+      "enableErrorDetection": true,
       "errorModel": {
         "goodToBad": 0.5,
         "badToGood": 0.5,
@@ -143,6 +151,7 @@ Below is an example of a configuration file:
     },
     {
       "fragmentationParameter": 2,
+      "enableErrorDetection": false,
       "errorModel": {
         "goodToBad": 0.5,
         "badToGood": 0.5,

@@ -231,7 +231,7 @@ public class MledSimulator {
 
                         // Number of nodes in each layer is 2^(i-1) + 1
                         int numNodes = (int) Math.pow(2, i - 1) + 1;
-                        layers.get(i - 1).addNodes(layerNum, numNodes, errorDetectionMethod, errorModel);
+                        layers.get(i - 1).addNodes(layerNum, numNodes, errorDetectionMethod, errorModel, true);
                         System.out.println(PrintColor.printInGreenBack("Layer " + i +
                                 " created with fragmentation parameter " + fragmentationParameter +
                                 " and error detection method " + errorDetectionMethodName));
