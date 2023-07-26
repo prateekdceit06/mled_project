@@ -1,40 +1,28 @@
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public abstract class Node {
-
-    private static final Logger logger = LogManager.getLogger(Node.class);
     private final int layerID;
     private final int nodeID;
     private final String nodeName;
     private final int fragmentationParameter;
     private final ErrorDetectionMethod errorDetectionMethod;
-    private List<Packet> receivedData = new ArrayList<>();
     private List<Packet> sentDataBeforeError = new ArrayList<>();
     private List<Packet> sentDataAfterError = new ArrayList<>();
     private Node parentNode;
     private Node childNode;
-
     private int errorDetectedCount = 0;
     private int errorAddedCount = 0;
-
     private final ErrorModel errorModel;
-
     private int MTU;
-
     private List<String> errorAddedToPackets;
     private List<String> errorDetectedInPackets;
+    private int actualUndetectedErrorsCount = 0;
+    private List<Packet> undetectedErrors = new ArrayList<>();
+    private int retransmissionCount = 0;
 
-    private List<Packet> checkSumCorrect = new ArrayList<>();
-    private List<Packet> checkSumIncorrect = new ArrayList<>();
 
 
     public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
@@ -64,14 +52,6 @@ public abstract class Node {
 
     public String getNodeName() {
         return nodeName;
-    }
-
-    public List<Packet> getReceivedData() {
-        return receivedData;
-    }
-
-    public void setReceivedData(List<Packet> receivedData) {
-        this.receivedData = receivedData;
     }
 
 
@@ -139,13 +119,27 @@ public abstract class Node {
         return sentDataAfterError;
     }
 
-    public List<Packet> getCheckSumCorrect() {
-        return checkSumCorrect;
+    public int getActualUndetectedErrorsCount() {
+        return actualUndetectedErrorsCount;
     }
 
-    public List<Packet> getCheckSumIncorrect() {
-        return checkSumIncorrect;
+    public void setActualUndetectedErrorsCount(int actualUndetectedErrorsCount) {
+        this.actualUndetectedErrorsCount = actualUndetectedErrorsCount;
     }
+
+    public List<Packet> getUndetectedErrors() {
+        return undetectedErrors;
+    }
+
+    public int getRetransmissionCount() {
+        return retransmissionCount;
+    }
+
+    public void setRetransmissionCount(int retransmissionCount) {
+        this.retransmissionCount = retransmissionCount;
+    }
+
+
 
     //override toString method to print out node information
     @Override
@@ -162,7 +156,6 @@ public abstract class Node {
                 "layerID=" + layerID +
                 ", nodeID=" + nodeID +
                 ", nodeName='" + nodeName + '\'' +
-                ", receivedData=" + receivedData +
                 ", Fragmentation Parameter=" + fragmentationParameter +
                 ", parentNode=" + parentNodeName +
                 ", childNode=" + childNodeName +
@@ -199,7 +192,7 @@ public abstract class Node {
         }
         if (errorAdded) {
             errorAddedCount++;
-            logAddedError(packet);
+            CommonFunctions.logAddedError(packet, this );
         }
     }
 
@@ -227,7 +220,7 @@ public abstract class Node {
 
         if (errorAdded) {
             errorAddedCount++;
-            logAddedError(packet);
+            CommonFunctions.logAddedError(packet, this );
         }
 
 
@@ -236,25 +229,7 @@ public abstract class Node {
 
     public abstract void receivePacket(Packet packet);
 
-    private void logAddedError(Packet packet) {
-        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
-        errorAddedToPackets.add(packetID);
 
-        String directoryName = CommonFunctions.createFolder("output");
-        String fileName = directoryName + File.separator + "errorsAdded.txt";
-
-
-        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
-            out.println("Error: " + errorAddedCount + " added by Node: " + this.getNodeName() + "\n");
-            out.println(packet);
-            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
-            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }

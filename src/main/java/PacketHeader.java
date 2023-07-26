@@ -92,6 +92,10 @@ public class PacketHeader {
         return lastBatchSize;
     }
 
+    public void setValueToCheck(String valueToCheck) {
+        this.valueToCheck = valueToCheck;
+    }
+
     //override tostring
     @Override
     public String toString() {

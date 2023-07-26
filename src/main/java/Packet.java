@@ -11,8 +11,18 @@ public class Packet {
 
     private List<String> path = new ArrayList<>();
 
+    public Packet(byte[] data, HashMap<String, PacketHeader> packetHeaders, List<String> path){
+        byte[] newData = new byte[data.length];
+        System.arraycopy(data, 0, newData, 0, data.length);
+        this.data = newData;
+        this.packetHeaders.putAll(packetHeaders);
+        this.path.addAll(path);
+    }
+
     public Packet(byte[] data, PacketHeader packetHeaders, List<String> path) {
-        this.data = data;
+        byte[] newData = new byte[data.length];
+        System.arraycopy(data, 0, newData, 0, data.length);
+        this.data = newData;
         this.packetHeaders.put(packetHeaders.getPacketCreatingNodeName(), packetHeaders);
         this.sentFromNodeName = packetHeaders.getSentFrom();
         this.path.addAll(path);

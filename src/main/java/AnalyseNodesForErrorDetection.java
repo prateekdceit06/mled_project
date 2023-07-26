@@ -1,9 +1,15 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AnalyseNodesForErrorDetection {
+
+    private static final Logger logger = LogManager.getLogger(AnalyseNodesForErrorDetection.class);
+
     public void analyseNodesForErrorDetection(int layerNum, List<Layer> layers) {
         HashMap<Node, List<String>> nodeUndetectedErrorMap = new HashMap<>();
         for (int i = layerNum; i >= 1; i--) {
@@ -22,7 +28,7 @@ public class AnalyseNodesForErrorDetection {
             }
         }
         //todo:change print statements
-//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 
 
         HashMap<Node, Integer> nodeUndetectedErrorCountMap = new HashMap<>();
@@ -41,17 +47,17 @@ public class AnalyseNodesForErrorDetection {
                                     );
                             String nodeNameOfHigherLayerNodeToCheck = i + "-" + nodeIDOfHigherLayerNodeToCheck;
                             //todo:change print statements
-                            System.out.println("Node Name: " + thisNode.getNodeName() +
-                                    " nodeNameOfHigherLayerNodeToCheck: " + nodeNameOfHigherLayerNodeToCheck);
+//                            System.out.println("Node Name: " + thisNode.getNodeName() +
+//                                    " nodeNameOfHigherLayerNodeToCheck: " + nodeNameOfHigherLayerNodeToCheck);
                             Node nodeOfHigherLayerToCheck =
                                     CommonFunctions.getNodeByName(nodeNameOfHigherLayerNodeToCheck, layerNum, layers);
 
                             String packetNameToCheckInUndetectedPacketsOnLayerAbove =
                                     getPacketNameToCheckInUndetectedPacketsOnLayerAbove(undetectedErrorPacketName, i);
                             //todo:change print statements
-                            System.out.println("Node Name: " + thisNode.getNodeName() +
-                                    " packetNameToCheckInUndetectedPacketsOnLayerAbove: " +
-                                    packetNameToCheckInUndetectedPacketsOnLayerAbove);
+//                            System.out.println("Node Name: " + thisNode.getNodeName() +
+//                                    " packetNameToCheckInUndetectedPacketsOnLayerAbove: " +
+//                                    packetNameToCheckInUndetectedPacketsOnLayerAbove);
                             if (nodeOfHigherLayerToCheck.getErrorDetectedInPackets() != null) {
                                 if (nodeOfHigherLayerToCheck.getErrorDetectedInPackets()
                                         .contains(packetNameToCheckInUndetectedPacketsOnLayerAbove)) {
@@ -61,19 +67,20 @@ public class AnalyseNodesForErrorDetection {
                                                     .getOrDefault(nodeOfHigherLayerToCheck, 0) + 1);
                                     //todo:change print statements
 
-                                    String output = String.format("Node %s could not find error in packet %s " +
-                                                    "but node %s could find error in packet %s",
-                                            thisNode.getNodeName(),
-                                            undetectedErrorPacketName,
+                                    String output = String.format("Node %s could  find error in packet %s formed by " +
+                                                    "packet %s. The error was initially missed by node %s.",
                                             nodeOfHigherLayerToCheck.getNodeName(),
-                                            packetNameToCheckInUndetectedPacketsOnLayerAbove
+                                            packetNameToCheckInUndetectedPacketsOnLayerAbove,
+                                            undetectedErrorPacketName,
+                                            thisNode.getNodeName()
+
                                     );
 
-                                    System.out.println(PrintColor.printInGreenBack(output));
-                                    System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+                                    logger.info(PrintColor.printInGreenBack(output));
+                                    logger.info(PrintColor.printInGreen(PrintColor.divider()));
 
                                     break;
-                                } else{
+                                } else {
                                     //todo:change print statements
 
                                     String output = String.format("Node %s could not find error in packet %s formed by " +
@@ -83,8 +90,8 @@ public class AnalyseNodesForErrorDetection {
                                             undetectedErrorPacketName,
                                             thisNode.getNodeName()
                                     );
-                                    System.out.println(PrintColor.printInRedBack(output));
-                                    System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+                                    logger.info(PrintColor.printInRedBack(output));
+                                    logger.info(PrintColor.printInGreen(PrintColor.divider()));
                                 }
                             }
                         }
@@ -94,28 +101,103 @@ public class AnalyseNodesForErrorDetection {
 
 
         }
-        //todo:change print statements (Not necessary)
 
-//        for (Map.Entry<Node, Integer> entry : nodeUndetectedErrorCountMap.entrySet()) {
-//            String output = String.format("Node %s could find %d undetected error in packets",
-//                    entry.getKey().getNodeName(),
-//                    entry.getValue()
-//            );
-//            System.out.println(PrintColor.printInGreenBack(output));
-//        }
-//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
-//
-//        for (int i = layerNum; i >= 1; i--) {
-//            for (Node thisNode : layers.get(i - 1).getNodes()) {
-//                System.out.println("Node Name: " + thisNode.getNodeName() + " Correct Checksum: " + thisNode.getCheckSumCorrect());
-//                System.out.println("Node Name: " + thisNode.getNodeName() + " Incorrect Checksum: " + thisNode.getCheckSumIncorrect());
-//            }
-//            System.out.println(PrintColor.printInGreen(PrintColor.divider()));
-//
-//        }
-//
-//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+        // todo:change print statements
 
+        printUndetectedErrorCount(nodeUndetectedErrorCountMap);
+
+        printNetworkStatistics(layers);
+
+    }
+
+    private void printNetworkStatistics(List<Layer> layers) {
+        int totalBytesRetransmitted = 0;
+        for (Layer layer : layers) {
+            for (Node node : layer.getNodes()) {
+                if (node.getRetransmissionCount() != 0) {
+                    int previousNodeID = layer.getNodeIDs().get(layer.getNodeIDs().indexOf(node.getNodeID()) - 1);
+                    totalBytesRetransmitted += node.getRetransmissionCount() * node.getMTU() *
+                            (node.getNodeID() - previousNodeID);
+                }
+            }
+        }
+
+        long totalBitsRetransmitted = totalBytesRetransmitted * 8L;
+
+        int totalBytesTransmittedForErrorFreeFile =
+                (Constants.totalFileSize * (layers.get(layers.size()-1).getNodeIDs().size()-1));
+        long totalBitsTransmittedForErrorFreeFile = totalBytesTransmittedForErrorFreeFile * 8L;
+
+        int totalBytesTransmitted = totalBytesTransmittedForErrorFreeFile + totalBytesRetransmitted;
+        long totalBitsTransmitted = totalBytesTransmitted * 8L;
+
+
+        int totalRetransmissionHops = totalBytesRetransmitted/layers.get(layers.size()-1).getMTU();
+
+        int totalHopsForErrorFreeFile = (int) Math.ceil((double)Constants.totalFileSize/layers.get(layers.size()-1).getMTU())
+                * (layers.get(layers.size()-1).getNodeIDs().size()-1);
+
+        int totalHops = totalHopsForErrorFreeFile + totalRetransmissionHops;
+
+        double efficiency = (double) totalBytesTransmittedForErrorFreeFile / totalBytesTransmitted;
+
+        String output = String.format("Total Bytes Transmitted for Error Free File: %d (= %d bits), " +
+                        "Total Bytes Retransmitted: %d (= %d bits), " +
+                        "Total Bytes Transmitted: %d (= %d bits) ",
+                totalBytesTransmittedForErrorFreeFile,
+                totalBitsTransmittedForErrorFreeFile,
+                totalBytesRetransmitted,
+                totalBitsRetransmitted,
+                totalBytesTransmitted,
+                totalBitsTransmitted
+        );
+
+        System.out.println(PrintColor.printInGreenBack(output));
+
+
+        output = String.format("Efficiency [totalBytesTransmittedForErrorFreeFile / totalBytesTransmitted]: %.4f ",
+                efficiency
+        );
+
+        System.out.println(PrintColor.printInGreenBack(output));
+
+        output = String.format("Total Hops for Error Free File: %d, Total Retransmission Hops: %d , Total Hops: %d ",
+                totalHopsForErrorFreeFile,
+                totalRetransmissionHops,
+                totalHops
+        );
+        System.out.println(PrintColor.printInGreenBack(output));
+
+        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+
+        System.out.println(PrintColor.printInPurpleBack(
+                "========================In case the final MD5 hash detects error in file========================")
+        );
+
+        int totalBytesTransmittedIfHashDetectsError = totalBytesTransmitted + totalBytesTransmittedForErrorFreeFile;
+        long totalBitsTransmittedIfHashDetectsError = totalBytesTransmittedIfHashDetectsError * 8L;
+        int totalHopsIfHashDetectsError = totalHops + totalHopsForErrorFreeFile;
+        double efficiencyIfHashDetectsError = (double) totalBytesTransmittedForErrorFreeFile / totalBytesTransmittedIfHashDetectsError;
+
+        output = String.format( "Total Bytes Transmitted: %d (= %d bits), Total Hops: %d, Efficiency: %.4f ",
+                totalBytesTransmittedIfHashDetectsError,
+                totalBitsTransmittedIfHashDetectsError,
+                totalHopsIfHashDetectsError,
+                efficiencyIfHashDetectsError
+        );
+
+        System.out.println(PrintColor.printInPurpleBack(output));
+    }
+
+    private void printUndetectedErrorCount(HashMap<Node, Integer> nodeUndetectedErrorCountMap) {
+        for (Map.Entry<Node, Integer> entry : nodeUndetectedErrorCountMap.entrySet()) {
+            String output = String.format("Node %s could find %d undetected error in packets ",
+                    entry.getKey().getNodeName(),
+                    entry.getValue()
+            );
+            System.out.println(PrintColor.printInGreenBack(output));
+        }
+        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
     }
 
 

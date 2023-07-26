@@ -7,6 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -348,7 +351,7 @@ public class MledSimulator {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();  // create Gson instance with pretty printing
             Random random = new Random();  // create Random instance for generating random numbers
 
-            try (Reader reader = new FileReader("./configs/input_config_for_autorun_to_find_seed_for_undected_error.json")) {
+            try (Reader reader = new FileReader("./configs/_input_config_for_autorun_to_find_seed_for_undetected_error.json")) {
                 JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();  // read JSON file
 
                 // Generate a random integer
@@ -375,25 +378,49 @@ public class MledSimulator {
             calculateMTU();
             createRoute();
             runNetwork();
-
+//            CommonFunctions.printStats(layers);
             AnalyseNodesForErrorDetection analyseNodesForErrorDetection = new AnalyseNodesForErrorDetection();
             analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
 
+//todo: Uncomment to find 1 undetected error
 
-            int errorAdded = 0;
-            int errorDetected = 0;
-            for (Layer layer : layers) {
-                for (Node node : layer.getNodes()) {
-                    errorAdded += node.getErrorAddedCount();
-                    errorDetected += node.getErrorDetectedCount();
+//            int errorAdded = 0;
+//            int errorDetected = 0;
+//            for (Layer layer : layers) {
+//                for (Node node : layer.getNodes()) {
+//                    errorAdded += node.getErrorAddedCount();
+//                    errorDetected += node.getErrorDetectedCount();
+//                }
+//            }
+//
+//
+//            if (errorAdded == 1 && errorDetected == 0) {
+//                return true;
+//            }
+
+            //todo: Uncomment to find configuration in which hash misses the undetected error
+//
+
+            boolean fileExists = CommonFunctions.checkFileExistsInFolder("", "receivedData.csv");
+
+
+//            Path path = Paths.get("receivedData.csv");
+//            if (Files.exists(path)) {
+//                Files.delete(path);
+//            }
+
+
+            if (fileExists) {
+                try {
+                    byte[] file1Bytes = Files.readAllBytes(Paths.get("receivedData.csv"));
+                    byte[] file2Bytes = Files.readAllBytes(Paths.get("astroMLDataTest.csv"));
+
+                    return !java.util.Arrays.equals(file1Bytes, file2Bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
                 }
             }
-
-
-            if (errorAdded == 1 && errorDetected == 0) {
-                return true;
-            }
-
 
         } catch (Exception e) {
             System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));

@@ -7,7 +7,7 @@ Level order from most to least severe:
       logger.info()
       logger.debug()
       logger.trace()
--->
+
 
 <Configuration status="WARN">
   <Appenders>
@@ -31,3 +31,22 @@ Level order from most to least severe:
     </Root>
   </Loggers>
 </Configuration>
+-->
+
+<Configuration status="INFO">
+  <Properties>
+    <Property name="logPattern">%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</Property>
+    <Property name="fileName">logs/app-log-${date:yyyy-MM-dd-HH-mm-ss}</Property>
+  </Properties>
+  <Appenders>
+    <File name="LogFile" fileName="${fileName}.log">
+      <PatternLayout pattern="${logPattern}"/>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="LogFile"/>
+    </Root>
+  </Loggers>
+</Configuration>
+

@@ -78,6 +78,27 @@ public class CommonFunctions {
         }
     }
 
+
+    public static void logAddedError(Packet packet, Node thisNode) {
+        String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
+        thisNode.getErrorAddedToPackets().add(packetID);
+
+        String directoryName = CommonFunctions.createFolder("output");
+        String fileName = directoryName + File.separator + "errorsAdded.txt";
+
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
+            out.println("Error: " + thisNode.getErrorAddedCount() + " added by Node: " + thisNode.getNodeName() + "\n");
+            out.println(packet);
+            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
+            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String createFolder(String folderName) {
         File folder = new File(folderName);
         if (!folder.exists()) {
@@ -95,11 +116,20 @@ public class CommonFunctions {
 
         for (Layer layer : layers) {
             for (Node node : layer.getNodes()) {
+//                String output = String.format(
+//                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d ",
+//                        node.getNodeName(),
+//                        node.getErrorAddedCount(),
+//                        node.getErrorDetectedCount()
+//                );
+//todo:Change print statement for recovery
+
                 String output = String.format(
-                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d ",
+                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d Actual Undetected Errors: %-7d",
                         node.getNodeName(),
                         node.getErrorAddedCount(),
-                        node.getErrorDetectedCount()
+                        node.getErrorDetectedCount(),
+                        node.getActualUndetectedErrorsCount()
                 );
 
                 System.out.println(PrintColor.printInRedBack(output));
@@ -156,6 +186,18 @@ public class CommonFunctions {
             }
         }
         return null;
+    }
+
+    public static boolean checkFileExistsInFolder(String folder, String fileName) {
+        String rootDirectoryPath = System.getProperty("user.dir");
+        String directoryPath;
+        if (folder != null && folder.length() > 0) {
+            directoryPath = rootDirectoryPath + File.separator + folder;
+        } else {
+            directoryPath = rootDirectoryPath;
+        }
+        File file = new File(directoryPath, fileName);
+        return file.exists();
     }
 
 }

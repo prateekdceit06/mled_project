@@ -115,7 +115,7 @@ public class Menu {
             String fileName = file.getName();
 
             if (!fileName.startsWith(".") && !fileName.startsWith("_")) { // Ignore files starting with a dot (.)
-                System.out.println(PrintColor.printInYellow(fileName));
+                System.out.println(PrintColor.printInYellow(count+ ". "+fileName));
                 validFiles.add(file);
                 count++;
             }
