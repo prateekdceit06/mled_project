@@ -22,20 +22,6 @@
       "fragmentationParameter": 2,
       "enableErrorDetection": true,
       "errorModel": {
-        "goodToBad": 0.05,
-        "badToGood": 0.9,
-        "errorProbabilityGood": 0.0001,
-        "errorProbabilityBad": 0.001
-      },
-      "errorDetectionMethod": {
-        "name": "crc",
-        "crcPolynomial": "0x07"
-      }
-    },
-    {
-      "fragmentationParameter": 2,
-      "enableErrorDetection": true,
-      "errorModel": {
         "goodToBad": 0.5,
         "badToGood": 0.5,
         "errorProbabilityGood": 0.001,
@@ -43,7 +29,7 @@
       },
       "errorDetectionMethod": {
         "name": "crc",
-        "crcPolynomial": "0x07"
+        "crcPolynomial": "0x42F0E1EBA9EA3693"
       }
     }
   ]

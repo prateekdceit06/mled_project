@@ -20,12 +20,12 @@
     },
     {
       "fragmentationParameter": 2,
-      "enableErrorDetection": true,
+      "enableErrorDetection": false,
       "errorModel": {
-        "goodToBad": 0.05,
-        "badToGood": 0.9,
-        "errorProbabilityGood": 0.0001,
-        "errorProbabilityBad": 0.001
+        "goodToBad": 0.0,
+        "badToGood": 0.0,
+        "errorProbabilityGood": 0.0,
+        "errorProbabilityBad": 0.0
       },
       "errorDetectionMethod": {
         "name": "crc",
@@ -43,7 +43,7 @@
       },
       "errorDetectionMethod": {
         "name": "crc",
-        "crcPolynomial": "0x07"
+        "crcPolynomial": "0x04C11DB7"
       }
     }
   ]

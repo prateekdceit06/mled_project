@@ -72,6 +72,10 @@ public class Layer {
         return MTU;
     }
 
+    public boolean isEnableErrorDetection() {
+        return enableErrorDetection;
+    }
+
     public void addNodes(int layerNum, int nodeNum, ErrorDetectionMethod errorDetectionMethod,
                          ErrorModel errorModel, boolean enableErrorDetection) {
         int increment = (int) Math.pow(2, layerNum - layerID);

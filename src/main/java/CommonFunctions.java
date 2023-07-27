@@ -30,7 +30,8 @@ public class CommonFunctions {
         int layerNum = layers.size();
         System.out.println(PrintColor.printInGreen("==================================================Network " +
                 "Topology========================================================"));
-        CellVirtualConnection virtualConnectionCell = new CellVirtualConnection();
+        CellVirtualConnectionEnabled virtualConnectionEnabledCell = new CellVirtualConnectionEnabled();
+        CellVirtualConnectionDisabled virtualConnectionDisabledCell = new CellVirtualConnectionDisabled();
         for (int i = 1; i <= layerNum; i++) {
             if (i < 10) {
                 System.out.print(PrintColor.printInGreen("Layer 0" + i + ":"));
@@ -41,10 +42,21 @@ public class CommonFunctions {
             int loopEnd = (int) Math.pow(2, layerNum - 1) + 1;
             for (int j = 1; j <= loopEnd; j++) {
                 if (layers.get(i - 1).getNodeIDs().contains(j)) {
-                    CellNode nodeCell = new CellNode(j);
-                    nodeCell.printCell();
+                    if(layers.get(i-1).isEnableErrorDetection()){
+                        CellNode nodeCell = new CellNode(j);
+                        nodeCell.printCell();
+                    } else{
+                        CellNodeDisabled nodeCell = new CellNodeDisabled(j);
+                        nodeCell.printCell();
+                    }
+
                 } else {
-                    virtualConnectionCell.printCell();
+                    if(layers.get(i-1).isEnableErrorDetection()){
+                        virtualConnectionEnabledCell.printCell();
+                    } else{
+                        virtualConnectionDisabledCell.printCell();
+                    }
+
                 }
             }
             //todo:change print statements to print layer information
