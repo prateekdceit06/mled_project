@@ -1,46 +1,91 @@
 {
   "simulator": {
     "lastLayerMTU": 500,
-    "seed": 560606
+    "seed": 2524103
   },
   "layers": [
     {
       "fragmentationParameter": 1,
+      "enableErrorDetection": true,
       "errorModel": {
-        "goodToBad": 0.001,
-        "badToGood": 0.9,
-        "errorProbabilityGood": 0.0001,
-        "errorProbabilityBad": 0.001
+        "goodToBad": 0.0,
+        "badToGood": 0.0,
+        "errorProbabilityGood": 0.0,
+        "errorProbabilityBad": 0.0
       },
       "errorDetectionMethod": {
-        "name": "crc",
-        "crcPolynomial": "0x07"
+        "name": "checksum",
+        "checksumLength": 2
       }
     },
     {
       "fragmentationParameter": 2,
+      "enableErrorDetection": false,
       "errorModel": {
-        "goodToBad": 0.001,
-        "badToGood": 0.9,
-        "errorProbabilityGood": 0.0001,
-        "errorProbabilityBad": 0.001
+        "goodToBad": 0.0,
+        "badToGood": 0.0,
+        "errorProbabilityGood": 0.0,
+        "errorProbabilityBad": 0.0
       },
       "errorDetectionMethod": {
         "name": "crc",
-        "crcPolynomial": "0x1B"
+        "crcPolynomial": "0x8005"
       }
     },
     {
       "fragmentationParameter": 2,
+      "enableErrorDetection": false,
       "errorModel": {
-        "goodToBad": 0.001,
-        "badToGood": 0.9,
-        "errorProbabilityGood": 0.0001,
-        "errorProbabilityBad": 0.001
+        "goodToBad": 0.0,
+        "badToGood": 0.0,
+        "errorProbabilityGood": 0.0,
+        "errorProbabilityBad": 0.0
       },
       "errorDetectionMethod": {
-        "name": "CHECKSUM",
-        "checksumLength": 1
+        "name": "crc",
+        "crcPolynomial": "0x8005"
+      }
+    },
+    {
+      "fragmentationParameter": 2,
+      "enableErrorDetection": false,
+      "errorModel": {
+        "goodToBad": 0.0,
+        "badToGood": 0.0,
+        "errorProbabilityGood": 0.0,
+        "errorProbabilityBad": 0.0
+      },
+      "errorDetectionMethod": {
+        "name": "crc",
+        "crcPolynomial": "0x8005"
+      }
+    },
+    {
+      "fragmentationParameter": 2,
+      "enableErrorDetection": false,
+      "errorModel": {
+        "goodToBad": 0.0,
+        "badToGood": 0.0,
+        "errorProbabilityGood": 0.0,
+        "errorProbabilityBad": 0.0
+      },
+      "errorDetectionMethod": {
+        "name": "crc",
+        "crcPolynomial": "0x8005"
+      }
+    },
+    {
+      "fragmentationParameter": 2,
+      "enableErrorDetection": true,
+      "errorModel": {
+        "goodToBad": 0.1,
+        "badToGood": 0.5,
+        "errorProbabilityGood": 0.01,
+        "errorProbabilityBad": 0.01
+      },
+      "errorDetectionMethod": {
+        "name": "crc",
+        "crcPolynomial": "0x8005"
       }
     }
   ]

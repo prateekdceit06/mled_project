@@ -1,0 +1,67 @@
+5 Layer Network
+
+undetectedErrorCount: 1 Seed: 9610279
+undetectedErrorCount: 1 Seed: 8634002
+undetectedErrorCount: 1 Seed: 750739
+undetectedErrorCount: 1 Seed: 6075957
+undetectedErrorCount: 1 Seed: 5305947
+undetectedErrorCount: 1 Seed: 5090113
+undetectedErrorCount: 1 Seed: 7492536
+undetectedErrorCount: 1 Seed: 6468884
+undetectedErrorCount: 1 Seed: 9867432
+undetectedErrorCount: 1 Seed: 7030033
+undetectedErrorCount: 1 Seed: 6421274
+undetectedErrorCount: 1 Seed: 1404338
+undetectedErrorCount: 1 Seed: 6705856
+undetectedErrorCount: 1 Seed: 1243830
+undetectedErrorCount: 1 Seed: 9865283
+undetectedErrorCount: 1 Seed: 2259917
+undetectedErrorCount: 1 Seed: 9677350
+undetectedErrorCount: 1 Seed: 2793482
+undetectedErrorCount: 1 Seed: 3854191
+undetectedErrorCount: 1 Seed: 2391067
+undetectedErrorCount: 1 Seed: 3821924
+
+
+6 Layer Network
+
+undetectedErrorCount: 1 Seed: 6576923
+undetectedErrorCount: 1 Seed: 6685133
+undetectedErrorCount: 1 Seed: 271835
+undetectedErrorCount: 1 Seed: 9290319
+undetectedErrorCount: 1 Seed: 8946493
+undetectedErrorCount: 1 Seed: 3138485
+undetectedErrorCount: 1 Seed: 5201026
+undetectedErrorCount: 1 Seed: 4572566
+undetectedErrorCount: 1 Seed: 7342358
+undetectedErrorCount: 1 Seed: 2640687
+undetectedErrorCount: 1 Seed: 9798038
+undetectedErrorCount: 1 Seed: 8128535
+undetectedErrorCount: 1 Seed: 349012
+undetectedErrorCount: 1 Seed: 2129956
+undetectedErrorCount: 1 Seed: 3965019
+undetectedErrorCount: 1 Seed: 8107119
+undetectedErrorCount: 1 Seed: 7856317
+undetectedErrorCount: 1 Seed: 3089938
+undetectedErrorCount: 1 Seed: 4572655
+undetectedErrorCount: 1 Seed: 4429377
+undetectedErrorCount: 1 Seed: 1889107
+undetectedErrorCount: 1 Seed: 5899484
+undetectedErrorCount: 1 Seed: 3789481
+undetectedErrorCount: 1 Seed: 1840092
+undetectedErrorCount: 1 Seed: 657373
+undetectedErrorCount: 1 Seed: 7171141
+undetectedErrorCount: 1 Seed: 8493674
+undetectedErrorCount: 1 Seed: 5793605
+undetectedErrorCount: 1 Seed: 7504792
+undetectedErrorCount: 1 Seed: 2808869
+undetectedErrorCount: 1 Seed: 495754
+undetectedErrorCount: 1 Seed: 1429330
+undetectedErrorCount: 1 Seed: 3779366
+undetectedErrorCount: 1 Seed: 9598032
+undetectedErrorCount: 1 Seed: 1811839
+undetectedErrorCount: 1 Seed: 1527929
+undetectedErrorCount: 1 Seed: 7530966
+undetectedErrorCount: 1 Seed: 1382679
+undetectedErrorCount: 2 Seed: 1032350
+undetectedErrorCount: 1 Seed: 2073486

@@ -346,6 +346,7 @@ public class MledSimulator {
     public boolean quickRun() {
 
         SimulatorConfig config = new SimulatorConfig();
+        int newValue = 0;
         try {
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create();  // create Gson instance with pretty printing
@@ -355,7 +356,7 @@ public class MledSimulator {
                 JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();  // read JSON file
 
                 // Generate a random integer
-                int newValue = random.nextInt(10000000);  // Generate random integers in range 0 to 1000000, change range as per your need
+                newValue = random.nextInt(10000000);  // Generate random integers in range 0 to 1000000, change range as per your need
 
                 // Modify the 'seed' property under 'simulator' with the random integer
                 jsonObject.getAsJsonObject("simulator").addProperty("seed", newValue);
@@ -382,45 +383,14 @@ public class MledSimulator {
             AnalyseNodesForErrorDetection analyseNodesForErrorDetection = new AnalyseNodesForErrorDetection();
             analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
 
-//todo: Uncomment to find 1 undetected error
+            //todo: uncomment to find configuration where at least one error is undetected at the lowest layer
+            return flawedCRC(newValue);
 
-//            int errorAdded = 0;
-//            int errorDetected = 0;
-//            for (Layer layer : layers) {
-//                for (Node node : layer.getNodes()) {
-//                    errorAdded += node.getErrorAddedCount();
-//                    errorDetected += node.getErrorDetectedCount();
-//                }
-//            }
-//
-//
-//            if (errorAdded == 1 && errorDetected == 0) {
-//                return true;
-//            }
+            //todo: Uncomment to find 1 undetected error
+//            return oneUndetectedError();
 
             //todo: Uncomment to find configuration in which hash misses the undetected error
-//
-
-            boolean fileExists = CommonFunctions.checkFileExistsInFolder("", "receivedData.csv");
-
-
-//            Path path = Paths.get("receivedData.csv");
-//            if (Files.exists(path)) {
-//                Files.delete(path);
-//            }
-
-
-            if (fileExists) {
-                try {
-                    byte[] file1Bytes = Files.readAllBytes(Paths.get("receivedData.csv"));
-                    byte[] file2Bytes = Files.readAllBytes(Paths.get("astroMLDataTest.csv"));
-
-                    return !java.util.Arrays.equals(file1Bytes, file2Bytes);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
+//            return hashMissesUndetectedError();
 
         } catch (Exception e) {
             System.out.println(PrintColor.printInRedBack("Error: Invalid input. Please try again."));
@@ -431,5 +401,61 @@ public class MledSimulator {
 
     }
 
+    private boolean flawedCRC(int newValue) {
+        int undetectedErrorCount = 0;
 
+        for (Node node: layers.get(layerNum-1).getNodes()) {
+            undetectedErrorCount += node.getActualUndetectedErrorsCount();
+        }
+
+        if(undetectedErrorCount>0){
+            try (FileWriter writer = new FileWriter("./oneUndetectedError.txt", true)) {
+                writer.write("undetectedErrorCount: "+undetectedErrorCount + " Seed: "+ newValue +"\n");
+            } catch (IOException e) {
+                System.out.println("An error occurred while writing to the file.");
+                e.printStackTrace();
+            }
+            System.out.println(PrintColor.printInRedBack("undetectedErrorCount = " + undetectedErrorCount));
+        }
+
+        if(undetectedErrorCount>5){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean oneUndetectedError(){
+        int errorAdded = 0;
+        int errorDetected = 0;
+        for (Layer layer : layers) {
+            for (Node node : layer.getNodes()) {
+                errorAdded += node.getErrorAddedCount();
+                errorDetected += node.getErrorDetectedCount();
+            }
+        }
+
+
+        if (errorAdded == 1 && errorDetected == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean hashMissesUndetectedError() {
+        boolean fileExists = CommonFunctions.checkFileExistsInFolder("", "receivedData.csv");
+
+
+        if (fileExists) {
+            try {
+                byte[] file1Bytes = Files.readAllBytes(Paths.get("receivedData.csv"));
+                byte[] file2Bytes = Files.readAllBytes(Paths.get("astroMLDataTest.csv"));
+
+                return !java.util.Arrays.equals(file1Bytes, file2Bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
+    }
 }
