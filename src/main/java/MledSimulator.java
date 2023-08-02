@@ -383,7 +383,7 @@ public class MledSimulator {
             AnalyseNodesForErrorDetection analyseNodesForErrorDetection = new AnalyseNodesForErrorDetection();
             analyseNodesForErrorDetection.analyseNodesForErrorDetection(layerNum, layers);
 
-            //todo: uncomment to find configuration where at least one error is undetected at the lowest layer
+            //todo: uncomment to find seed where at least an error is undetected at the lowest layer
             return flawedCRC(newValue);
 
             //todo: Uncomment to find 1 undetected error
@@ -409,7 +409,7 @@ public class MledSimulator {
         }
 
         if(undetectedErrorCount>0){
-            try (FileWriter writer = new FileWriter("./oneUndetectedError.txt", true)) {
+            try (FileWriter writer = new FileWriter("./undetectedError.txt", true)) {
                 writer.write("undetectedErrorCount: "+undetectedErrorCount + " Seed: "+ newValue +"\n");
             } catch (IOException e) {
                 System.out.println("An error occurred while writing to the file.");

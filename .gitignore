@@ -10,7 +10,6 @@ target/classes/**
 
 output/**
 
-receivedData.txt
+receivedData.csv
 
 logs/**
-
