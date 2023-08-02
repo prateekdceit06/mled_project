@@ -362,7 +362,7 @@ public class MledSimulator {
                 jsonObject.getAsJsonObject("simulator").addProperty("seed", newValue);
                 System.out.println(newValue);
 
-                try (Writer writer = new FileWriter("configs/output.json")) {
+                try (Writer writer = new FileWriter("configs/_output.json")) {
                     gson.toJson(jsonObject, writer);  // write modified JSON to a new file
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -373,7 +373,7 @@ public class MledSimulator {
                 e.printStackTrace();
             }
 
-            config.readConfig("./configs/output.json", this);
+            config.readConfig("./configs/_output.json", this);
 
 
             calculateMTU();

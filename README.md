@@ -125,7 +125,7 @@ The MLED Simulator will run with the new configuration settings.
 
 ## Example Configuration File
 
-Below is an example of a configuration file:
+Below is an example of a configuration file for a three-layers MLED architecture:
 
 ```json
 {
@@ -150,7 +150,7 @@ Below is an example of a configuration file:
     },
     {
       "fragmentationParameter": 2,
-      "enableErrorDetection": false,
+      "enableErrorDetection": true,
       "errorModel": {
         "goodToBad": 0.5,
         "badToGood": 0.5,
@@ -164,6 +164,7 @@ Below is an example of a configuration file:
     },
     {
       "fragmentationParameter": 2,
+      "enableErrorDetection": true,
       "errorModel": {
         "goodToBad": 0.5,
         "badToGood": 0.5,
@@ -181,5 +182,48 @@ Below is an example of a configuration file:
 
 You can modify the values in this JSON file to match your desired configuration. Save the modified file in the "configs"
 directory and then run the program. You will be prompted to select a configuration file. Choose the file you just saved
-to start the simulation with your specified configurations.
+to start the simulation with your specified configurations. To add more layers, simply add more objects to the `layers`.
+
+## Seed Value Finder for Undetected Errors
+
+To find the seed value when a check function at the lowest layer misses the error. Follow the steps below:
+
+### 1. Configuring for Seed Value Finder
+
+- Add your configuration in the `./configs/_input_config_for_autorun_to_find_seed_for_undetected_error.json` file.
+
+- In the `Project.java` file:
+    - Comment out the method call to `runUserConfig()`.
+    - Uncomment the method call to `runSeedFinder()`.
+
+- Ensure that the `quickRun()` method in `MledSimulator.java` has the `return flawedCRC(newValue);` statement
+  uncommented. Other return statements `return oneUndetectedError();` and `return hashMissesUndetectedError();` should
+  be commented.
+
+### 2. Running the Seed Value Finder
+
+- Run the `Project.java` file and let it execute.
+    - This will create an `undetectedError.txt` file in the root directory of the program, which will contain the number
+      of errors missed and the corresponding seed value.
+
+- Save this configuration from  `./configs/_input_config_for_autorun_to_find_seed_for_undetected_error.json` file with a
+  unique name (not starting with an underscore (_)) and a new seed value that you
+  want to try from undetectedError.txt. Store it in the configs folder for future reference.
+
+### 3. Reverting to User Config Mode
+
+- You can access the new configuration in user config mode by uncommenting `runUserConfig()` in `Project.java` file.
+
+**NOTE**: Configuration files that start with an underscore will not be visible when running the program in user config
+mode.
+
+### Simulator Configuration
+
+When you select "Initialise Simulator with custom configuration" in the start menu, all the layers you create will be
+considered enabled. You cannot selectively disable the layers in this selection.
+
+To selectively disable the configuration at a particular layer, you can do the following:
+
+- Select "Initialise Simulator from configuration file".
+- Enable/disable error check in layer by using `enableErrorDetection` parameter in the config file as explained [above](#layers).
 
