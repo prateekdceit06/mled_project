@@ -22,6 +22,7 @@ public class SimulatorConfig {
 
             int lastLayerMTU = simulatorObject.get("lastLayerMTU").getAsInt();
             int seed = simulatorObject.get("seed").getAsInt();
+//            Constants.capacityOfLastLayer = simulatorObject.get("capacityOfLastLayer").getAsLong();
 
             errorFlag = !Validator.isIntValid(lastLayerMTU, 500, 10000);
             if (errorFlag) {

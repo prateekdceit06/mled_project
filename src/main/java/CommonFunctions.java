@@ -68,7 +68,7 @@ public class CommonFunctions {
                 "====================="));
 
     }
-
+//todo: log error packet
     public static void logErrorPacket(Packet packet, int errorCount, Node thisNode) {
 
         String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
@@ -78,19 +78,19 @@ public class CommonFunctions {
         String fileName = directoryName + File.separator + "errorsFound.txt";
 
 
-        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
-            out.println("Error: " + errorCount + " found by Node: " + packet.getSentFromNodeName() + "\n");
-            out.println(packet);
-            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
-            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
+//            out.println("Error: " + errorCount + " found by Node: " + packet.getSentFromNodeName() + "\n");
+//            out.println(packet);
+//            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
+//            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
-
+    //todo: log added error
     public static void logAddedError(Packet packet, Node thisNode) {
         String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();
         thisNode.getErrorAddedToPackets().add(packetID);
@@ -99,16 +99,16 @@ public class CommonFunctions {
         String fileName = directoryName + File.separator + "errorsAdded.txt";
 
 
-        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
-            out.println("Error: " + thisNode.getErrorAddedCount() + " added by Node: " + thisNode.getNodeName() + "\n");
-            out.println(packet);
-            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
-            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
+//            out.println("Error: " + thisNode.getErrorAddedCount() + " added by Node: " + thisNode.getNodeName() + "\n");
+//            out.println(packet);
+//            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
+//            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static String createFolder(String folderName) {

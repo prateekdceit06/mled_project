@@ -64,9 +64,12 @@ public class PacketsReassembleAndSend {
 
             newPacket.getPacketHeaders().entrySet().removeIf(entry -> entry.getValue().equals(packetHeaderToCheck));
 
-            if (thisNode.isEnableErrorDetection()){
+            if (thisNode.isEnableErrorDetection()) {
+                long startTime = System.currentTimeMillis();
                 boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
-
+                long endTime = System.currentTimeMillis();
+                long elapsedTime = endTime - startTime;
+                thisNode.setTimeTakenForErrorCheck(thisNode.getTimeTakenForErrorCheck()+elapsedTime);
                 if (!isCorrect) {
                     handleIncorrectPacket(thisNode, nodeToCheckValue, newPacket, receivedData, packetID);
                 } else {
@@ -133,6 +136,7 @@ public class PacketsReassembleAndSend {
         newPacket.getPacketHeaders().get(thisNode.getNodeName()).setValueToCheck(recoveredValueToCheck);
         newPacket.setData(recoveredData);
         thisNode.setRetransmittedBytes(thisNode.getRetransmittedBytes() + recoveredData.length);
+        thisNode.setNumberOfRetransmissions(thisNode.getNumberOfRetransmissions() + 1);
     }
 
     private void handleCorrectPacket(Node thisNode, Node nodeToCheckValue, Packet newPacket, byte[] receivedData, String packetID) {

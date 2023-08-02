@@ -103,16 +103,40 @@ public class AnalyseNodesForErrorDetection {
         }
 
         // todo:change print statements
+//        double timeTakenForErrorCheckInSeconds = calculateTimeForErrorDetection(layers);
 
         printUndetectedErrorCount(nodeUndetectedErrorCountMap);
 
         printNetworkStatistics(layers);
 
+
+    }
+
+    private double calculateTimeForErrorDetection(List<Layer> layers) {
+        int numNodes = 0;
+        long timeTakenForErrorCheck = 0;
+        for (Layer layer : layers) {
+            if (layer.isEnableErrorDetection()) {
+                int numberOfRetransmissionsPerLayer = 0;
+                numNodes += layer.getNodes().size() - 1;
+
+                for (Node node : layer.getNodes()) {
+                    timeTakenForErrorCheck += node.getTimeTakenForErrorCheck();
+                    numberOfRetransmissionsPerLayer += node.getNumberOfRetransmissions();
+                }
+                double avgTimeTakenForErrorCheckForLayer = (double) timeTakenForErrorCheck / layer.getNodes().size();
+                double timeForRetransmissionPerLayer = numberOfRetransmissionsPerLayer * avgTimeTakenForErrorCheckForLayer;
+                timeTakenForErrorCheck += timeForRetransmissionPerLayer;
+            }
+        }
+        return (double) timeTakenForErrorCheck / 1000;
     }
 
     private void printNetworkStatistics(List<Layer> layers) {
         int totalBytesRetransmitted = 0;
         int totalRetransmissionHops = 0;
+//        double totalRetransmissionTime = 0;
+        double totalTime = 0;
         int lastLayerMTU = layers.get(layers.size() - 1).getMTU();
         for (Layer layer : layers) {
             for (Node node : layer.getNodes()) {
@@ -121,9 +145,18 @@ public class AnalyseNodesForErrorDetection {
                     totalBytesRetransmitted += node.getRetransmittedBytes() * (node.getNodeID() - previousNodeID);
                     totalRetransmissionHops += (int) Math.ceil((double) node.getRetransmittedBytes() / lastLayerMTU)
                             * (node.getNodeID() - previousNodeID);
+//                    totalRetransmissionTime += ((double) node.getRetransmittedBytes() /
+//                            (Constants.capacityOfLastLayer))
+//                            * (node.getNodeID() - previousNodeID);
                 }
             }
         }
+
+//        double totalTransmissionTime = (double) Constants.totalFileSize /
+//                (Constants.capacityOfLastLayer) *
+//                (layers.get(layers.size() - 1).getNodeIDs().size() - 1);
+//
+//        totalTime = totalTransmissionTime + totalRetransmissionTime + timeTakenForErrorCheckInSeconds;
 
         long totalBitsRetransmitted = totalBytesRetransmitted * 8L;
 
@@ -170,6 +203,19 @@ public class AnalyseNodesForErrorDetection {
         System.out.println(PrintColor.printInGreenBack(output));
 
         System.out.println(PrintColor.printInGreen(PrintColor.divider()));
+
+//        output = String.format("Total Transmission time: %.4f seconds, " +
+//                        "Total Retransmission Time: %.4f seconds, " +
+//                        "Time Taken for Error Check: %.4f seconds, " +
+//                        "Total Time: %.4f seconds ",
+//                totalTransmissionTime,
+//                totalRetransmissionTime,
+//                timeTakenForErrorCheckInSeconds,
+//                totalTime
+//        );
+//        System.out.println(PrintColor.printInGreenBack(output));
+//
+//        System.out.println(PrintColor.printInGreen(PrintColor.divider()));
 
         System.out.println(PrintColor.printInPurpleBack(
                 "========================In case the final MD5 hash detects error in file========================")

@@ -25,6 +25,9 @@ public abstract class Node {
 
     private boolean enableErrorDetection;
 
+    private long timeTakenForErrorCheck = 0;
+
+    private int numberOfRetransmissions = 0;
 
 
     public Node(int layerID, int nodeID, int fragmentationParameter, ErrorDetectionMethod errorDetectionMethod,
@@ -146,7 +149,21 @@ public abstract class Node {
         return enableErrorDetection;
     }
 
+    public long getTimeTakenForErrorCheck() {
+        return timeTakenForErrorCheck;
+    }
 
+    public void setTimeTakenForErrorCheck(long timeTakenForErrorCheck) {
+        this.timeTakenForErrorCheck = timeTakenForErrorCheck;
+    }
+
+    public int getNumberOfRetransmissions() {
+        return numberOfRetransmissions;
+    }
+
+    public void setNumberOfRetransmissions(int numberOfRetransmissions) {
+        this.numberOfRetransmissions = numberOfRetransmissions;
+    }
 
     //override toString method to print out node information
     @Override
@@ -201,7 +218,7 @@ public abstract class Node {
         }
         if (errorAdded) {
             errorAddedCount++;
-            CommonFunctions.logAddedError(packet, this );
+            CommonFunctions.logAddedError(packet, this);
         }
     }
 
@@ -229,7 +246,7 @@ public abstract class Node {
 
         if (errorAdded) {
             errorAddedCount++;
-            CommonFunctions.logAddedError(packet, this );
+            CommonFunctions.logAddedError(packet, this);
         }
 
 
@@ -237,8 +254,6 @@ public abstract class Node {
 
 
     public abstract void receivePacket(Packet packet);
-
-
 
 
 }

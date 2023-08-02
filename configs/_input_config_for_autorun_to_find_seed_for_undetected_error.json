@@ -81,7 +81,7 @@
         "goodToBad": 0.1,
         "badToGood": 0.5,
         "errorProbabilityGood": 0.01,
-        "errorProbabilityBad": 0.01
+        "errorProbabilityBad": 0.1
       },
       "errorDetectionMethod": {
         "name": "crc",

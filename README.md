@@ -85,7 +85,6 @@ Please note that the number of layers should be within the range of 1 to 99.
   value is not specified, it will be set to `true` by default. Though it is important to note that irrespective of the
   value of this parameter, the `errorDetectionMethod` parameter (as described below) for the layer has to be specified
   otherwise the config file will not be read correctly.
-
 - `errorModel`: An object that specifies the error model for the layer. It includes the following properties:
 
     - `goodToBad`: The probability of transitioning from a good state to a bad state. The value should be a decimal

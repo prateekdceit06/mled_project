@@ -20,7 +20,7 @@
     },
     {
       "fragmentationParameter": 2,
-      "enableErrorDetection": true,
+      "enableErrorDetection": false,
       "errorModel": {
         "goodToBad": 0.0,
         "badToGood": 0.0,
@@ -34,7 +34,7 @@
     },
     {
       "fragmentationParameter": 2,
-      "enableErrorDetection": false,
+      "enableErrorDetection": true,
       "errorModel": {
         "goodToBad": 0.0,
         "badToGood": 0.0,
