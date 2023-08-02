@@ -13,3 +13,7 @@ output/**
 receivedData.csv
 
 logs/**
+
+configs/**
+
+undetectedError.txt
