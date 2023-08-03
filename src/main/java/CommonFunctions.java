@@ -1,7 +1,4 @@
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,27 +30,28 @@ public class CommonFunctions {
         CellVirtualConnectionEnabled virtualConnectionEnabledCell = new CellVirtualConnectionEnabled();
         CellVirtualConnectionDisabled virtualConnectionDisabledCell = new CellVirtualConnectionDisabled();
         for (int i = 1; i <= layerNum; i++) {
+            int virtualLayerID = layerNum - i + 1;
             if (i < 10) {
-                System.out.print(PrintColor.printInGreen("Layer 0" + i + ":"));
+                System.out.print(PrintColor.printInGreen("Layer 0" + virtualLayerID + ":"));
             } else {
-                System.out.print(PrintColor.printInGreen("Layer " + i + ":"));
+                System.out.print(PrintColor.printInGreen("Layer " + virtualLayerID + ":"));
             }
 
             int loopEnd = (int) Math.pow(2, layerNum - 1) + 1;
             for (int j = 1; j <= loopEnd; j++) {
                 if (layers.get(i - 1).getNodeIDs().contains(j)) {
-                    if(layers.get(i-1).isEnableErrorDetection()){
+                    if (layers.get(i - 1).isEnableErrorDetection()) {
                         CellNode nodeCell = new CellNode(j);
                         nodeCell.printCell();
-                    } else{
+                    } else {
                         CellNodeDisabled nodeCell = new CellNodeDisabled(j);
                         nodeCell.printCell();
                     }
 
                 } else {
-                    if(layers.get(i-1).isEnableErrorDetection()){
+                    if (layers.get(i - 1).isEnableErrorDetection()) {
                         virtualConnectionEnabledCell.printCell();
-                    } else{
+                    } else {
                         virtualConnectionDisabledCell.printCell();
                     }
 
@@ -68,7 +66,8 @@ public class CommonFunctions {
                 "====================="));
 
     }
-//todo: log error packet
+
+    //todo: log error packet
     public static void logErrorPacket(Packet packet, int errorCount, Node thisNode) {
 
         String packetID = packet.getPacketHeaders().get(packet.getPath().get(packet.getPath().size() - 1)).getPacketID();

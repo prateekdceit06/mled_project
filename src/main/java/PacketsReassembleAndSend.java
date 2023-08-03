@@ -69,7 +69,7 @@ public class PacketsReassembleAndSend {
                 boolean isCorrect = thisNode.getErrorDetectionMethod().verify(receivedData, packetValueToCheck);
                 long endTime = System.currentTimeMillis();
                 long elapsedTime = endTime - startTime;
-                thisNode.setTimeTakenForErrorCheck(thisNode.getTimeTakenForErrorCheck()+elapsedTime);
+                thisNode.setTimeTakenForErrorCheck(thisNode.getTimeTakenForErrorCheck() + elapsedTime);
                 if (!isCorrect) {
                     handleIncorrectPacket(thisNode, nodeToCheckValue, newPacket, receivedData, packetID);
                 } else {

@@ -27,7 +27,6 @@ public class NodeB extends Node {
                 mtu, packetHeaderToCheck, nodeToCheckValue);
 
 
-
     }
 }
 

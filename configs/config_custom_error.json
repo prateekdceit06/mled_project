@@ -1,7 +1,7 @@
 {
   "simulator": {
     "lastLayerMTU": 500,
-    "seed": 560606
+    "seed": 5606066
   },
   "layers": [
     {
@@ -20,7 +20,7 @@
     },
     {
       "fragmentationParameter": 2,
-      "enableErrorDetection": true,
+      "enableErrorDetection": false,
       "errorModel": {
         "goodToBad": 0.05,
         "badToGood": 0.9,

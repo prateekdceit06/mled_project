@@ -10,24 +10,24 @@ public class Project {
 
     }
 
-    private static void runSeedFinder(){
+    private static void runSeedFinder() {
         int runCount = 0;
-        do{
+        do {
             runCount++;
             MledSimulator simulator = MledSimulator.newSimulator();
 
             System.out.print("Run " + runCount + " finished with seed ");
             boolean result = simulator.quickRun();
 
-            if (result){
+            if (result) {
                 System.out.println("Simulation finished successfully.");
                 break;
             }
 
-        } while(true);
+        } while (true);
     }
 
-    private static void runUserConfig(){
+    private static void runUserConfig() {
         MledSimulator simulator = MledSimulator.getInstance();
         simulator.getOptionToStartSimulator();
     }

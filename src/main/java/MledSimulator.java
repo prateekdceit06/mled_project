@@ -3,12 +3,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +16,6 @@ import static java.lang.System.exit;
 
 public class MledSimulator {
 
-    private static final Logger logger = LogManager.getLogger(MledSimulator.class);
     private static MledSimulator instance = null;
     Scanner scanner = new Scanner(System.in);
 
@@ -404,13 +400,13 @@ public class MledSimulator {
     private boolean flawedCRC(int newValue) {
         int undetectedErrorCount = 0;
 
-        for (Node node: layers.get(layerNum-1).getNodes()) {
+        for (Node node : layers.get(layerNum - 1).getNodes()) {
             undetectedErrorCount += node.getActualUndetectedErrorsCount();
         }
 
-        if(undetectedErrorCount>0){
+        if (undetectedErrorCount > 0) {
             try (FileWriter writer = new FileWriter("./undetectedError.txt", true)) {
-                writer.write("undetectedErrorCount: "+undetectedErrorCount + " Seed: "+ newValue +"\n");
+                writer.write("undetectedErrorCount: " + undetectedErrorCount + " Seed: " + newValue + "\n");
             } catch (IOException e) {
                 System.out.println("An error occurred while writing to the file.");
                 e.printStackTrace();
@@ -418,13 +414,13 @@ public class MledSimulator {
             System.out.println(PrintColor.printInRedBack("undetectedErrorCount = " + undetectedErrorCount));
         }
 
-        if(undetectedErrorCount>5){
+        if (undetectedErrorCount > 5) {
             return true;
         }
         return false;
     }
 
-    private boolean oneUndetectedError(){
+    private boolean oneUndetectedError() {
         int errorAdded = 0;
         int errorDetected = 0;
         for (Layer layer : layers) {

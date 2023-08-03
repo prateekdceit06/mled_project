@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PacketsSplitAndSend {
 
@@ -84,7 +87,7 @@ public class PacketsSplitAndSend {
         return packets;
     }
 
-    private void addError(Node thisNode, Packet newPacket){
+    private void addError(Node thisNode, Packet newPacket) {
         Packet tempPacket = new Packet(newPacket.getData(), newPacket.getPacketHeaders(), newPacket.getPath());
         thisNode.getSentDataBeforeError().add(tempPacket);
         //todo: change if you need an error in a single packet ---> addError() method
