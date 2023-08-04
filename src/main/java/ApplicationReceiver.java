@@ -35,10 +35,7 @@ public class ApplicationReceiver {
         }
         packetBuffer.add(packet);
         int receivedDataSize = packetBuffer.stream().mapToInt(p -> p.getData().length).sum();
-//        for (Packet p : packetBuffer) {
-//            System.out.println(p);
-//            CommonFunctions.pause();
-//        }
+
         if (receivedDataSize >= packetSize) {
             // If we have all the data, join all packets' data into one string
             byte[] receivedData = new byte[packetSize];
@@ -51,47 +48,39 @@ public class ApplicationReceiver {
             ErrorDetectionMethodHash errorDetectionMethod = new ErrorDetectionMethodHash();
             boolean isCorrect = errorDetectionMethod.verify(receivedData, packetValueToCheck);
             System.out.println();
+            String directoryName = CommonFunctions.createFolder("output");
+            String incorrectFileName = directoryName + File.separator + "receivedData.csv";
+            String correctFileName = "./astroMLFiles" + File.separator + "receivedData.csv";
+
 
             if (isCorrect) {
-
-                try {
-                    Path path = Paths.get("receivedData.csv");
-                    if (Files.exists(path)) {
-                        Files.delete(path);
-                    }
-                    try (PrintWriter out = new PrintWriter(new FileWriter("receivedData.csv", true))) {
-                        out.print(new String(receivedData));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-//todo: change print statements
+                createFile(correctFileName, receivedData);
+                //todo: change print statements
                 System.out.println(PrintColor.printInGreenBack("Received data is correct"));
             } else {
-                String directoryName = CommonFunctions.createFolder("output");
-                String fileName = directoryName + File.separator + "receivedData.csv";
-                try {
-                    Path path = Paths.get(fileName);
-                    if (Files.exists(path)) {
-                        Files.delete(path);
-                    }
-                    try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
-                        out.print(new String(receivedData));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                createFile(incorrectFileName, receivedData);
                 //todo: change print statements
                 System.out.println(PrintColor.printInRedBack("Received data is incorrect"));
             }
             System.out.println();
-
             packetBuffer.clear();
         }
 
+    }
+
+    private void createFile(String fileName, byte[] receivedData) {
+        Path path = Paths.get(fileName);
+        try {
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
+            out.print(new String(receivedData));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,4 +1,7 @@
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
 
@@ -77,16 +80,16 @@ public class CommonFunctions {
         String fileName = directoryName + File.separator + "errorsFound.txt";
 
 
-//        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
-//            out.println("Error: " + errorCount + " found by Node: " + packet.getSentFromNodeName() + "\n");
-//            out.println(packet);
-//            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
-//            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
+            out.println("Error: " + errorCount + " found by Node: " + packet.getSentFromNodeName() + "\n");
+            out.println(packet);
+            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
+            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //todo: log added error
@@ -98,16 +101,16 @@ public class CommonFunctions {
         String fileName = directoryName + File.separator + "errorsAdded.txt";
 
 
-//        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
-//            out.println("Error: " + thisNode.getErrorAddedCount() + " added by Node: " + thisNode.getNodeName() + "\n");
-//            out.println(packet);
-//            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
-//            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
+            out.println("Error: " + thisNode.getErrorAddedCount() + " added by Node: " + thisNode.getNodeName() + "\n");
+            out.println(packet);
+            String str = new String(packet.getData(), StandardCharsets.US_ASCII);
+            out.println("\nData: " + str + "\n-----------------------------------------------------------------\n");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static String createFolder(String folderName) {
@@ -127,30 +130,20 @@ public class CommonFunctions {
 
         for (Layer layer : layers) {
             for (Node node : layer.getNodes()) {
-//                String output = String.format(
-//                        "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d ",
-//                        node.getNodeName(),
-//                        node.getErrorAddedCount(),
-//                        node.getErrorDetectedCount()
-//                );
-//todo:Change print statement for recovery
-
+                String nodeNameToShowPart2 = node.getNodeName().split("-")[1];
+                int virtualLayerID = layers.size() - layer.getLayerID() + 1;
+                String nodeNameToShow = virtualLayerID + "-" + nodeNameToShowPart2;
                 String output = String.format(
                         "Node Name: %-15s Errors Added: %-7d Errors Detected: %-7d Actual Undetected Errors: %-7d",
-                        node.getNodeName(),
+                        nodeNameToShow,
                         node.getErrorAddedCount(),
                         node.getErrorDetectedCount(),
                         node.getActualUndetectedErrorsCount()
                 );
-
                 System.out.println(PrintColor.printInRedBack(output));
-
-
             }
-
             System.out.println(PrintColor.printInGreen(PrintColor.divider()));
         }
-
     }
 
 

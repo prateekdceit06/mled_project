@@ -1,3 +1,8 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class Project {
     public static void main(String[] args) {
@@ -13,6 +18,7 @@ public class Project {
     private static void runSeedFinder() {
         int runCount = 0;
         do {
+            clearOutputFolder();
             runCount++;
             MledSimulator simulator = MledSimulator.newSimulator();
 
@@ -27,8 +33,36 @@ public class Project {
         } while (true);
     }
 
+
+
     private static void runUserConfig() {
+        clearOutputFolder();
         MledSimulator simulator = MledSimulator.getInstance();
         simulator.getOptionToStartSimulator();
+    }
+
+    private static void clearOutputFolder() {
+        String folderPath = "./output";
+        try {
+            deleteFilesInFolder(folderPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void deleteFilesInFolder(String folderPath) throws IOException {
+        try (Stream<Path> paths = Files.walk(Paths.get(folderPath))) {
+            paths
+                    .filter(Files::isRegularFile)
+                    .filter(path -> !path.getFileName().toString().equals("receivedData.csv"))
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }
     }
 }

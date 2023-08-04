@@ -438,13 +438,13 @@ public class MledSimulator {
     }
 
     private boolean hashMissesUndetectedError() {
-        boolean fileExists = CommonFunctions.checkFileExistsInFolder("", "receivedData.csv");
+        boolean fileExists = CommonFunctions.checkFileExistsInFolder("astroMLFiles", "receivedData.csv");
 
 
         if (fileExists) {
             try {
-                byte[] file1Bytes = Files.readAllBytes(Paths.get("receivedData.csv"));
-                byte[] file2Bytes = Files.readAllBytes(Paths.get("astroMLDataTest.csv"));
+                byte[] file1Bytes = Files.readAllBytes(Paths.get("./astroMLFiles/receivedData.csv"));
+                byte[] file2Bytes = Files.readAllBytes(Paths.get("./astroMLFiles/astroMLDataTest.csv"));
 
                 return !java.util.Arrays.equals(file1Bytes, file2Bytes);
             } catch (IOException e) {
