@@ -151,6 +151,7 @@ public class Constants {
 
     public static int totalFileSize = 0;
 
-//    public static long capacityOfLastLayer = 0;
+    public static String fileNameToRead;
+
 
 }

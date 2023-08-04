@@ -444,7 +444,7 @@ public class MledSimulator {
         if (fileExists) {
             try {
                 byte[] file1Bytes = Files.readAllBytes(Paths.get("./astroMLFiles/receivedData.csv"));
-                byte[] file2Bytes = Files.readAllBytes(Paths.get("./astroMLFiles/astroMLDataTest.csv"));
+                byte[] file2Bytes = Files.readAllBytes(Paths.get("./astroMLFiles/" + Constants.fileNameToRead));
 
                 return !java.util.Arrays.equals(file1Bytes, file2Bytes);
             } catch (IOException e) {

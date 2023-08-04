@@ -7,7 +7,8 @@ public class ApplicationSender {
     public void readFileAndSendData() {
         try {
             //todo: Change file name
-            String data = new String(Files.readAllBytes(Paths.get("./astroMLFiles/astroMLDataTest.csv")));
+            Constants.fileNameToRead = "astroMLDataTest.csv";
+            String data = new String(Files.readAllBytes(Paths.get("./astroMLFiles/" + Constants.fileNameToRead)));
             // Calculate the hash of the entire file content
             ErrorDetectionMethodHash errorDetectionMethod = new ErrorDetectionMethodHash();
             byte[] dataBytes = data.getBytes();

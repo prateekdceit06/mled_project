@@ -198,7 +198,7 @@ To find the seed value when a check function at the lowest layer misses the erro
 
 - Ensure that the `quickRun()` method in `MledSimulator.java` has the `return flawedCRC(newValue);` statement
   uncommented. Other return statements `return oneUndetectedError();` and `return hashMissesUndetectedError();` should
-  be commented.
+  be commented. You can add your own custom method for the particular error you want to find the seed value for.
 
 ### 2. Running the Seed Value Finder
 
@@ -217,13 +217,28 @@ To find the seed value when a check function at the lowest layer misses the erro
 **NOTE**: Configuration files that start with an underscore will not be visible when running the program in user config
 mode.
 
-### Simulator Configuration
+### Additional Notes
 
-When you select "Initialise Simulator with custom configuration" in the start menu, all the layers you create will be
+- When you select "Initialise Simulator with custom configuration" in the start menu, all the layers you create will be
 considered enabled. You cannot selectively disable the layers in this selection.
 
-To selectively disable the configuration at a particular layer, you can do the following:
+- To selectively disable the configuration at a particular layer, you can do the following:
 
-- Select "Initialise Simulator from configuration file".
-- Enable/disable error check in layer by using `enableErrorDetection` parameter in the config file as explained [above](#layers).
+  - Select "Initialise Simulator from configuration file".
+  - Enable/disable error check in layer by using `enableErrorDetection` parameter in the config file as
+    explained [above](#layers).
 
+- The simulator works with files that are kept in the `./astroMLFiles/` directory. To change the input file for the
+  simulator, you don't need to move or rename the file itself. Instead, you only need to update the
+  `Constants.fileNameToRead` variable in the `ApplicationSender.java` file. For example, if you want to work with a file
+  named `astroMLDataTest.csv`, you should write `Constants.fileNameToRead = "astroMLDataTest.csv";` in
+  `ApplicationSender.java`.
+- The simulator performs a final hash check on the whole file it processes. If the processed file has no errors (as
+  confirmed by the hash check), the simulator will produce a file called `receivedData.csv`. This file will be saved in
+  the `./astroMLFiles/` directory.
+- If the processed file does contain errors (as confirmed by the hash check), the simulator will still create the
+  `receivedData.csv` file, but instead of the `./astroMLFiles/` directory, this file will be saved in the `./output`
+  directory in the root of the project.
+
+In summary, the `receivedData.csv` file is always created after the simulator processes an input file. The location
+where`receivedData.csv` is saved depends on whether the input file passed the hash check (i.e., had no errors) or not.
